@@ -4,23 +4,11 @@ namespace Dinex.WebApi.Business
     public class UserService : IUserService
     {
         private readonly IUserRepository _userRepository;
-        private readonly IJwtService _jwtService;
 
-        public UserService(IUserRepository userRepository, IJwtService jwtService)
+
+        public UserService(IUserRepository userRepository)
         {
             _userRepository = userRepository;
-            _jwtService = jwtService;
-        }
-
-        public async Task<AuthenticaticationResponse> Authenticate(AuthenticationRequest model)
-        {
-            var user = await _userRepository.GetByEmailAsync(model.Email);
-
-            if (user is null) return null;
-
-            var token = _jwtService.GenerateToken(user);
-
-            return new AuthenticaticationResponse(user,token);
         }
 
         public async Task<int> Create(User user)
@@ -55,10 +43,12 @@ namespace Dinex.WebApi.Business
             return await (Task<User>)httpContext.Items["User"];
         }
 
+        #region exclusive for middleware
         public async Task<User> GetByIdAsNoTracking(Guid userId)
         {
             var user = _userRepository.GetByIdAsNoTracking(userId).Result;
             return user;
         }
+        #endregion
     }
 }

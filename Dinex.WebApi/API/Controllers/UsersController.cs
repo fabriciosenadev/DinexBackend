@@ -32,16 +32,6 @@
             return Ok(userResult);
         }
 
-        [HttpPost("authenticate")]
-        public async Task<ActionResult<AuthenticaticationResponse>> Authenticate(AuthenticationRequest request)
-        {
-            var response = await _userService.Authenticate(request);
-            if (response is null)
-                return BadRequest(new { message = "User or password is incorrect" });
-
-            return Ok(response);
-        }
-
         [Authorize]
         [HttpGet]
         public async Task<ActionResult<UserSearchResult>> GetById()
@@ -59,12 +49,6 @@
         [HttpPut]
         public async Task<ActionResult<UserSearchResult>> Update(UserInputModel model)
         {
-            //var user = new User();
-            //user.FullName = model.FullName;
-            //user.Email = model.Email;
-            //user.UpdatedAt = DateTime.Now;
-            //user.Password = model.Password;
-
             var user = _mapper.Map<User>(model);
 
             var httpContextUser = await _userService.GetFromContext(HttpContext);           

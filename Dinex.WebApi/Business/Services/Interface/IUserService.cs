@@ -30,14 +30,6 @@
         /// <returns>dados do usuario atualizados</returns>
         Task<User> Update(User user);
 
-        // TODO: migrar apos testes
-        /// <summary>
-        /// Autenticacao de usuario
-        /// </summary>
-        /// <param name="model"></param>
-        /// <returns></returns>
-        Task<AuthenticaticationResponse> Authenticate(AuthenticationRequest model);
-
         /// <summary>
         /// obtem o usuario do contexto http passado
         /// </summary>
