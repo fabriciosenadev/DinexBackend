@@ -23,11 +23,19 @@ namespace Dinex.WebApi.Business
             return result;
         }
 
-        public Task<User> GetById(Guid id)
+        public async Task<User> GetById(Guid id)
         {
-            var user = _userRepository.GetByIdAsync(id);
+            var user = await  _userRepository.GetByIdAsync(id);
             return user;
         }
+
+        public async Task<User> GetByEmail(string email)
+        {
+            var user = await _userRepository.GetByEmailAsync(email);
+            return user;
+        }
+
+
 
         public async Task<User> Update(User user)
         {

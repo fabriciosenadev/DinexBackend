@@ -15,7 +15,14 @@
         /// <param name="id">codigo identificador</param>
         /// <returns>dados do usuario</returns>
         Task<User> GetById(Guid id);
-        
+
+        /// <summary>
+        /// busca usuario por email
+        /// </summary>
+        /// <param name="email">email</param>
+        /// <returns>dados do usuario</returns>
+        Task<User> GetByEmail(string email);
+
         /// <summary>
         /// busca usuario por codigo identificador
         /// </summary>
