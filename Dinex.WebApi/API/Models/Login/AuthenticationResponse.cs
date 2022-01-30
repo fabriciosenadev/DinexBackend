@@ -1,13 +1,13 @@
 ﻿namespace Dinex.WebApi.API.Models
 {
-    public class AuthenticaticationResponse
+    public class AuthenticationResponse
     {
         public Guid Id { get; set; }
         public string FullName { get; set; }
         public string Email { get; set; }
         public string Token { get; set; }
 
-        public AuthenticaticationResponse(User user, string token)
+        public AuthenticationResponse(User user, string token)
         {
             Id = user.Id;
             FullName = user.FullName;
