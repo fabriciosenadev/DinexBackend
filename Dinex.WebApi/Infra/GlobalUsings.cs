@@ -14,6 +14,9 @@ global using Microsoft.IdentityModel.Tokens;
 
 global using Microsoft.Extensions.Options;
 
+global using FluentValidation;
+global using FluentValidation.AspNetCore;
+
 global using AutoMapper;
 
 global using Dinex.WebApi.API.Models;
