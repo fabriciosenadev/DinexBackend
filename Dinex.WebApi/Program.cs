@@ -1,4 +1,6 @@
 
+var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -7,10 +9,22 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-//configuration add to working
-builder.Services.AddCors();
+var appSettings = new AppSettings();
+new ConfigureFromConfigurationOptions<AppSettings>(builder.Configuration.GetSection("AppSettings")).Configure(appSettings);
+builder.Services.AddSingleton(appSettings);
+//builder.Services.Configure<AppSettings>(builder.Configuration.GetSection("AppSettings"));
 
-builder.Services.Configure<AppSettings>(builder.Configuration.GetSection("AppSettings"));
+//configuration add to working
+builder.Services.AddCors( options =>
+{
+    options.AddPolicy(name: MyAllowSpecificOrigins, 
+        builder =>
+        {
+            builder.WithOrigins( appSettings.AllowedOrigin)
+                .WithMethods("POST", "PUT", "GET")
+                .WithHeaders("accept", "content-type", "origin");
+        });
+});
 
 builder.Services.RegisterAllDependecies();
 
@@ -18,10 +32,11 @@ var app = builder.Build();
 
 // Configure the HTTP request pipeline.
 { 
-    app.UseCors(x => x
-    .AllowAnyOrigin()
-    .AllowAnyMethod()
-    .AllowAnyHeader());
+    //app.UseCors(x => x
+    //.AllowAnyOrigin()
+    //.AllowAnyMethod()
+    //.AllowAnyHeader());
+    app.UseCors(MyAllowSpecificOrigins);
 
     app.UseMiddleware<JwtMiddleware>();
 }
