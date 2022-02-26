@@ -20,21 +20,25 @@
             services.AddAutoMapper(typeof(LoginMapper));
             #endregion
 
-            #region bisness validations
+            #region business validations
             services.AddScoped<IValidator<UserInputModel>, UserModelValidation>();
+            services.AddScoped<IValidator<ActivationInputModel>, ActivationValidation>();
             #endregion
 
             #region business services
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IAuthenticationService, AuthenticationService>();
+            services.AddScoped<IActivationService, ActivationService>();
             #endregion
 
             #region infra services
             services.AddScoped<IJwtService, JwtService>();
+            services.AddScoped<ISendMailService, SendMailService>();
             #endregion
 
             #region repositories
             services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<IActivationRepository, ActivationRepository>();
             #endregion
 
             return services;
