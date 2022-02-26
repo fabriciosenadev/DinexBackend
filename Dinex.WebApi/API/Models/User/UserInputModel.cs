@@ -12,6 +12,6 @@
         public string Password { get; set; }
 
         [Required]
-        public string VerifyPassword { get; set; }
+        public string ConfirmPassword { get; set; }
     }
 }
