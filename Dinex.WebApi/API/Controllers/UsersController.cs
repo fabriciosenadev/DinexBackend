@@ -1,6 +1,6 @@
 ﻿namespace Dinex.WebApi.API.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("v1/[controller]")]
     [ApiController]
     public class UsersController : ControllerBase
     {
