@@ -13,5 +13,6 @@
         public string MailboxPassword { get; set; }
         public string MailboxName { get; set; }
         public string MailTemplateFolder { get; set; }
+        public string AllowedOrigin { get; set; }
     }
 }
