@@ -1,5 +1,6 @@
 ﻿namespace Dinex.WebApi.API.Controllers
 {
+    [EnableCors("_myAllowSpecificOrigins")]
     [Route("v1/[controller]")]
     [ApiController]
     public class ActivationsController : ControllerBase
