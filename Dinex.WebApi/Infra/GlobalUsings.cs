@@ -19,6 +19,9 @@ global using FluentValidation.AspNetCore;
 
 global using AutoMapper;
 
+global using MailKit.Net.Smtp;
+global using MimeKit;
+
 global using Dinex.WebApi.API.Models;
 global using Dinex.WebApi.API.Controllers;
 global using Dinex.WebApi.Entities;
