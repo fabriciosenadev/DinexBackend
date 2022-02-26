@@ -29,7 +29,7 @@
                 .WithName("Senha")
                 .WithMessage("Preencha a senha");
 
-            RuleFor(u => u.VerifyPassword)
+            RuleFor(u => u.ConfirmPassword)
                 .Equal(u => u.Password)
                 .WithMessage("Senhas devem ser iguais");
         }
