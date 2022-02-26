@@ -11,13 +11,34 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Dinex.WebApi.Infra.DB.Migrations
 {
     [DbContext(typeof(DinexBackendContext))]
-    [Migration("20220125231805_initials")]
-    partial class initials
+    [Migration("20220202232442_Add-Category")]
+    partial class AddCategory
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "6.0.1");
+
+            modelBuilder.Entity("Dinex.WebApi.Entities.Activation", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("ActivationCode")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Activations");
+                });
 
             modelBuilder.Entity("Dinex.WebApi.Entities.Category", b =>
                 {
