@@ -27,6 +27,7 @@
   <ItemGroup>
     <Folder Include="Entities\Category\" />
     <Folder Include="Infra\DB\Migrations\" />
+    <Folder Include="Infra\Helpers\Enums\Activation\" />
     <Folder Include="Templates\" />
   </ItemGroup>
 
