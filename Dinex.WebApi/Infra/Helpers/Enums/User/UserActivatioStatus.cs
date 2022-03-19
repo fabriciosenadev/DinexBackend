@@ -1,4 +1,4 @@
-﻿namespace Dinex.WebApi.Entities
+﻿namespace Dinex.WebApi.Infra
 {
     public enum UserActivatioStatus
     {
