@@ -29,6 +29,8 @@
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IAuthenticationService, AuthenticationService>();
             services.AddScoped<IActivationService, ActivationService>();
+            services.AddScoped<ICategoryService, CategoryService>();
+            services.AddScoped<ICategoryToUserService, CategoryToUserService>();
             #endregion
 
             #region infra services
@@ -39,6 +41,8 @@
             #region repositories
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IActivationRepository, ActivationRepository>();
+            services.AddScoped<ICategoryRepository, CategoryRepository>();
+            services.AddScoped<ICategoryToUserRepository, CategoryToUserRepository>();
             #endregion
 
             return services;
