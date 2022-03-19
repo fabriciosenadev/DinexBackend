@@ -12,7 +12,9 @@ builder.Services.AddSwaggerGen();
 var appSettings = new AppSettings();
 new ConfigureFromConfigurationOptions<AppSettings>(builder.Configuration.GetSection("AppSettings")).Configure(appSettings);
 builder.Services.AddSingleton(appSettings);
-//builder.Services.Configure<AppSettings>(builder.Configuration.GetSection("AppSettings"));
+
+// fix to work with this section on classes and methods
+builder.Services.Configure<AppSettings>(builder.Configuration.GetSection("AppSettings"));
 
 //configuration add to working
 builder.Services.AddCors( options =>
