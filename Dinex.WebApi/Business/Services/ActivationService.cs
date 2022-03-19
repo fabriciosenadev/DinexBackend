@@ -5,18 +5,21 @@
         private readonly IActivationRepository _activationRepository;
         private readonly IUserService _userService;
         private readonly ISendMailService _sendMailService;
+        private readonly ICategoryService _categoryService;
         public ActivationService(
             IActivationRepository activationRepository,
             IUserService userService,
-            ISendMailService sendMailService
+            ISendMailService sendMailService,
+            ICategoryService categoryService
             )
         {
             _activationRepository = activationRepository;
             _userService = userService;
             _sendMailService = sendMailService;
+            _categoryService = categoryService;
         }
 
-        public async Task ActivateAccount(string email, string activationCode)
+        public async Task<ActivationReason> ActivateAccount(string email, string activationCode)
         {
             var user = await _userService.GetByEmail(email);
             var listOfActivations = await _activationRepository.ListByUserIdAsync(user.Id);
@@ -24,7 +27,7 @@
             listOfActivations.RemoveAll(a => !a.ActivationCode.Equals(activationCode));
             if(listOfActivations.Count != 1)
             {
-                //return error
+                return ActivationReason.InvalidCode;
             }
 
             const int activationExpiresInMinutes = 120;
@@ -32,14 +35,16 @@
             var currentTimeToExpire = DateTime.Now.AddMinutes(-activationExpiresInMinutes);
             if (currentTimeToExpire >= createdAt)
             {
-                //return error
+                return ActivationReason.ExpiredCode;
             }
 
-            var updatedUser = await ActivateUser(user);
+            await ActivateUser(user);
 
-            // TODO: create standard categories here
+            await _categoryService.BindStandardCategories(user.Id);
 
+            await ClearActivationCodes(user.Id);
 
+            return ActivationReason.Success;
         }
 
         public async Task<string> SendActivationCode(string email)
@@ -47,7 +52,7 @@
             const int codeLength = 6;
             var user = await _userService.GetByEmail(email);
             var activationCode = GenerateActivatioCode(codeLength);
-            var activationResult = await AddActivationOnDatabase(user.Id, activationCode);
+            await AddActivationOnDatabase(user.Id, activationCode);
 
             var sendResult = await _sendMailService.SendActivationCode(activationCode, user.FullName, user.Email);
             return sendResult;
@@ -79,8 +84,13 @@
         {
             user.IsActive = UserActivatioStatus.Active;
             var resultUser = await _userService.Update(user);
-            resultUser.Password = null;
+            resultUser.Password = String.Empty;
             return resultUser;
+        }
+
+        private async Task ClearActivationCodes(Guid userId)
+        {
+            await _activationRepository.DeleteByUserIdAsync(userId);
         }
     }
 }

@@ -3,6 +3,6 @@
     public interface IActivationService
     {
         Task<string> SendActivationCode(string email);
-        Task ActivateAccount(string email, string activationCode);
+        Task<ActivationReason> ActivateAccount(string email, string activationCode);
     }
 }
