@@ -19,9 +19,25 @@
         }
 
         [HttpPost("activate-account")]
-        public async Task ActivateAccount(ActivationInputModel activation)
+        public async Task<IActionResult> ActivateAccount(ActivationInputModel activation)
         {
-            await _activationService.ActivateAccount(activation.Email, activation.ActivationCode);
+            var reason = await _activationService.ActivateAccount(activation.Email, activation.ActivationCode);
+
+            string message = null;
+            switch (reason)
+            {
+                case ActivationReason.ExpiredCode:
+                    message = "activation code was expired";
+                    break;
+                case ActivationReason.InvalidCode:
+                    message = "activation code was invalid";
+                    break;
+            }
+
+            if (!string.IsNullOrEmpty(message))
+                return BadRequest(message);
+
+            return Ok();
         }
     }
 }
