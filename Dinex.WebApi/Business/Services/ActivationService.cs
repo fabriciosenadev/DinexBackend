@@ -38,11 +38,11 @@
                 return ActivationReason.ExpiredCode;
             }
 
-            await ActivateUser(user);
-
             await _categoryService.BindStandardCategories(user.Id);
 
             await ClearActivationCodes(user.Id);
+
+            await ActivateUser(user);
 
             return ActivationReason.Success;
         }
@@ -80,12 +80,11 @@
                 .Select(s => s[random.Next(s.Length)]).ToArray());
         }
 
-        private async Task<User> ActivateUser(User user)
+        private async Task ActivateUser(User user)
         {
             user.IsActive = UserActivatioStatus.Active;
+            user.UpdatedAt = DateTime.Now;
             var resultUser = await _userService.Update(user);
-            resultUser.Password = String.Empty;
-            return resultUser;
         }
 
         private async Task ClearActivationCodes(Guid userId)
