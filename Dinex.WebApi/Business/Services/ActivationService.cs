@@ -84,7 +84,7 @@
         {
             user.IsActive = UserActivatioStatus.Active;
             user.UpdatedAt = DateTime.Now;
-            var resultUser = await _userService.Update(user);
+            var resultUser = await _userService.Update(user, false);
         }
 
         private async Task ClearActivationCodes(Guid userId)

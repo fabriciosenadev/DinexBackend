@@ -4,28 +4,29 @@ namespace Dinex.WebApi.Business
     public class UserService : IUserService
     {
         private readonly IUserRepository _userRepository;
+        private readonly ICryptographyService _cryptographyService;
 
-
-        public UserService(IUserRepository userRepository)
+        public UserService(IUserRepository userRepository, ICryptographyService cryptographyService)
         {
             _userRepository = userRepository;
+            _cryptographyService = cryptographyService;
         }
 
         public async Task<int> Create(User user)
         {
             user.IsActive = UserActivatioStatus.Inactive;
             user.CreatedAt = DateTime.Now;
+            user.Password = _cryptographyService.Encrypt(user.Password);
 
             var result = await _userRepository.AddAsync(user);
-            
-            user.Password = null;
 
+            user.Password = null;
             return result;
         }
 
         public async Task<User> GetById(Guid id)
         {
-            var user = await  _userRepository.GetByIdAsync(id);
+            var user = await _userRepository.GetByIdAsync(id);
             return user;
         }
 
@@ -37,9 +38,13 @@ namespace Dinex.WebApi.Business
 
 
 
-        public async Task<User> Update(User user)
+        public async Task<User> Update(User user, bool needUpdatePassword)
         {
-            //user.UpdatedAt = DateTime.Now;
+            user.UpdatedAt = DateTime.Now;
+
+            if (needUpdatePassword)
+                user.Password = _cryptographyService.Encrypt(user.Password);
+
             var result = await _userRepository.UpdateAsync(user);
 
             user.Password = null;

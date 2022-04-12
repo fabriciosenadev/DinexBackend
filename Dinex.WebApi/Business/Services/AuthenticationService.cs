@@ -4,20 +4,29 @@
     {
         private readonly IUserRepository _userRepository;
         private readonly IJwtService _jwtService;
-        public AuthenticationService(IUserRepository userRepository, IJwtService jwtService)
+        private readonly ICryptographyService _cryptographyService;
+
+        public AuthenticationService(
+            IUserRepository userRepository,
+            IJwtService jwtService,
+            ICryptographyService cryptographyService
+            )
         {
             _userRepository = userRepository;
             _jwtService = jwtService;
+            _cryptographyService = cryptographyService;
         }
 
         public async Task<(User, string)> Authenticate(Login loginData)
         {
             var user = await _userRepository.GetByEmailAsync(loginData.Email);
 
-            if (user is null || user.Password != loginData.Password) 
+            var passwordsAreNotEqual = _cryptographyService.CompareValues(user.Password, loginData.Password);
+
+            if (user is null || passwordsAreNotEqual)
                 return (null, null);
-            
-            if(user.IsActive == UserActivatioStatus.Inactive) 
+
+            if (user.IsActive == UserActivatioStatus.Inactive)
                 return (user, null);
 
             var token = _jwtService.GenerateToken(user);

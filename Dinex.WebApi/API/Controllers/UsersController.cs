@@ -55,7 +55,7 @@
             var httpContextUser = await _userService.GetFromContext(HttpContext);           
             user.Id = httpContextUser.Id;
 
-            var updated = await _userService.Update(user);
+            var updated = await _userService.Update(user, true);
             var userResult = _mapper.Map<UserSearchResult>(updated);
 
             return Ok(userResult);
