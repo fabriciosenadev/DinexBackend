@@ -21,9 +21,9 @@
         {
             var user = await _userRepository.GetByEmailAsync(loginData.Email);
 
-            var passwordsAreNotEqual = _cryptographyService.CompareValues(user.Password, loginData.Password);
+            var passwordsMatch = _cryptographyService.CompareValues(user.Password, loginData.Password);
 
-            if (user is null || passwordsAreNotEqual)
+            if (user is null || !passwordsMatch)
                 return (null, null);
 
             if (user.IsActive == UserActivatioStatus.Inactive)
