@@ -10,8 +10,12 @@
         public async Task<string> SendActivationCode(string activationCode, string fullName, string to)
         {
             var message = CreateMessage(activationCode, fullName, to);
+            var result = await SendMessage(message);
+            return result;
+        }
 
-            // --- SMTP information
+        private async Task<string> SendMessage(MimeMessage message)
+        {
             var smtpClient = new SmtpClient();
             await smtpClient.ConnectAsync(_appSettings.SmtpHost, _appSettings.SmtpPort, _appSettings.SmtpUseSsl); // --- TLS config
             await smtpClient.AuthenticateAsync(_appSettings.MailboxAddress, _appSettings.MailboxPassword);
