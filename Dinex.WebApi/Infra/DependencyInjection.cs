@@ -36,6 +36,7 @@
             #region infra services
             services.AddScoped<IJwtService, JwtService>();
             services.AddScoped<ISendMailService, SendMailService>();
+            services.AddScoped<ICryptographyService, CryptographyService>();
             #endregion
 
             #region repositories
