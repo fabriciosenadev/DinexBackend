@@ -49,9 +49,11 @@
 
         public async Task<string> SendActivationCode(string email)
         {
-            const int codeLength = 6;
-            var user = await _userService.GetByEmail(email);
+            const int codeLength = 32;
             var activationCode = GenerateActivatioCode(codeLength);
+
+            var user = await _userService.GetByEmail(email);
+
             await AddActivationOnDatabase(user.Id, activationCode);
 
             var sendResult = await _sendMailService.SendActivationCode(activationCode, user.FullName, user.Email);

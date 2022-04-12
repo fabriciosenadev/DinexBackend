@@ -46,7 +46,7 @@
 
         private MimeEntity CreateBodyToMessage(string activationCode, string fullName)
         {
-            var templateName = "activationCode.html";
+            var templateName = "activationAccount.html";
             var partialTemplatePath = _appSettings.MailTemplateFolder + "/" + templateName;
             var fullTemplatePath = Path.GetFullPath(partialTemplatePath);
 
@@ -57,9 +57,11 @@
                 html = Source.ReadToEnd();
             }
 
+            var activationUrl = $"{_appSettings.AllowedOrigin}/activation/{activationCode}";
+
             bodyBuilder.HtmlBody = html
                 .Replace("{name}", fullName)
-                .Replace("{activationCode}", activationCode);
+                .Replace("{activationUrl}", activationUrl);
 
             var msgBody = bodyBuilder.ToMessageBody();
             return msgBody;
