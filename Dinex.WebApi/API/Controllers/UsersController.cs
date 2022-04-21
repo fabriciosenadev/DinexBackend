@@ -18,7 +18,7 @@
 
 
         [HttpPost]
-        public async Task<ActionResult<UserSearchResult>> Create(UserInputModel model)
+        public async Task<ActionResult<UserResponseModel>> Create(UserRequestModel model)
         {
             const int successCreation = 1;
 
@@ -28,27 +28,27 @@
             if (resultCreation != successCreation)
                 return BadRequest();
 
-            var userResult = _mapper.Map<UserSearchResult>(user);
+            var userResult = _mapper.Map<UserResponseModel>(user);
 
             return Ok(userResult);
         }
 
         [Authorize]
         [HttpGet]
-        public async Task<ActionResult<UserSearchResult>> GetById()
+        public async Task<ActionResult<UserResponseModel>> GetById()
         {
             var user = await _userService.GetFromContext(HttpContext);
             if (user is null)
                 return BadRequest(new { message = "User not found" });
 
-            var userResult = _mapper.Map<UserSearchResult>(user);
+            var userResult = _mapper.Map<UserResponseModel>(user);
 
             return Ok(userResult);
         }
 
         [Authorize]
         [HttpPut]
-        public async Task<ActionResult<UserSearchResult>> Update(UserInputModel model)
+        public async Task<ActionResult<UserResponseModel>> Update(UserRequestModel model)
         {
             var user = _mapper.Map<User>(model);
 
@@ -56,7 +56,7 @@
             user.Id = httpContextUser.Id;
 
             var updated = await _userService.Update(user, true);
-            var userResult = _mapper.Map<UserSearchResult>(updated);
+            var userResult = _mapper.Map<UserResponseModel>(updated);
 
             return Ok(userResult);
 

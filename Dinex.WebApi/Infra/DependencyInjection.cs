@@ -18,11 +18,13 @@
             #region AutoMapper
             services.AddAutoMapper(typeof(UserMapper));
             services.AddAutoMapper(typeof(LoginMapper));
+            //services.AddAutoMapper(typeof(CategoryMapper));
             #endregion
 
             #region business validations
-            services.AddScoped<IValidator<UserInputModel>, UserModelValidation>();
-            services.AddScoped<IValidator<ActivationInputModel>, ActivationValidation>();
+            services.AddScoped<IValidator<UserRequestModel>, UserRequestModelValidation>();
+            services.AddScoped<IValidator<ActivationRequestModel>, ActivationRequestModelValidation>();
+            services.AddScoped<IValidator<CategoryRequestModel>, CategoryRequestModelValidation>();
             #endregion
 
             #region business services

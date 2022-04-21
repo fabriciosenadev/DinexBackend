@@ -16,7 +16,7 @@
 
 
         [HttpPost]
-        public async Task<ActionResult<AuthenticationResponse>> Authenticate(AuthenticationRequest request)
+        public async Task<ActionResult<AuthenticationResponseModel>> Authenticate(AuthenticationRequestModel request)
         {
             var login = _mapper.Map<Login>(request);
             var (user, token) = await _authenticationService.Authenticate(login);
@@ -26,7 +26,7 @@
             if (user is not null && token is null)
                 return BadRequest(new { message = "Usuario inativo, ative seu acesso" });
 
-            var response = new AuthenticationResponse(user, token);
+            var response = new AuthenticationResponseModel(user, token);
             return Ok(response);
         }
     }

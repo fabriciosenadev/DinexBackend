@@ -4,8 +4,8 @@
     {
         public UserMapper()
         {
-            CreateMap<UserInputModel, User>().ReverseMap();
-            CreateMap<UserSearchResult, User>().ReverseMap();
+            CreateMap<UserRequestModel, User>().ReverseMap();
+            CreateMap<UserResponseModel, User>().ReverseMap();
         }
     }
 }

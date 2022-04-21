@@ -4,7 +4,7 @@
     {
         public LoginMapper()
         {
-            CreateMap<AuthenticationRequest, Login>();
+            CreateMap<AuthenticationRequestModel, Login>();
         }
     }
 }
