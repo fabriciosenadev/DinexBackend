@@ -1,10 +1,10 @@
 ﻿namespace Dinex.WebApi.Business
 {
-    public class UserModelValidation : AbstractValidator<UserInputModel>
+    public class UserRequestModelValidation : AbstractValidator<UserRequestModel>
     {
         private readonly IUserService _userService;
 
-        public UserModelValidation(IUserService userService)
+        public UserRequestModelValidation(IUserService userService)
         {
             _userService = userService;
 
@@ -17,7 +17,7 @@
         private bool UniqueEmail(string email)
         {
             var hasAlreadyExists = _userService.GetByEmail(email);
-            if (!(hasAlreadyExists.Result == null)) return false;
+            if (hasAlreadyExists.Result is not null) return false;
 
             return true;
         }

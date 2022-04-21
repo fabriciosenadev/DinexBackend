@@ -1,7 +1,7 @@
 ﻿
 namespace Dinex.WebApi.API.Models
 {
-    public class AuthenticationRequest
+    public class AuthenticationRequestModel
     {
         [Required]
         public string Email { get; set; }

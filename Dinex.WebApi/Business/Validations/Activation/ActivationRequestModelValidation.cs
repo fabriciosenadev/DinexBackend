@@ -1,8 +1,8 @@
 ﻿namespace Dinex.WebApi.Business
 {
-    public class ActivationValidation : AbstractValidator<ActivationInputModel>
+    public class ActivationRequestModelValidation : AbstractValidator<ActivationRequestModel>
     {
-        public ActivationValidation()
+        public ActivationRequestModelValidation()
         {
             ValidateEmail();
         }
