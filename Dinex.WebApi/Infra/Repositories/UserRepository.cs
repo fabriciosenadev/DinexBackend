@@ -23,11 +23,5 @@ namespace Dinex.WebApi.Infra
         {
             return  _context.Users.AsNoTracking().FirstOrDefault(u => u.Id.Equals(userId));
         }
-
-        //public async Task<int> UpdateTest(User user)
-        //{
-        //    _context.Users.Update(user);
-        //    return await _context.SaveChangesAsync();
-        //}
     }
 }
