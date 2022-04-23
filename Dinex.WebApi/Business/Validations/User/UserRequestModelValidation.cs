@@ -1,12 +1,16 @@
-﻿namespace Dinex.WebApi.Business
+﻿using Microsoft.AspNetCore.Mvc.Infrastructure;
+
+namespace Dinex.WebApi.Business
 {
     public class UserRequestModelValidation : AbstractValidator<UserRequestModel>
     {
         private readonly IUserService _userService;
+        private readonly IActionContextAccessor _actionContextAccessor;
 
-        public UserRequestModelValidation(IUserService userService)
+        public UserRequestModelValidation(IUserService userService, IActionContextAccessor actionContextAccessor)
         {
             _userService = userService;
+            _actionContextAccessor = actionContextAccessor;
 
             ValidateName();
 
@@ -14,18 +18,33 @@
 
             VidatePassword();
         }
-        private bool UniqueEmail(string email)
+        private bool UniqueEmailWhenNewUser(string email)
         {
-            var hasAlreadyExists = _userService.GetByEmail(email);
-            if (hasAlreadyExists.Result is not null) return false;
+            var result = true;
+            try
+            {
+                if (_actionContextAccessor.ActionContext.HttpContext.Request.Method.Equals("POST"))
+                {
+                    var hasAlreadyExists = _userService.GetByEmail(email);
 
-            return true;
+                    if (hasAlreadyExists.Result is not null)
+                        result = false;
+                }
+            }
+            catch (Exception ex)
+            {
+
+            }
+
+            return result;
         }
 
         private void VidatePassword()
         {
             RuleFor(u => u.Password)
                 .NotEmpty()
+                .MinimumLength(8)
+                .WithMessage("Senha minima, 8 caracteres")
                 .WithName("Senha")
                 .WithMessage("Preencha a senha");
 
@@ -41,7 +60,7 @@
                 .EmailAddress()
                 .WithName("E-mail")
                 .WithMessage("Informe seu melhor e-mail")
-                .Must(UniqueEmail)
+                .Must(UniqueEmailWhenNewUser)
                 .WithMessage("Utilize outro endereço de e-mail.");
         }
 
