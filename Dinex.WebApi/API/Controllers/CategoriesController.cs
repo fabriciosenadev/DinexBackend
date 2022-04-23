@@ -67,9 +67,9 @@
             return Ok(categoryResult);
         }
 
-        [HttpGet("All")]
+        [HttpGet]
         [Authorize]
-        public async Task<ActionResult<List<CategoryResponseModel>>> GetAll()
+        public async Task<ActionResult<List<CategoryResponseModel>>> List()
         {
             var userId = await GetUserId();
             var result = await _categoryService.ListCategories(userId);
