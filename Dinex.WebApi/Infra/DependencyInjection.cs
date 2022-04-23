@@ -4,6 +4,8 @@
     {
         public static IServiceCollection RegisterAllDependecies(this IServiceCollection services)
         {
+            services.RegisterSwagger();
+
             // database context registration
             services.AddEntityFrameworkSqlite().AddDbContext<DinexBackendContext>();
 
@@ -47,6 +49,45 @@
             services.AddScoped<ICategoryRepository, CategoryRepository>();
             services.AddScoped<ICategoryToUserRepository, CategoryToUserRepository>();
             #endregion
+
+            return services;
+        }
+
+        private static IServiceCollection RegisterSwagger(this IServiceCollection services)
+        {
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo
+                {
+                    Title = "",
+                    Version = "v1",
+                });
+
+                c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme()
+                {
+                    Name = "Authorization",
+                    Type = SecuritySchemeType.ApiKey,
+                    Scheme = "Bearer",
+                    BearerFormat = "JWT",
+                    In = ParameterLocation.Header,
+                    Description = "JWT Authorization header usign the Bearer scheme. Example: Bearer {token}"
+                });
+
+                c.AddSecurityRequirement(new OpenApiSecurityRequirement
+                {
+                        {
+                            new OpenApiSecurityScheme
+                            {
+                                Reference = new OpenApiReference
+                                {
+                                    Type = ReferenceType.SecurityScheme,
+                                    Id = "Bearer"
+                                }
+                            },
+                            new string[] { }
+                        }
+                });
+            });
 
             return services;
         }
