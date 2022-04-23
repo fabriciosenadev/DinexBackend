@@ -130,5 +130,33 @@
 
             return listCategories;
         }
+
+        public async Task<List<Category>> ListCategoriesDeleted(Guid userId)
+        {
+            var listCategoryRelationIds = await _categoryToUserService.ListCategoryRelationIdsDeleted(userId);
+
+            if (listCategoryRelationIds is null)
+                return new List<Category>();
+
+            var listCategories = await _categoryRepository.ListCategoriesAsync(listCategoryRelationIds);
+
+            if (listCategories is null)
+                return new List<Category>();
+
+            return listCategories;
+        }
+
+        public async Task<Category> RestoreDeletedCategory(Guid userId, int categoryId)
+        {
+            var category = await _categoryRepository.GetByIdAsync(categoryId);
+            if (category is null)
+                return null;
+
+            var result = await _categoryToUserService.RestoreDeletedCategory(userId, categoryId);
+            if (result is null)
+                return null;
+
+            return category;
+        }
     }
 }

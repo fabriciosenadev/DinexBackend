@@ -7,5 +7,7 @@
         Task<bool> Delete(int categoryId, Guid userId);
         Task<Category> GetCategory(int categoryId, Guid userId);
         Task<List<Category>> ListCategories(Guid userId);
+        Task<List<Category>> ListCategoriesDeleted(Guid userId);
+        Task<Category> RestoreDeletedCategory(Guid userId, int categoryId);
     }
 }

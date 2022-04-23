@@ -1,4 +1,6 @@
-﻿namespace Dinex.WebApi.Infra
+﻿using Microsoft.AspNetCore.Mvc.Infrastructure;
+
+namespace Dinex.WebApi.Infra
 {
     public static class DependencyInjection
     {
@@ -17,10 +19,15 @@
                 ).AddFluentValidation();
 
 
+            #region register ContextAccessor
+            services.AddHttpContextAccessor();
+            services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
+            #endregion
+
             #region AutoMapper
             services.AddAutoMapper(typeof(UserMapper));
             services.AddAutoMapper(typeof(LoginMapper));
-            //services.AddAutoMapper(typeof(CategoryMapper));
+            services.AddAutoMapper(typeof(CategoryMapper));
             #endregion
 
             #region business validations

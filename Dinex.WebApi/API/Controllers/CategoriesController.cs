@@ -81,5 +81,34 @@
 
             return listResult;
         }
+
+        [HttpGet("deleted")]
+        [Authorize]
+        public async Task<ActionResult<List<CategoryResponseModel>>> ListDeleted()
+        {
+            var userId = await GetUserId();
+            var result = await _categoryService.ListCategoriesDeleted(userId);
+
+            if (result is null)
+                return new List<CategoryResponseModel>();
+
+            var listResult = _mapper.Map<List<CategoryResponseModel>>(result);
+
+            return listResult;
+        }
+
+        [HttpPut("{Id}/reactive")]
+        [Authorize]
+        public async Task<ActionResult<CategoryResponseModel>> RestoreDeletedCategory([FromRoute] int id)
+        {
+            var userId = await GetUserId();
+
+            var result = await _categoryService.RestoreDeletedCategory(userId, id);
+
+            if(result is null)
+                return BadRequest(new { message = "something went wrong try later" });
+
+            return Ok(result);
+        }
     }
 }

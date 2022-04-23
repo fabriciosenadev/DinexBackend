@@ -38,5 +38,20 @@
             var result = await _categoryToUserRepository.ListCategoryRelationIdsAsync(userId);
             return result;
         }
+
+        public async Task<List<int>> ListCategoryRelationIdsDeleted(Guid userId)
+        {
+            var result = await _categoryToUserRepository.ListCategoryRelationIdsDeletedAsync(userId);
+            return result;
+        }
+
+        public async Task<CategoryToUser> RestoreDeletedCategory(Guid userId, int categoryId)
+        {
+            var relation = await _categoryToUserRepository.FindDeletedRelationAsync(categoryId, userId);
+
+            relation.DeletedAt = null;
+            var result = await _categoryToUserRepository.UpdateAsync(relation);
+            return relation;
+        }
     }
 }
