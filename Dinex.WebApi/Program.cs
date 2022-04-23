@@ -23,8 +23,8 @@ builder.Services.AddCors( options =>
         builder =>
         {
             builder.WithOrigins( appSettings.AllowedOrigin)
-                .WithMethods("POST", "PUT", "GET")
-                .WithHeaders("accept", "content-type", "origin");
+                .WithMethods("POST", "PUT", "GET", "DELETE")
+                .WithHeaders("accept", "content-type", "origin", "authorization");
         });
 });
 
@@ -45,6 +45,13 @@ var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
 {
+    // Execute Migrations on start app
+    using (var scope = app.Services.CreateScope())
+    {
+        var dataContext = scope.ServiceProvider.GetRequiredService<DinexBackendContext>();
+        dataContext.Database.Migrate();
+    }
+
     app.UseSwagger();
     app.UseSwaggerUI();
 
