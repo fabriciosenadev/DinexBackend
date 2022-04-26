@@ -21,19 +21,23 @@ namespace Dinex.WebApi.Business
         private bool UniqueEmailWhenNewUser(string email)
         {
             var result = true;
-            try
-            {
-                if (_actionContextAccessor.ActionContext.HttpContext.Request.Method.Equals("POST"))
-                {
-                    var hasAlreadyExists = _userService.GetByEmail(email);
 
+            var requestMethod = _actionContextAccessor.ActionContext?.HttpContext.Request.Method;
+
+            var hasAlreadyExists = _userService.GetByEmail(email);
+
+            if (!String.IsNullOrEmpty(requestMethod))
+            {
+                if (requestMethod.Equals("POST"))
+                {
                     if (hasAlreadyExists.Result is not null)
                         result = false;
                 }
-            }
-            catch (Exception ex)
-            {
-
+                else
+                {
+                    if (hasAlreadyExists.Result is null)
+                        result = false;
+                }
             }
 
             return result;
