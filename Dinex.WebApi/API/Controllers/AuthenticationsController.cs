@@ -16,7 +16,7 @@
 
 
         [HttpPost]
-        public async Task<ActionResult<AuthenticationResponseModel>> Authenticate(AuthenticationRequestModel request)
+        public async Task<ActionResult<AuthenticationResponseModel>> Authenticate([FromBody] AuthenticationRequestModel request)
         {
             var login = _mapper.Map<Login>(request);
             var (user, token) = await _authenticationService.Authenticate(login);

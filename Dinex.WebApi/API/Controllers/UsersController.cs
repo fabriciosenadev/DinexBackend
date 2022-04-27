@@ -18,7 +18,7 @@
 
 
         [HttpPost]
-        public async Task<ActionResult<UserResponseModel>> Create(UserRequestModel model)
+        public async Task<ActionResult<UserResponseModel>> Create([FromBody] UserRequestModel model)
         {
             const int successCreation = 1;
 
@@ -48,7 +48,7 @@
 
         [Authorize]
         [HttpPut]
-        public async Task<ActionResult<UserResponseModel>> Update(UserRequestModel model)
+        public async Task<ActionResult<UserResponseModel>> Update([FromBody] UserRequestModel model)
         {
             var user = _mapper.Map<User>(model);
 

@@ -24,7 +24,7 @@
 
         [HttpPost]
         [Authorize]
-        public async Task<ActionResult<CategoryResponseModel>> Create(CategoryRequestModel model)
+        public async Task<ActionResult<CategoryResponseModel>> Create([FromBody] CategoryRequestModel model)
         {
             var userId = await GetUserId();
             var category = _mapper.Map<Category>(model);
@@ -41,7 +41,7 @@
 
         [HttpDelete("{Id}")]
         [Authorize]
-        public async Task<IActionResult> Delete(int id)
+        public async Task<IActionResult> Delete([FromRoute] int id)
         {
             var userId = await GetUserId();
 
@@ -54,7 +54,7 @@
 
         [HttpGet("{Id}")]
         [Authorize]
-        public async Task<ActionResult<CategoryResponseModel>> Get(int id)
+        public async Task<ActionResult<CategoryResponseModel>> Get([FromRoute] int id)
         {
             var userId = await GetUserId();
             var result = await _categoryService.GetCategory(id, userId);
