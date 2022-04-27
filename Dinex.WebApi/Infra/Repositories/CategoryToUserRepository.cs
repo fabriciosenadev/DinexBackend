@@ -8,7 +8,7 @@
 
         public async Task<CategoryToUser> FindRelationAsync(int categoryId, Guid userId)
         {
-            var result = await _context.CategoryiesToUsers
+            var result = await _context.CategoriesToUsers
                 .Where(r => 
                     r.UserId.Equals(userId) && 
                     r.CategoryId.Equals(categoryId) && 
@@ -20,7 +20,7 @@
         
         public async Task<CategoryToUser> FindDeletedRelationAsync(int categoryId, Guid userId)
         {
-            var result = await _context.CategoryiesToUsers
+            var result = await _context.CategoriesToUsers
                 .Where(r => 
                     r.UserId.Equals(userId) && 
                     r.CategoryId.Equals(categoryId) && 
@@ -32,7 +32,7 @@
 
         public async Task<List<int>> ListCategoryRelationIdsAsync(Guid userId)
         {
-            var result = await _context.CategoryiesToUsers
+            var result = await _context.CategoriesToUsers
                 .Where(r => r.UserId.Equals(userId) && r.DeletedAt.Equals(null))
                 .Select(r => r.CategoryId)
                 .ToListAsync();
@@ -42,7 +42,7 @@
 
         public async Task<List<int>> ListCategoryRelationIdsDeletedAsync(Guid userId)
         {
-            var result = await _context.CategoryiesToUsers
+            var result = await _context.CategoriesToUsers
                 .Where(r => r.UserId.Equals(userId) && r.DeletedAt != null)
                 .Select(r => r.CategoryId)
                 .ToListAsync();
