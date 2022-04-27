@@ -2,6 +2,6 @@
 {
     public interface ISendMailService
     {
-        Task<string> SendActivationCode(string activationCode, string fullName, string to);
+        Task<string> SendActivationCodeAsync(string activationCode, string fullName, string to);
     }
 }

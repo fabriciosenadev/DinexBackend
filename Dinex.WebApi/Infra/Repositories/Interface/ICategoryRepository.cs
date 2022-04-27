@@ -2,9 +2,9 @@
 {
     public interface ICategoryRepository : IRepository<Category>
     {
-        Task<List<Category>> ListStandardCategories();
+        Task<List<Category>> ListStandardCategoriesAsync();
 
-        Task<Category> GetByName(string categoryName);
+        Task<Category> GetByNameAsync(string categoryName);
 
         Task<Category> GetByIdAsync(int categoryId);
 

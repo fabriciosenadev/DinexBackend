@@ -12,7 +12,7 @@ namespace Dinex.WebApi.Business
             _cryptographyService = cryptographyService;
         }
 
-        public async Task<int> Create(User user)
+        public async Task<int> CreateAsync(User user)
         {
             user.IsActive = UserActivatioStatus.Inactive;
             user.CreatedAt = DateTime.Now;
@@ -24,13 +24,13 @@ namespace Dinex.WebApi.Business
             return result;
         }
 
-        public async Task<User> GetById(Guid id)
+        public async Task<User> GetByIdAsync(Guid id)
         {
             var user = await _userRepository.GetByIdAsync(id);
             return user;
         }
 
-        public async Task<User> GetByEmail(string email)
+        public async Task<User> GetByEmailAsync(string email)
         {
             var user = await _userRepository.GetByEmailAsync(email);
             return user;
@@ -38,7 +38,7 @@ namespace Dinex.WebApi.Business
 
 
 
-        public async Task<User> Update(User user, bool needUpdatePassword)
+        public async Task<User> UpdateAsync(User user, bool needUpdatePassword)
         {
             user.UpdatedAt = DateTime.Now;
 
@@ -51,7 +51,7 @@ namespace Dinex.WebApi.Business
             return user;
         }
 
-        public async Task<User> GetFromContext(HttpContext httpContext)
+        public async Task<User> GetFromContextAsync(HttpContext httpContext)
         {
             return await (Task<User>)httpContext.Items["User"];
         }

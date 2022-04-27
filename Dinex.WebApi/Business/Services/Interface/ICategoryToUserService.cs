@@ -2,16 +2,16 @@
 {
     public interface ICategoryToUserService
     {
-        Task AssignCategoryToUser(Guid userId, int categoryId);
+        Task AssignCategoryToUserAsync(Guid userId, int categoryId);
 
-        Task<CategoryToUser> GetRelation(int categoryId, Guid userId);
+        Task<CategoryToUser> GetRelationAsync(int categoryId, Guid userId);
 
-        Task<bool> SoftDeleteRelation(CategoryToUser categoryToUser);
+        Task<bool> SoftDeleteRelationAsync(CategoryToUser categoryToUser);
 
-        Task<List<int>> ListCategoryRelationIds(Guid userId);
+        Task<List<int>> ListCategoryRelationIdsAsync(Guid userId);
 
-        Task<List<int>> ListCategoryRelationIdsDeleted(Guid userId);
+        Task<List<int>> ListCategoryRelationIdsDeletedAsync(Guid userId);
 
-        Task<CategoryToUser> RestoreDeletedCategory(Guid userId, int categoryId);
+        Task<CategoryToUser> RestoreDeletedCategoryAsync(Guid userId, int categoryId);
     }
 }

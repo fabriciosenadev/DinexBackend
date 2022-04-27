@@ -19,9 +19,9 @@
             _categoryService = categoryService;
         }
 
-        public async Task<ActivationReason> ActivateAccount(string email, string activationCode)
+        public async Task<ActivationReason> ActivateAccountAsync(string email, string activationCode)
         {
-            var user = await _userService.GetByEmail(email);
+            var user = await _userService.GetByEmailAsync(email);
             var listOfActivations = await _activationRepository.ListByUserIdAsync(user.Id);
 
             listOfActivations.RemoveAll(a => !a.ActivationCode.Equals(activationCode));
@@ -38,29 +38,29 @@
                 return ActivationReason.ExpiredCode;
             }
 
-            await _categoryService.BindStandardCategories(user.Id);
+            await _categoryService.BindStandardCategoriesAsync(user.Id);
 
-            await ClearActivationCodes(user.Id);
+            await ClearActivationCodesAsync(user.Id);
 
-            await ActivateUser(user);
+            await ActivateUserAsync(user);
 
             return ActivationReason.Success;
         }
 
-        public async Task<string> SendActivationCode(string email)
+        public async Task<string> SendActivationCodeAsync(string email)
         {
             const int codeLength = 32;
-            var activationCode = GenerateActivatioCode(codeLength);
+            var activationCode = GenerateActivatioCodeAsync(codeLength);
 
-            var user = await _userService.GetByEmail(email);
+            var user = await _userService.GetByEmailAsync(email);
 
-            await AddActivationOnDatabase(user.Id, activationCode);
+            await AddActivationOnDatabaseAsync(user.Id, activationCode);
 
-            var sendResult = await _sendMailService.SendActivationCode(activationCode, user.FullName, user.Email);
+            var sendResult = await _sendMailService.SendActivationCodeAsync(activationCode, user.FullName, user.Email);
             return sendResult;
         }
 
-        private async Task<int> AddActivationOnDatabase(Guid userId, string activationCode)
+        private async Task<int> AddActivationOnDatabaseAsync(Guid userId, string activationCode)
         {
             var activation = new Activation();
             activation.UserId = userId;
@@ -71,7 +71,7 @@
             return result;
         }
 
-        private string GenerateActivatioCode(int codeLength)
+        private string GenerateActivatioCodeAsync(int codeLength)
         {
             var random = new Random();
             const string lower = "abcdefghijklmnopqrstuvwxyz";
@@ -82,14 +82,14 @@
                 .Select(s => s[random.Next(s.Length)]).ToArray());
         }
 
-        private async Task ActivateUser(User user)
+        private async Task ActivateUserAsync(User user)
         {
             user.IsActive = UserActivatioStatus.Active;
             user.UpdatedAt = DateTime.Now;
-            var resultUser = await _userService.Update(user, false);
+            var resultUser = await _userService.UpdateAsync(user, false);
         }
 
-        private async Task ClearActivationCodes(Guid userId)
+        private async Task ClearActivationCodesAsync(Guid userId)
         {
             await _activationRepository.DeleteByUserIdAsync(userId);
         }

@@ -6,13 +6,13 @@
         {
         }
 
-        public async Task<List<Category>> ListStandardCategories()
+        public async Task<List<Category>> ListStandardCategoriesAsync()
         {
             var result = await _context.Categories.Where(c => c.IsCustom.Equals(false)).ToListAsync();
             return result;
         }
 
-        public async Task<Category> GetByName(string categoryName)
+        public async Task<Category> GetByNameAsync(string categoryName)
         {
             var result = await _context.Categories.FirstOrDefaultAsync(c => c.Name.Equals(categoryName));
             return result;

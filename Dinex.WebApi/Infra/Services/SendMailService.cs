@@ -7,14 +7,14 @@
         {
             _appSettings = appSettings.Value;
         }
-        public async Task<string> SendActivationCode(string activationCode, string fullName, string to)
+        public async Task<string> SendActivationCodeAsync(string activationCode, string fullName, string to)
         {
             var message = CreateMessage(activationCode, fullName, to);
-            var result = await SendMessage(message);
+            var result = await SendMessageAsync(message);
             return result;
         }
 
-        private async Task<string> SendMessage(MimeMessage message)
+        private async Task<string> SendMessageAsync(MimeMessage message)
         {
             var smtpClient = new SmtpClient();
             await smtpClient.ConnectAsync(_appSettings.SmtpHost, _appSettings.SmtpPort, _appSettings.SmtpUseSsl); // --- TLS config

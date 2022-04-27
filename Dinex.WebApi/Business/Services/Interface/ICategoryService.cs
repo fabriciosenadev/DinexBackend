@@ -2,12 +2,12 @@
 {
     public interface ICategoryService
     {
-        Task BindStandardCategories(Guid userId);
-        Task<Category> Create(Category category, Guid userId);
-        Task<bool> Delete(int categoryId, Guid userId);
-        Task<Category> GetCategory(int categoryId, Guid userId);
-        Task<List<Category>> ListCategories(Guid userId);
-        Task<List<Category>> ListCategoriesDeleted(Guid userId);
-        Task<Category> RestoreDeletedCategory(Guid userId, int categoryId);
+        Task BindStandardCategoriesAsync(Guid userId);
+        Task<Category> CreateAsync(Category category, Guid userId);
+        Task<bool> DeleteAsync(int categoryId, Guid userId);
+        Task<Category> GetCategoryAsync(int categoryId, Guid userId);
+        Task<List<Category>> ListCategoriesAsync(Guid userId);
+        Task<List<Category>> ListCategoriesDeletedAsync(Guid userId);
+        Task<Category> RestoreDeletedCategoryAsync(Guid userId, int categoryId);
     }
 }
