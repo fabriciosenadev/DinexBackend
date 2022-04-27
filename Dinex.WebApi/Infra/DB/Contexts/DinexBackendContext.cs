@@ -10,10 +10,10 @@ namespace Dinex.WebApi.Infra
 
         public DbSet<Activation> Activations { get; set; }
         public DbSet<Category> Categories { get; set; }
-        public DbSet<CategoryToUser> CategoryiesToUsers { get; set; }
-        //public DbSet<Launch> Launches { get; set; }
+        public DbSet<CategoryToUser> CategoriesToUsers { get; set; }
+        public DbSet<Launch> Launches { get; set; }
+        public DbSet<PayMethodFromLaunch> PayMethodFromLaunches { get; set; }
         //public DbSet<PayMethod> PayMethods { get; set; }
-        //public DbSet<PayMethodLaunches> PayMethodLaunches { get; set; }
         //public DbSet<ScheduledLaunches> ScheduledLaunches { get; set; }
         public DbSet<User> Users { get; set; }
         //public DbSet<UserAmounts> UserAmounts { get; set; }
