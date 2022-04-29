@@ -18,7 +18,7 @@
 
         private async Task<Guid> GetUserId()
         {
-            var user = await _userService.GetFromContext(HttpContext);
+            var user = await _userService.GetFromContextAsync(HttpContext);
             return user.Id;
         }
 
@@ -29,7 +29,7 @@
             var userId = await GetUserId();
             var category = _mapper.Map<Category>(model);
             
-            var resultCreation = await _categoryService.Create(category, userId);            
+            var resultCreation = await _categoryService.CreateAsync(category, userId);            
             
             if (resultCreation is null)
                 return BadRequest(new { message = "category already exists"});
@@ -45,7 +45,7 @@
         {
             var userId = await GetUserId();
 
-            var result = await _categoryService.Delete(id, userId);
+            var result = await _categoryService.DeleteAsync(id, userId);
             if (!result)
                 return BadRequest(new { message = "something went wrong try later"});
 
@@ -57,7 +57,7 @@
         public async Task<ActionResult<CategoryResponseModel>> Get([FromRoute] int id)
         {
             var userId = await GetUserId();
-            var result = await _categoryService.GetCategory(id, userId);
+            var result = await _categoryService.GetCategoryAsync(id, userId);
             
             if(result is null)
                 return NotFound(new { message = "category not found"});
@@ -72,7 +72,7 @@
         public async Task<ActionResult<List<CategoryResponseModel>>> List()
         {
             var userId = await GetUserId();
-            var result = await _categoryService.ListCategories(userId);
+            var result = await _categoryService.ListCategoriesAsync(userId);
 
             if (result is null)
                 return new List<CategoryResponseModel>();
@@ -87,7 +87,7 @@
         public async Task<ActionResult<List<CategoryResponseModel>>> ListDeleted()
         {
             var userId = await GetUserId();
-            var result = await _categoryService.ListCategoriesDeleted(userId);
+            var result = await _categoryService.ListCategoriesDeletedAsync(userId);
 
             if (result is null)
                 return new List<CategoryResponseModel>();
@@ -103,7 +103,7 @@
         {
             var userId = await GetUserId();
 
-            var result = await _categoryService.RestoreDeletedCategory(userId, id);
+            var result = await _categoryService.RestoreDeletedCategoryAsync(userId, id);
 
             if(result is null)
                 return BadRequest(new { message = "something went wrong try later" });

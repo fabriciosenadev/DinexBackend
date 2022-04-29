@@ -8,7 +8,7 @@
             _categoryToUserRepository = categoryToUserRepository;
         }
 
-        public async Task AssignCategoryToUser(Guid userId, int categoryId)
+        public async Task AssignCategoryToUserAsync(Guid userId, int categoryId)
         {
             var relation = new CategoryToUser();
             relation.UserId = userId;
@@ -18,7 +18,7 @@
             await _categoryToUserRepository.AddAsync(relation);
         }
 
-        public async Task<bool> SoftDeleteRelation(CategoryToUser categoryToUser)
+        public async Task<bool> SoftDeleteRelationAsync(CategoryToUser categoryToUser)
         {
             categoryToUser.DeletedAt = DateTime.Now;
             var result = await _categoryToUserRepository.UpdateAsync(categoryToUser);
@@ -27,25 +27,25 @@
             return true;
         }
 
-        public async Task<CategoryToUser> GetRelation(int categoryId, Guid userId)
+        public async Task<CategoryToUser> GetRelationAsync(int categoryId, Guid userId)
         {
             var result = await _categoryToUserRepository.FindRelationAsync(categoryId, userId);
             return result;
         }
 
-        public async Task<List<int>> ListCategoryRelationIds(Guid userId)
+        public async Task<List<int>> ListCategoryRelationIdsAsync(Guid userId)
         {
             var result = await _categoryToUserRepository.ListCategoryRelationIdsAsync(userId);
             return result;
         }
 
-        public async Task<List<int>> ListCategoryRelationIdsDeleted(Guid userId)
+        public async Task<List<int>> ListCategoryRelationIdsDeletedAsync(Guid userId)
         {
             var result = await _categoryToUserRepository.ListCategoryRelationIdsDeletedAsync(userId);
             return result;
         }
 
-        public async Task<CategoryToUser> RestoreDeletedCategory(Guid userId, int categoryId)
+        public async Task<CategoryToUser> RestoreDeletedCategoryAsync(Guid userId, int categoryId)
         {
             var relation = await _categoryToUserRepository.FindDeletedRelationAsync(categoryId, userId);
 

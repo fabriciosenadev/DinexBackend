@@ -17,7 +17,7 @@
             _cryptographyService = cryptographyService;
         }
 
-        public async Task<(User, string)> Authenticate(Login loginData)
+        public async Task<(User, string)> AuthenticateAsync(Login loginData)
         {
             var user = await _userRepository.GetByEmailAsync(loginData.Email);
 

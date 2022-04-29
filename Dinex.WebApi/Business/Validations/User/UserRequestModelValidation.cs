@@ -24,7 +24,7 @@ namespace Dinex.WebApi.Business
 
             var requestMethod = _actionContextAccessor.ActionContext?.HttpContext.Request.Method;
 
-            var hasAlreadyExists = _userService.GetByEmail(email);
+            var hasAlreadyExists = _userService.GetByEmailAsync(email);
 
             if (!String.IsNullOrEmpty(requestMethod))
             {

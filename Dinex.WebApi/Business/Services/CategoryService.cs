@@ -14,18 +14,18 @@
             _categoryToUserService = categoryToUserService;
         }
 
-        private async Task AddStandardCategories()
+        private async Task AddStandardCategoriesAsync()
         {
-            await AddCategory("Salário", Applicable.In, false);
-            await AddCategory("Alimentação", Applicable.Out, false);
-            await AddCategory("Beleza", Applicable.Out, false);
-            await AddCategory("Educação", Applicable.Out, false);
-            await AddCategory("Lazer", Applicable.Out, false);
-            await AddCategory("Saúde", Applicable.Out, false);
-            await AddCategory("Transporte", Applicable.Out, false);
+            await AddCategoryAsync("Salário", Applicable.In, false);
+            await AddCategoryAsync("Alimentação", Applicable.Out, false);
+            await AddCategoryAsync("Beleza", Applicable.Out, false);
+            await AddCategoryAsync("Educação", Applicable.Out, false);
+            await AddCategoryAsync("Lazer", Applicable.Out, false);
+            await AddCategoryAsync("Saúde", Applicable.Out, false);
+            await AddCategoryAsync("Transporte", Applicable.Out, false);
         }
 
-        private async Task<Category> AddCategory(string categoryName, Applicable applicable, Boolean isCustom)
+        private async Task<Category> AddCategoryAsync(string categoryName, Applicable applicable, Boolean isCustom)
         {
             var category = new Category
             {
@@ -39,76 +39,76 @@
             return category;
         }
 
-        private async Task AssignStandardCategoriesToUser(Guid userId, List<Category> standardCategories)
+        private async Task AssignStandardCategoriesToUserAsync(Guid userId, List<Category> standardCategories)
         {
             foreach (var category in standardCategories)
-                await _categoryToUserService.AssignCategoryToUser(userId, category.Id);
+                await _categoryToUserService.AssignCategoryToUserAsync(userId, category.Id);
 
         }
 
-        private async Task AssignCategoryToUser(Guid userId, int categoryId) 
-            => await _categoryToUserService.AssignCategoryToUser(userId, categoryId);
+        private async Task AssignCategoryToUserAsync(Guid userId, int categoryId) 
+            => await _categoryToUserService.AssignCategoryToUserAsync(userId, categoryId);
 
-        private async Task<Category> GetByName(string categoryName)
+        private async Task<Category> GetByNameAsync(string categoryName)
         {
-            var category = await _categoryRepository.GetByName(categoryName);
+            var category = await _categoryRepository.GetByNameAsync(categoryName);
             return category;
         }
 
         private async Task<CategoryToUser> GetCategoryToUserRelation(int categoryId, Guid userId)
         {
-            var result = await _categoryToUserService.GetRelation(categoryId, userId);
+            var result = await _categoryToUserService.GetRelationAsync(categoryId, userId);
             return result;
         }
 
-        public async Task BindStandardCategories(Guid userId)
+        public async Task BindStandardCategoriesAsync(Guid userId)
         {
-            var standardCategories = await _categoryRepository.ListStandardCategories();
+            var standardCategories = await _categoryRepository.ListStandardCategoriesAsync();
             if (standardCategories.Count == 0)
             {
-                await AddStandardCategories();
-                standardCategories = await _categoryRepository.ListStandardCategories();
+                await AddStandardCategoriesAsync();
+                standardCategories = await _categoryRepository.ListStandardCategoriesAsync();
             }
 
-            await AssignStandardCategoriesToUser(userId, standardCategories);
+            await AssignStandardCategoriesToUserAsync(userId, standardCategories);
         }
 
-        public async Task<Category> Create(Category category, Guid userId)
+        public async Task<Category> CreateAsync(Category category, Guid userId)
         {
-            var foundCategory = await GetByName(category.Name);
+            var foundCategory = await GetByNameAsync(category.Name);
 
             Category result = foundCategory;
             if (foundCategory is null)
-                result = await AddCategory(category.Name, category.Applicable, true);
+                result = await AddCategoryAsync(category.Name, category.Applicable, true);
 
             var hasRelation = await GetCategoryToUserRelation((int)result.Id, userId);
             if (hasRelation is not null)
                 return null;
 
-            await AssignCategoryToUser(userId, result.Id);
+            await AssignCategoryToUserAsync(userId, result.Id);
 
             return result;
         }
 
-        public async Task<bool> Delete(int categoryId, Guid userId)
+        public async Task<bool> DeleteAsync(int categoryId, Guid userId)
         {
             if (categoryId == 0)
                 return false;
 
-            var relation = await _categoryToUserService.GetRelation(categoryId, userId);
+            var relation = await _categoryToUserService.GetRelationAsync(categoryId, userId);
             if (relation is null)
                 return false;
 
-            var result = await _categoryToUserService.SoftDeleteRelation(relation);
+            var result = await _categoryToUserService.SoftDeleteRelationAsync(relation);
             return result;
         }
 
-        public async Task<Category> GetCategory(int categoryId, Guid userId)
+        public async Task<Category> GetCategoryAsync(int categoryId, Guid userId)
         {
             if (categoryId == 0)
                 return null;
 
-            var relation = await _categoryToUserService.GetRelation(categoryId, userId);
+            var relation = await _categoryToUserService.GetRelationAsync(categoryId, userId);
             if (relation is null)
                 return null;
 
@@ -116,9 +116,9 @@
             return category;
         }
 
-        public async Task<List<Category>> ListCategories(Guid userId)
+        public async Task<List<Category>> ListCategoriesAsync(Guid userId)
         {
-            var listCategoryRelationIds = await _categoryToUserService.ListCategoryRelationIds(userId);
+            var listCategoryRelationIds = await _categoryToUserService.ListCategoryRelationIdsAsync(userId);
 
             if (listCategoryRelationIds is null)
                 return new List<Category>();
@@ -131,9 +131,9 @@
             return listCategories;
         }
 
-        public async Task<List<Category>> ListCategoriesDeleted(Guid userId)
+        public async Task<List<Category>> ListCategoriesDeletedAsync(Guid userId)
         {
-            var listCategoryRelationIds = await _categoryToUserService.ListCategoryRelationIdsDeleted(userId);
+            var listCategoryRelationIds = await _categoryToUserService.ListCategoryRelationIdsDeletedAsync(userId);
 
             if (listCategoryRelationIds is null)
                 return new List<Category>();
@@ -146,13 +146,13 @@
             return listCategories;
         }
 
-        public async Task<Category> RestoreDeletedCategory(Guid userId, int categoryId)
+        public async Task<Category> RestoreDeletedCategoryAsync(Guid userId, int categoryId)
         {
             var category = await _categoryRepository.GetByIdAsync(categoryId);
             if (category is null)
                 return null;
 
-            var result = await _categoryToUserService.RestoreDeletedCategory(userId, categoryId);
+            var result = await _categoryToUserService.RestoreDeletedCategoryAsync(userId, categoryId);
             if (result is null)
                 return null;
 

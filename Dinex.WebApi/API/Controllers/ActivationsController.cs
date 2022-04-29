@@ -14,14 +14,14 @@
         [HttpPost("send-code")]
         public async Task<IActionResult> SendActivationCode([FromBody] ActivationRequestModel activation)
         {
-            var result = await _activationService.SendActivationCode(activation.Email);
+            var result = await _activationService.SendActivationCodeAsync(activation.Email);
             return Ok(new { message = result });
         }
 
         [HttpPost("activate-account")]
         public async Task<IActionResult> ActivateAccount([FromBody] ActivationRequestModel activation)
         {
-            var reason = await _activationService.ActivateAccount(activation.Email, activation.ActivationCode);
+            var reason = await _activationService.ActivateAccountAsync(activation.Email, activation.ActivationCode);
 
             string message = null;
             switch (reason)

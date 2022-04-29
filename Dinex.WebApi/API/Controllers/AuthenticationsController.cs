@@ -19,7 +19,7 @@
         public async Task<ActionResult<AuthenticationResponseModel>> Authenticate([FromBody] AuthenticationRequestModel request)
         {
             var login = _mapper.Map<Login>(request);
-            var (user, token) = await _authenticationService.Authenticate(login);
+            var (user, token) = await _authenticationService.AuthenticateAsync(login);
             if (user is null && token is null)
                 return BadRequest(new { message = "Usuario ou senha incorreto(s)" });
 
