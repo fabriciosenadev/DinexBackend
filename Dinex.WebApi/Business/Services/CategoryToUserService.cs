@@ -8,11 +8,12 @@
             _categoryToUserRepository = categoryToUserRepository;
         }
 
-        public async Task AssignCategoryToUserAsync(Guid userId, int categoryId)
+        public async Task AssignCategoryToUserAsync(Guid userId, int categoryId, Applicable applicable)
         {
             var relation = new CategoryToUser();
             relation.UserId = userId;
             relation.CategoryId = categoryId;
+            relation.Applicable = applicable;
             relation.CreatedAt = DateTime.Now;
 
             await _categoryToUserRepository.AddAsync(relation);
@@ -33,13 +34,13 @@
             return result;
         }
 
-        public async Task<List<int>> ListCategoryRelationIdsAsync(Guid userId)
+        public async Task<List<CategoryToUser>> ListCategoryRelationIdsAsync(Guid userId)
         {
             var result = await _categoryToUserRepository.ListCategoryRelationIdsAsync(userId);
             return result;
         }
 
-        public async Task<List<int>> ListCategoryRelationIdsDeletedAsync(Guid userId)
+        public async Task<List<CategoryToUser>> ListCategoryRelationIdsDeletedAsync(Guid userId)
         {
             var result = await _categoryToUserRepository.ListCategoryRelationIdsDeletedAsync(userId);
             return result;
@@ -52,6 +53,15 @@
             relation.DeletedAt = null;
             var result = await _categoryToUserRepository.UpdateAsync(relation);
             return relation;
+        }
+
+        public List<int> ListIds(List<CategoryToUser> categoryToUsers)
+            => categoryToUsers.Select(x => x.Id).ToList();
+
+        public string CapitalizeFirstLetter(string value)
+        {
+            var newStr = char.ToUpper(value[0]) + value.Substring(1);
+            return newStr;
         }
     }
 }

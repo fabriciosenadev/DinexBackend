@@ -30,21 +30,19 @@
             return result;
         }
 
-        public async Task<List<int>> ListCategoryRelationIdsAsync(Guid userId)
+        public async Task<List<CategoryToUser>> ListCategoryRelationIdsAsync(Guid userId)
         {
             var result = await _context.CategoriesToUsers
                 .Where(r => r.UserId.Equals(userId) && r.DeletedAt.Equals(null))
-                .Select(r => r.CategoryId)
                 .ToListAsync();
 
             return result;
         }
 
-        public async Task<List<int>> ListCategoryRelationIdsDeletedAsync(Guid userId)
+        public async Task<List<CategoryToUser>> ListCategoryRelationIdsDeletedAsync(Guid userId)
         {
             var result = await _context.CategoriesToUsers
                 .Where(r => r.UserId.Equals(userId) && r.DeletedAt != null)
-                .Select(r => r.CategoryId)
                 .ToListAsync();
 
             return result;

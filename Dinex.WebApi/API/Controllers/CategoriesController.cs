@@ -22,6 +22,19 @@
             return user.Id;
         }
 
+        private List<CategoryResponseModel> FillApplicableToMainList(List<CategoryResponseModel> mainList, List<CategoryToUser> supportList)
+        {
+            mainList.ForEach(category =>
+            {
+                var applicable = supportList
+                    .Where(x => x.CategoryId == category.Id)
+                    .Select(x => x.Applicable);
+
+                category.Applicable = applicable.ElementAt(0).ToString();
+            });
+            return mainList;
+        }
+
         [HttpPost]
         [Authorize]
         public async Task<ActionResult<CategoryResponseModel>> Create([FromBody] CategoryRequestModel model)
@@ -29,12 +42,13 @@
             var userId = await GetUserId();
             var category = _mapper.Map<Category>(model);
             
-            var resultCreation = await _categoryService.CreateAsync(category, userId);            
             
+            var resultCreation = await _categoryService.CreateAsync(category, userId, model.Applicable);                        
             if (resultCreation is null)
                 return BadRequest(new { message = "category already exists"});
 
             var categoryResult = _mapper.Map<CategoryResponseModel>(resultCreation);
+            categoryResult.Applicable = model.Applicable;
 
             return Ok(categoryResult);
         }
@@ -72,12 +86,14 @@
         public async Task<ActionResult<List<CategoryResponseModel>>> List()
         {
             var userId = await GetUserId();
-            var result = await _categoryService.ListCategoriesAsync(userId);
+            var (categoryResult, relationResult) = await _categoryService.ListCategoriesAsync(userId);
 
-            if (result is null)
+            if (categoryResult is null || relationResult is null)
                 return new List<CategoryResponseModel>();
 
-            var listResult = _mapper.Map<List<CategoryResponseModel>>(result);
+            var listResultModel = _mapper.Map<List<CategoryResponseModel>>(categoryResult);
+
+            var listResult = FillApplicableToMainList(listResultModel, relationResult);
 
             return listResult;
         }
@@ -87,12 +103,14 @@
         public async Task<ActionResult<List<CategoryResponseModel>>> ListDeleted()
         {
             var userId = await GetUserId();
-            var result = await _categoryService.ListCategoriesDeletedAsync(userId);
+            var (categoryResult, relationResult) = await _categoryService.ListCategoriesDeletedAsync(userId);
 
-            if (result is null)
+            if (categoryResult is null || relationResult is null)
                 return new List<CategoryResponseModel>();
 
-            var listResult = _mapper.Map<List<CategoryResponseModel>>(result);
+            var listResultModel = _mapper.Map<List<CategoryResponseModel>>(categoryResult);
+
+            var listResult = FillApplicableToMainList(listResultModel, relationResult);
 
             return listResult;
         }
