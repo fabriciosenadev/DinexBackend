@@ -6,7 +6,7 @@ namespace Dinex.WebApi.Infra
     {
         public static IServiceCollection RegisterAllDependecies(this IServiceCollection services)
         {
-            services.RegisterSwagger();
+            //services.RegisterSwagger();
 
             // database context registration
             services.AddEntityFrameworkSqlite().AddDbContext<DinexBackendContext>();

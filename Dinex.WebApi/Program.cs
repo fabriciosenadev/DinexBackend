@@ -46,11 +46,11 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     // Execute Migrations on start app
-    using (var scope = app.Services.CreateScope())
-    {
-        var dataContext = scope.ServiceProvider.GetRequiredService<DinexBackendContext>();
-        dataContext.Database.Migrate();
-    }
+    //using (var scope = app.Services.CreateScope())
+    //{
+    //    var dataContext = scope.ServiceProvider.GetRequiredService<DinexBackendContext>();
+    //    dataContext.Database.Migrate();
+    //}
 
     app.UseSwagger();
     app.UseSwaggerUI();
