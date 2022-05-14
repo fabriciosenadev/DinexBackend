@@ -28,6 +28,8 @@ namespace Dinex.WebApi.Infra
             services.AddAutoMapper(typeof(UserMapper));
             services.AddAutoMapper(typeof(LoginMapper));
             services.AddAutoMapper(typeof(CategoryMapper));
+            services.AddAutoMapper(typeof(LaunchMapper));
+            services.AddAutoMapper(typeof(PayMethodFromLaunchMapper));
             #endregion
 
             #region business validations
@@ -42,6 +44,8 @@ namespace Dinex.WebApi.Infra
             services.AddScoped<IActivationService, ActivationService>();
             services.AddScoped<ICategoryService, CategoryService>();
             services.AddScoped<ICategoryToUserService, CategoryToUserService>();
+            services.AddScoped<ILaunchService, LaunchService>();
+            services.AddScoped<IPayMethodFromLaunchService, PayMethodFromLaunchService>();
             #endregion
 
             #region infra services
@@ -55,6 +59,8 @@ namespace Dinex.WebApi.Infra
             services.AddScoped<IActivationRepository, ActivationRepository>();
             services.AddScoped<ICategoryRepository, CategoryRepository>();
             services.AddScoped<ICategoryToUserRepository, CategoryToUserRepository>();
+            services.AddScoped<ILaunchRepository, LaunchRepository>();
+            services.AddScoped<IPayMethodFromLaunchRepository, PayMethodFromLaunchRepository>();
             #endregion
 
             return services;

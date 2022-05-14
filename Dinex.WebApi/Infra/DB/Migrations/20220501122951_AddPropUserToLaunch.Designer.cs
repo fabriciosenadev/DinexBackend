@@ -3,6 +3,7 @@ using System;
 using Dinex.WebApi.Infra;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Dinex.WebApi.Infra.DB.Migrations
 {
     [DbContext(typeof(DinexBackendContext))]
-    partial class DinexBackendContextModelSnapshot : ModelSnapshot
+    [Migration("20220501122951_AddPropUserToLaunch")]
+    partial class AddPropUserToLaunch
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "6.0.1");
@@ -103,7 +105,7 @@ namespace Dinex.WebApi.Infra.DB.Migrations
                     b.Property<DateTime>("Date")
                         .HasColumnType("TEXT");
 
-                    b.Property<DateTime?>("DeletedAt")
+                    b.Property<DateTime>("DeletedAt")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Description")
@@ -113,7 +115,7 @@ namespace Dinex.WebApi.Infra.DB.Migrations
                     b.Property<int>("Status")
                         .HasColumnType("INTEGER");
 
-                    b.Property<DateTime?>("UpdatedAt")
+                    b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("TEXT");
 
                     b.Property<Guid>("UserId")
@@ -133,7 +135,7 @@ namespace Dinex.WebApi.Infra.DB.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("TEXT");
 
-                    b.Property<DateTime?>("DeletedAt")
+                    b.Property<DateTime>("DeletedAt")
                         .HasColumnType("TEXT");
 
                     b.Property<int>("LaunchId")
@@ -142,7 +144,7 @@ namespace Dinex.WebApi.Infra.DB.Migrations
                     b.Property<int>("PayMethod")
                         .HasColumnType("INTEGER");
 
-                    b.Property<DateTime?>("UpdatedAt")
+                    b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");

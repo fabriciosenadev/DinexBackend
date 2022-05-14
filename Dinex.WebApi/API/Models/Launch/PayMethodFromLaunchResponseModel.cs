@@ -1,9 +1,9 @@
-﻿namespace Dinex.WebApi.Entities
+﻿namespace Dinex.WebApi.API.Models
 {
-    public class PayMethodFromLaunch
+    public class PayMethodFromLaunchResponseModel
     {
         public int Id { get; set; }
-        public LaunchPayMethod PayMethod { get; set; }
+        public string PayMethod { get; set; }
         public int LaunchId { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime? UpdatedAt { get; set; }
