@@ -129,7 +129,7 @@
                 return (new List<Category>(), new List<CategoryToUser>());
 
             var listCategories = await _categoryRepository
-                .ListCategoriesAsync(_categoryToUserService.ListIds(listCategoryRelations));
+                .ListCategoriesAsync(_categoryToUserService.ListCategoryIds(listCategoryRelations));
 
             if (listCategories is null)
                 return (new List<Category>(), new List<CategoryToUser>());
@@ -145,7 +145,7 @@
                 return (new List<Category>(), new List<CategoryToUser>());
 
             var listCategories = await _categoryRepository
-                .ListCategoriesAsync(_categoryToUserService.ListIds(listCategoryRelations));
+                .ListCategoriesAsync(_categoryToUserService.ListCategoryIds(listCategoryRelations));
 
             if (listCategories is null)
                 return (new List<Category>(), new List<CategoryToUser>());

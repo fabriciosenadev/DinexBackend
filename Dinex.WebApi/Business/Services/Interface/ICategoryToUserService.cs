@@ -14,7 +14,7 @@
 
         Task<CategoryToUser> RestoreDeletedCategoryAsync(Guid userId, int categoryId);
 
-        List<int> ListIds(List<CategoryToUser> categoryToUsers);
+        List<int> ListCategoryIds(List<CategoryToUser> categoryToUsers);
 
         string CapitalizeFirstLetter(string value);
     }

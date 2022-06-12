@@ -55,8 +55,8 @@
             return relation;
         }
 
-        public List<int> ListIds(List<CategoryToUser> categoryToUsers)
-            => categoryToUsers.Select(x => x.Id).ToList();
+        public List<int> ListCategoryIds(List<CategoryToUser> categoryToUsers)
+            => categoryToUsers.Select(x => x.CategoryId).ToList();
 
         public string CapitalizeFirstLetter(string value)
         {
