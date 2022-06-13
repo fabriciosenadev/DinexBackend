@@ -158,7 +158,7 @@ namespace Dinex.WebApi.API.Controllers
 
         }
 
-        [HttpGet("last-five")]
+        [HttpGet("last")]
         [Authorize]
         public async Task<ActionResult<List<LaunchResponseModel>>> ListLastLaunches()
         {
