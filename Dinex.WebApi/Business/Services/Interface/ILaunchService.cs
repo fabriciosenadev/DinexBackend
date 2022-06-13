@@ -7,5 +7,6 @@
         Task<bool> DeleteAsync(int launchId);
         Task<(Launch, PayMethodFromLaunch?)> GetAsync(int launchId);
         Task<(List<Launch>, List<PayMethodFromLaunch>?)> ListAsync();
+        Task<(List<Launch>, List<CategoryToUser>)> ListLast(Guid userId);
     }
 }

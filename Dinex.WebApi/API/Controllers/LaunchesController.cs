@@ -44,6 +44,19 @@ namespace Dinex.WebApi.API.Controllers
             return response;
         }
 
+        private List<LaunchResponseModel> FillApplicableToLaunchResponseModel(List<LaunchResponseModel> launchesResponseModel, List<CategoryToUser> categoriesToUser)
+        {
+            launchesResponseModel.ForEach(launch =>
+                {
+                    var applicable = categoriesToUser
+                        .Where(x => x.CategoryId.Equals(launch.CategoryId))
+                        .Select(x => x.Applicable);
+
+                    launch.Applicable = applicable.ElementAt(0).ToString();
+                });
+            return launchesResponseModel;
+        }
+
         [HttpPost]
         [Authorize]
         public async Task<ActionResult<LaunchAndPayMethodRequestModel>> Create([FromBody] LaunchAndPayMethodRequestModel model)
@@ -139,10 +152,23 @@ namespace Dinex.WebApi.API.Controllers
             var launchResponse = _mapper.Map<LaunchResponseModel>(launchResult);
 
             var response = GetLaunchAndPayMethodResponse(
-                launchResponse, 
+                launchResponse,
                 payMethodFromLaunchResponse);
             return Ok(response);
 
+        }
+
+        [HttpGet("last-five")]
+        [Authorize]
+        public async Task<ActionResult<List<LaunchResponseModel>>> ListLastLaunches()
+        {
+            var userId = await GetUserId();
+
+            var (launchesResponse, categoriesToUserResponse) = await _launchService.ListLast(userId);
+
+            var response = _mapper.Map<List<LaunchResponseModel>>(launchesResponse);
+            response = FillApplicableToLaunchResponseModel(response, categoriesToUserResponse);
+            return Ok(response);
         }
 
     }

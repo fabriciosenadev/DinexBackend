@@ -4,13 +4,16 @@
     {
         private readonly ILaunchRepository _launchRepository;
         private readonly IPayMethodFromLaunchService _payMethodFromLaunchService;
+        private readonly ICategoryToUserService _categoryToUserService;
 
         public LaunchService(
-            ILaunchRepository launchRepository, 
-            IPayMethodFromLaunchService payMethodFromLaunchService)
+            ILaunchRepository launchRepository,
+            IPayMethodFromLaunchService payMethodFromLaunchService,
+            ICategoryToUserService categoryToUserService)
         {
             _launchRepository = launchRepository;
             _payMethodFromLaunchService = payMethodFromLaunchService;
+            _categoryToUserService = categoryToUserService;
         }
 
         public async Task<(Launch, PayMethodFromLaunch?)> CreateAsync(Launch launch, PayMethodFromLaunch? payMethodFromLaunch)
@@ -84,6 +87,12 @@
             throw new NotImplementedException();
         }
 
+        public async Task<(List<Launch>, List<CategoryToUser>)> ListLast(Guid userId)
+        {
+            var launches = await _launchRepository.ListLast(userId);
+            var categoriesToUser = await _categoryToUserService.ListCategoryRelationIdsAsync(userId);
 
+            return (launches, categoriesToUser);
+        }
     }
 }
