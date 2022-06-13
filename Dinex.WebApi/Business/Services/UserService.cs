@@ -53,7 +53,11 @@ namespace Dinex.WebApi.Business
 
         public async Task<User> GetFromContextAsync(HttpContext httpContext)
         {
-            return await (Task<User>)httpContext.Items["User"];
+            var user = await (Task<User>)httpContext.Items["User"];
+            
+            httpContext.Items["User"] = null;
+            
+            return user;
         }
 
         #region exclusive for middleware
