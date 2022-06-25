@@ -1,6 +1,6 @@
 ﻿namespace Dinex.Business
 {
-    public class ActivationRequestModelValidation : AbstractValidator<ActivationRequestModel>
+    public class ActivationRequestModelValidation : AbstractValidator<ActivationRequestDto>
     {
         private readonly IActionContextAccessor _actionContextAccessor;
 

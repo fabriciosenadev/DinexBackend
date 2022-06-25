@@ -1,6 +1,6 @@
 ﻿namespace Dinex.Business
 {
-    public class CategoryRequestModelValidation : AbstractValidator<CategoryRequestModel>
+    public class CategoryRequestModelValidation : AbstractValidator<CategoryRequestDto>
     {
         public CategoryRequestModelValidation()
         {

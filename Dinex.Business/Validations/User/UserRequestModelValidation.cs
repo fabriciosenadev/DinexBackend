@@ -1,6 +1,6 @@
 ﻿namespace Dinex.Business
 {
-    public class UserRequestModelValidation : AbstractValidator<UserRequestModel>
+    public class UserRequestModelValidation : AbstractValidator<UserRequestDto>
     {
         private readonly IUserService _userService;
         private readonly IActionContextAccessor _actionContextAccessor;
