@@ -54,15 +54,19 @@
             return (launch, payMethodFromLaunch);
         }
 
-        public async Task<bool> DeleteAsync(int launchId)
+        public async Task<bool> SoftDeleteAsync(int launchId)
         {
             var (launch, payMethodFromLaunch) = await GetAsync(launchId);
 
             if(launch is null)
                 return false;
 
-            await _launchRepository.DeleteAsync(launch);
-            
+            launch.DeletedAt = DateTime.Now;
+            var resultCategory = await _launchRepository.UpdateAsync(launch);
+
+            if (resultCategory != 1)
+                return false;
+
             if (payMethodFromLaunch != null)
             {
                 var payMethodResult = await _payMethodFromLaunchService.SoftDeleteAsync(payMethodFromLaunch);

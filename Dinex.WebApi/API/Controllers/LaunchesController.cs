@@ -128,7 +128,7 @@ namespace Dinex.WebApi.API.Controllers
         [Authorize]
         public async Task<IActionResult> Delete(int id)
         {
-            var result = await _launchService.DeleteAsync(id);
+            var result = await _launchService.SoftDeleteAsync(id);
 
             if (!result)
                 return BadRequest(new { message = "there was a problem to delete launch" });
