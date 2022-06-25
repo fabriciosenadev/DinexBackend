@@ -1,10 +1,10 @@
-﻿namespace Dinex.Infra
+﻿namespace Dinex.Business
 {
     public class LoginMapper : Profile
     {
         public LoginMapper()
         {
-            CreateMap<AuthenticationRequestModel, Login>();
+            CreateMap<AuthenticationRequestDto, Login>();
         }
     }
 }
