@@ -1,4 +1,4 @@
-﻿namespace Dinex.WebApi.Infra
+﻿namespace Dinex.Infra
 {
     public class DinexBackendContext : DbContext
     {
