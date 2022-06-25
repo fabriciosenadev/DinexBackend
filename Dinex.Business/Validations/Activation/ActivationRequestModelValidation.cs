@@ -2,8 +2,11 @@
 {
     public class ActivationRequestModelValidation : AbstractValidator<ActivationRequestModel>
     {
-        public ActivationRequestModelValidation()
+        private readonly IActionContextAccessor _actionContextAccessor;
+
+        public ActivationRequestModelValidation(IActionContextAccessor actionContextAccessor)
         {
+            _actionContextAccessor = actionContextAccessor;
             ValidateEmail();
             ValidateActivationCode();
         }
@@ -19,10 +22,13 @@
 
         private void ValidateActivationCode()
         {
-            RuleFor(a => a.ActivationCode)
-                .NotEmpty()
-                .WithName("Código de ativação")
-                .WithMessage("Código de ativação deve ser informnado");
+            var requestOrigin = _actionContextAccessor.ActionContext?.ActionDescriptor.DisplayName;
+            if(!string.IsNullOrEmpty(requestOrigin) && requestOrigin.Contains("ActivateAccount"))
+                RuleFor(a => a.ActivationCode)
+                    .NotEmpty()
+                    .WithName("Código de ativação")
+                    .WithMessage("Código de ativação deve ser informnado");
+
         }
     }
 }

@@ -12,7 +12,6 @@
         public DbSet<CategoryToUser> CategoriesToUsers { get; set; }
         public DbSet<Launch> Launches { get; set; }
         public DbSet<PayMethodFromLaunch> PayMethodFromLaunches { get; set; }
-        //public DbSet<PayMethod> PayMethods { get; set; }
         //public DbSet<ScheduledLaunches> ScheduledLaunches { get; set; }
         public DbSet<User> Users { get; set; }
         //public DbSet<UserAmounts> UserAmounts { get; set; }
@@ -21,11 +20,5 @@
         {
             optionsBuilder.UseSqlite("Filename=DinExDB.sqlite");
         }
-
-        //protected override void OnModelCreating(ModelBuilder modelBuilder)
-        //{
-        //    modelBuilder.Entity<User>()
-        //        .HasKey(u => u.Id);
-        //}
     }
 }

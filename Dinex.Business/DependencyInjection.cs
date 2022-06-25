@@ -2,7 +2,7 @@
 {
     public static class DependencyInjection
     {
-        public static IServiceCollection RegisterBusinessDependecies(IServiceCollection services)
+        public static IServiceCollection RegisterBusinessDependecies(this IServiceCollection services)
         {
 
             services.RegisterInfraDependencies();
