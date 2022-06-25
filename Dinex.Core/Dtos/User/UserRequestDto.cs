@@ -1,6 +1,6 @@
 ﻿namespace Dinex.Core
 {
-    public class UserRequestModel
+    public class UserRequestDto
     {
         [Required]
         public string FullName { get; set; }

@@ -1,6 +1,6 @@
 ﻿namespace Dinex.Core
 {
-    public class AuthenticationRequestModel
+    public class AuthenticationRequestDto
     {
         [Required]
         public string Email { get; set; }

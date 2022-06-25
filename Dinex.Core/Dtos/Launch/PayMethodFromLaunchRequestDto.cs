@@ -1,6 +1,6 @@
 ﻿namespace Dinex.Core
 {
-    public class PayMethodFromLaunchRequestModel
+    public class PayMethodFromLaunchRequestDto
     {
         public string PayMethod { get; set; }
     }
