@@ -46,6 +46,7 @@ var app = builder.Build();
     app.UseCors(MyAllowSpecificOrigins);
 
     app.UseMiddleware<JwtMiddleware>();
+    app.UseMiddleware<ErrorHandlerMiddleware>();
 }
 
 if (app.Environment.IsDevelopment())
