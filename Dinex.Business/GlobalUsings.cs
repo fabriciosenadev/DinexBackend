@@ -23,5 +23,7 @@ global using Microsoft.Extensions.Options;
 
 global using FluentValidation;
 
+global using AutoMapper;
+
 global using Dinex.Core;
 global using Dinex.Infra;

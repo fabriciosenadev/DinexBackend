@@ -7,10 +7,23 @@
 
             services.RegisterInfraDependencies();
 
+            #region register ContextAccessor
+            services.AddHttpContextAccessor();
+            services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
+            #endregion
+
+            #region AutoMapper
+            services.AddAutoMapper(typeof(UserMapper));
+            services.AddAutoMapper(typeof(LoginMapper));
+            services.AddAutoMapper(typeof(CategoryMapper));
+            services.AddAutoMapper(typeof(LaunchMapper));
+            services.AddAutoMapper(typeof(PayMethodFromLaunchMapper));
+            #endregion
+
             #region business validations
-            services.AddScoped<IValidator<UserRequestModel>, UserRequestModelValidation>();
-            services.AddScoped<IValidator<ActivationRequestModel>, ActivationRequestModelValidation>();
-            services.AddScoped<IValidator<CategoryRequestModel>, CategoryRequestModelValidation>();
+            services.AddScoped<IValidator<UserRequestDto>, UserRequestModelValidation>();
+            services.AddScoped<IValidator<ActivationRequestDto>, ActivationRequestModelValidation>();
+            services.AddScoped<IValidator<CategoryRequestDto>, CategoryRequestModelValidation>();
             #endregion
 
             #region business services

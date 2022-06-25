@@ -14,19 +14,6 @@
                     }
                 ).AddFluentValidation();
 
-            #region register ContextAccessor
-            services.AddHttpContextAccessor();
-            services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
-            #endregion
-
-            #region AutoMapper
-            services.AddAutoMapper(typeof(UserMapper));
-            services.AddAutoMapper(typeof(LoginMapper));
-            services.AddAutoMapper(typeof(CategoryMapper));
-            services.AddAutoMapper(typeof(LaunchMapper));
-            services.AddAutoMapper(typeof(PayMethodFromLaunchMapper));
-            #endregion
-
             #region infra services
             services.AddScoped<IJwtService, JwtService>();
             services.AddScoped<ISendMailService, SendMailService>();
