@@ -5,98 +5,160 @@
         private readonly ILaunchRepository _launchRepository;
         private readonly IPayMethodFromLaunchService _payMethodFromLaunchService;
         private readonly ICategoryToUserService _categoryToUserService;
+        private readonly IMapper _mapper;
 
         public LaunchService(
             ILaunchRepository launchRepository,
             IPayMethodFromLaunchService payMethodFromLaunchService,
-            ICategoryToUserService categoryToUserService)
+            ICategoryToUserService categoryToUserService,
+            IMapper mapper)
         {
             _launchRepository = launchRepository;
             _payMethodFromLaunchService = payMethodFromLaunchService;
             _categoryToUserService = categoryToUserService;
+            _mapper = mapper;
         }
 
-        public async Task<(Launch, PayMethodFromLaunch?)> CreateAsync(Launch launch, PayMethodFromLaunch? payMethodFromLaunch)
+        private List<LaunchResponseDto> FillApplicableToLaunchResponseModel(List<LaunchResponseDto> launchesResponseModel, List<CategoryToUser> categoriesToUser)
         {
-            launch.CreatedAt = DateTime.Now;
-            launch.UpdatedAt = launch.DeletedAt = null;
-            var launchResult = await _launchRepository.AddAsync(launch);
-
-            if(launchResult != 1)
-                return (null, null);
-
-            if(payMethodFromLaunch is not null)
+            launchesResponseModel.ForEach(launch =>
             {
-                payMethodFromLaunch.LaunchId = launch.Id;
-                var payMethodResult= await _payMethodFromLaunchService.CreateAsync(payMethodFromLaunch);
+                var applicable = categoriesToUser
+                    .Where(x => x.CategoryId.Equals(launch.CategoryId))
+                    .Select(x => x.Applicable);
 
-                return (launch, payMethodResult);
-            }
-
-            return (launch, null);
+                launch.Applicable = applicable.ElementAt(0).ToString();
+            });
+            return launchesResponseModel;
         }
 
-        public async Task<(Launch, PayMethodFromLaunch?)> UpdateAsync(Launch launch, PayMethodFromLaunch? payMethodFromLaunch)
+        private (LaunchRequestDto, PayMethodFromLaunchRequestDto?) SplitLaunchAndPayMethodRequests(LaunchAndPayMethodRequestDto model)
         {
-            var launchResult = await _launchRepository.UpdateAsync(launch);
-
-            if (launchResult != 1)
-                return (null, null);
-
-            if (payMethodFromLaunch is not null)
-            {
-                payMethodFromLaunch.LaunchId = launch.Id;
-                var payMethodResult = await _payMethodFromLaunchService.UpdateAsync(payMethodFromLaunch);
-
-                return (launch, payMethodResult);
-            }
-
+            var launch = model.Launch;
+            var payMethodFromLaunch = model.PayMethodFromLaunch is not null ? model.PayMethodFromLaunch : null;
             return (launch, payMethodFromLaunch);
         }
 
-        public async Task<bool> SoftDeleteAsync(int launchId)
+        private LaunchAndPayMethodResponseDto JoinLaunchAndPayMethodResponses(
+            LaunchResponseDto launchResponseModel,
+            PayMethodFromLaunchResponseDto? payMethodFromLaunchResponseModel)
         {
-            var (launch, payMethodFromLaunch) = await GetAsync(launchId);
+            var response = new LaunchAndPayMethodResponseDto
+            {
+                Launch = launchResponseModel,
+                PayMethodFromLaunch = payMethodFromLaunchResponseModel
+            };
+            return response;
+        }
 
-            if(launch is null)
-                return false;
+        public async Task<LaunchAndPayMethodResponseDto> CreateAsync(LaunchAndPayMethodRequestDto request, Guid userId)
+        {
+            var (launchModel, payMethodModel) = SplitLaunchAndPayMethodRequests(request);
+
+            var launch = _mapper.Map<Launch>(launchModel);
+            launch.UserId = userId;
+            launch.CreatedAt = DateTime.Now;
+            launch.UpdatedAt = launch.DeletedAt = null;
+
+            var launchResult = await _launchRepository.AddAsync(launch);
+            if (launchResult != 1)
+                throw new AppException("there was a problem to create launch");
+
+            var launchResponse = _mapper.Map<LaunchResponseDto>(launch);
+
+            PayMethodFromLaunchResponseDto? payMethodFromLaunchResponse = null;
+            if (payMethodModel is not null)
+                payMethodFromLaunchResponse = await _payMethodFromLaunchService.CreateAsync(payMethodModel, launch.Id);
+
+
+            var response = JoinLaunchAndPayMethodResponses(
+                launchResponse,
+                payMethodFromLaunchResponse);
+
+            return response;
+        }
+
+        public async Task<LaunchAndPayMethodResponseDto> UpdateAsync(LaunchAndPayMethodRequestDto request, int launchId, Guid userId)
+        {
+            var (launchModel, payMethodModel) = SplitLaunchAndPayMethodRequests(request);
+
+            var launch = _mapper.Map<Launch>(launchModel);
+            launch.Id = launchId;
+            launch.UserId = userId;
+            launch.UpdatedAt = DateTime.Now;
+
+            var launchResult = await _launchRepository.UpdateAsync(launch);
+
+            if (launchResult != 1)
+                throw new AppException("there was a problem to update launch");
+
+            var launchResponse = _mapper.Map<LaunchResponseDto>(launchResult);
+
+            PayMethodFromLaunchResponseDto? payMethodFromLaunchResponse = null;
+            if (payMethodModel is not null)
+            {
+                payMethodFromLaunchResponse = await _payMethodFromLaunchService.UpdateAsync(payMethodModel, launch.Id);
+            }
+
+            var response = JoinLaunchAndPayMethodResponses(
+                launchResponse,
+                payMethodFromLaunchResponse);
+
+            return response;
+        }
+
+        public async Task SoftDeleteAsync(int launchId)
+        {
+            var result = await GetAsync(launchId);
+
+            var launch = _mapper.Map<Launch>(result.Launch);
+            var payMethodFromLaunch = _mapper.Map<PayMethodFromLaunch>(result.PayMethodFromLaunch);
+
+            if (launch is null)
+                throw new AppException("Launch not found");
 
             launch.DeletedAt = DateTime.Now;
             var resultCategory = await _launchRepository.UpdateAsync(launch);
 
             if (resultCategory != 1)
-                return false;
+                throw new AppException("there was a problem to delete launch");
 
             if (payMethodFromLaunch != null)
-            {
-                var payMethodResult = await _payMethodFromLaunchService.SoftDeleteAsync(payMethodFromLaunch);
-                if(!payMethodResult)
-                    return false;
-            }
-
-            return true;
+                await _payMethodFromLaunchService.SoftDeleteAsync(payMethodFromLaunch);
         }
 
-        public async Task<(Launch, PayMethodFromLaunch?)> GetAsync(int launchId)
+        public async Task<LaunchAndPayMethodResponseDto> GetAsync(int launchId)
         {
             var launch = await _launchRepository.GetByIdAsync(launchId);
 
-            var payMehtod = await _payMethodFromLaunchService.GetAsync(launchId);
+            if (launch is null)
+                throw new AppException("Launch not found");
 
-            return (launch, payMehtod);
+            var payMethodFromLaunchResponse = await _payMethodFromLaunchService.GetAsync(launchId);
+
+            var launchResponse = _mapper.Map<LaunchResponseDto>(launch);
+
+            var response = JoinLaunchAndPayMethodResponses(
+                launchResponse,
+                payMethodFromLaunchResponse);
+
+            return response;
         }
 
-        public Task<(List<Launch>, List<PayMethodFromLaunch>?)> ListAsync()
+        public Task<List<LaunchAndPayMethodResponseDto>> ListAsync()
         {
             throw new NotImplementedException();
         }
 
-        public async Task<(List<Launch>, List<CategoryToUser>)> ListLast(Guid userId)
+        public async Task<List<LaunchResponseDto>> ListLast(Guid userId)
         {
             var launches = await _launchRepository.ListLast(userId);
             var categoriesToUser = await _categoryToUserService.ListCategoryRelationIdsAsync(userId);
 
-            return (launches, categoriesToUser);
+            var response = _mapper.Map<List<LaunchResponseDto>>(launches);
+            response = FillApplicableToLaunchResponseModel(response, categoriesToUser);
+
+            return response;
         }
     }
 }

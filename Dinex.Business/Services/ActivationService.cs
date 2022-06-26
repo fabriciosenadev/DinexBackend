@@ -6,17 +6,21 @@
         private readonly IUserService _userService;
         private readonly ISendMailService _sendMailService;
         private readonly ICategoryService _categoryService;
+        private readonly IMapper _mapper;
+
         public ActivationService(
             IActivationRepository activationRepository,
             IUserService userService,
             ISendMailService sendMailService,
             ICategoryService categoryService
-            )
+,
+            IMapper mapper)
         {
             _activationRepository = activationRepository;
             _userService = userService;
             _sendMailService = sendMailService;
             _categoryService = categoryService;
+            _mapper = mapper;
         }
 
         public async Task<ActivationReason> ActivateAccountAsync(string email, string activationCode)
@@ -86,7 +90,11 @@
         {
             user.IsActive = UserActivatioStatus.Active;
             user.UpdatedAt = DateTime.Now;
-            var resultUser = await _userService.UpdateAsync(user, false);
+
+            var userDto = _mapper.Map<UserRequestDto>(user);
+
+            var resultUser = await _userService
+                .UpdateAsync(userDto, false, user.Id);
         }
 
         private async Task ClearActivationCodesAsync(Guid userId)

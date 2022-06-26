@@ -1,65 +1,54 @@
 ﻿namespace Dinex.WebApi.API.Controllers
 {
     [EnableCors("_myAllowSpecificOrigins")]
-    [Route("v1/[controller]")]
+    [Route("/[controller]")]
     [ApiController]
     public class UsersController : ControllerBase
     {
 
         private readonly IUserService _userService;
-        private readonly IMapper _mapper;
 
-        public UsersController(IUserService userService, IMapper mapper)
+        public UsersController(IUserService userService)
         {
 
             _userService = userService;
-            _mapper = mapper;
+        }
+
+        private async Task<Guid> GetUserId()
+        {
+            var user = await _userService.GetUser(HttpContext);
+            return user.Id;
         }
 
 
         [HttpPost]
-        public async Task<ActionResult<UserResponseModel>> Create([FromBody] UserRequestModel model)
+        public async Task<ActionResult<UserResponseDto>> Create([FromBody] UserRequestDto request)
         {
-            const int successCreation = 1;
-
-            var user = _mapper.Map<User>(model);
-            var resultCreation = await _userService.CreateAsync(user);
-
-            if (resultCreation != successCreation)
-                return BadRequest();
-
-            var userResult = _mapper.Map<UserResponseModel>(user);
-
-            return Ok(userResult);
+            var result = await _userService.CreateAsync(request);
+            return Ok(result);
         }
 
         [Authorize]
         [HttpGet]
-        public async Task<ActionResult<UserResponseModel>> GetById()
+        public async Task<ActionResult<UserResponseDto>> Get()
         {
-            var user = await _userService.GetFromContextAsync(HttpContext);
+            var user = await _userService.GetUser(HttpContext);
             if (user is null)
                 return BadRequest(new { message = "User not found" });
 
-            var userResult = _mapper.Map<UserResponseModel>(user);
-
-            return Ok(userResult);
+            return Ok(user);
         }
 
         [Authorize]
         [HttpPut]
-        public async Task<ActionResult<UserResponseModel>> Update([FromBody] UserRequestModel model)
+        public async Task<ActionResult<UserResponseDto>> Update([FromBody] UserRequestDto request)
         {
-            var user = _mapper.Map<User>(model);
+            var userId = await GetUserId();
 
-            var httpContextUser = await _userService.GetFromContextAsync(HttpContext);           
-            user.Id = httpContextUser.Id;
-
-            var updated = await _userService.UpdateAsync(user, true);
-            var userResult = _mapper.Map<UserResponseModel>(updated);
+            var userResult = await _userService
+                .UpdateAsync(request, true, userId);
 
             return Ok(userResult);
-
         }
     }
 }

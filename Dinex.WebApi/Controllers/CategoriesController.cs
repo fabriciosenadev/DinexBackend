@@ -1,56 +1,36 @@
 ﻿namespace Dinex.WebApi.API.Controllers
 {
     [EnableCors("_myAllowSpecificOrigins")]
-    [Route("v1/[controller]")]
+    [Route("/[controller]")]
     [ApiController]
     public class CategoriesController : ControllerBase
     {
         private readonly ICategoryService _categoryService;
         private readonly IUserService _userService;
-        private readonly IMapper _mapper;
 
-        public CategoriesController(ICategoryService categoryService, IMapper mapper, IUserService userService)
+
+        public CategoriesController(ICategoryService categoryService, IUserService userService)
         {
             _categoryService = categoryService;
-            _mapper = mapper;
             _userService = userService;
         }
 
         private async Task<Guid> GetUserId()
         {
-            var user = await _userService.GetFromContextAsync(HttpContext);
+            var user = await _userService.GetUser(HttpContext);
             return user.Id;
-        }
-
-        private List<CategoryResponseModel> FillApplicableToMainList(List<CategoryResponseModel> mainList, List<CategoryToUser> supportList)
-        {
-            mainList.ForEach(category =>
-            {
-                var applicable = supportList
-                    .Where(x => x.CategoryId == category.Id)
-                    .Select(x => x.Applicable);
-
-                category.Applicable = applicable.ElementAt(0).ToString();
-            });
-            return mainList;
         }
 
         [HttpPost]
         [Authorize]
-        public async Task<ActionResult<CategoryResponseModel>> Create([FromBody] CategoryRequestModel model)
+        public async Task<ActionResult<CategoryResponseDto>> Create([FromBody] CategoryRequestDto request)
         {
             var userId = await GetUserId();
-            var category = _mapper.Map<Category>(model);
             
-            
-            var resultCreation = await _categoryService.CreateAsync(category, userId, model.Applicable);                        
-            if (resultCreation is null)
-                return BadRequest(new { message = "category already exists"});
+            var resultCreation = await _categoryService
+                .CreateAsync(request, userId, request.Applicable);
 
-            var categoryResult = _mapper.Map<CategoryResponseModel>(resultCreation);
-            categoryResult.Applicable = model.Applicable;
-
-            return Ok(categoryResult);
+            return Ok(resultCreation);
         }
 
         [HttpDelete("{Id}")]
@@ -59,73 +39,48 @@
         {
             var userId = await GetUserId();
 
-            var result = await _categoryService.DeleteAsync(id, userId);
-            if (!result)
-                return BadRequest(new { message = "something went wrong try later"});
+            await _categoryService.DeleteAsync(id, userId);
 
             return Ok();
         }
 
         [HttpGet("{Id}")]
         [Authorize]
-        public async Task<ActionResult<CategoryResponseModel>> Get([FromRoute] int id)
+        public async Task<ActionResult<CategoryResponseDto>> Get([FromRoute] int id)
         {
             var userId = await GetUserId();
+
             var result = await _categoryService.GetCategoryAsync(id, userId);
-            
-            if(result is null)
-                return NotFound(new { message = "category not found"});
-
-            var categoryResult = _mapper.Map<CategoryResponseModel>(result);
-
-            return Ok(categoryResult);
+            return Ok(result);
         }
 
         [HttpGet]
         [Authorize]
-        public async Task<ActionResult<List<CategoryResponseModel>>> List()
+        public async Task<ActionResult<List<CategoryResponseDto>>> List()
         {
             var userId = await GetUserId();
-            var (categoryResult, relationResult) = await _categoryService.ListCategoriesAsync(userId);
 
-            if (categoryResult is null || relationResult is null)
-                return new List<CategoryResponseModel>();
-
-            var listResultModel = _mapper.Map<List<CategoryResponseModel>>(categoryResult);
-
-            var listResult = FillApplicableToMainList(listResultModel, relationResult);
-
+            var listResult = await _categoryService.ListCategoriesAsync(userId);
             return listResult;
         }
 
         [HttpGet("deleted")]
         [Authorize]
-        public async Task<ActionResult<List<CategoryResponseModel>>> ListDeleted()
+        public async Task<ActionResult<List<CategoryResponseDto>>> ListDeleted()
         {
             var userId = await GetUserId();
-            var (categoryResult, relationResult) = await _categoryService.ListCategoriesDeletedAsync(userId);
 
-            if (categoryResult is null || relationResult is null)
-                return new List<CategoryResponseModel>();
-
-            var listResultModel = _mapper.Map<List<CategoryResponseModel>>(categoryResult);
-
-            var listResult = FillApplicableToMainList(listResultModel, relationResult);
-
+            var listResult = await _categoryService.ListCategoriesDeletedAsync(userId);
             return listResult;
         }
 
-        [HttpPut("{Id}/reactive")]
+        [HttpPut("{Id}/re-activate")]
         [Authorize]
-        public async Task<ActionResult<CategoryResponseModel>> RestoreDeletedCategory([FromRoute] int id)
+        public async Task<ActionResult<CategoryResponseDto>> RestoreDeletedCategory([FromRoute] int id)
         {
             var userId = await GetUserId();
 
             var result = await _categoryService.RestoreDeletedCategoryAsync(userId, id);
-
-            if(result is null)
-                return BadRequest(new { message = "something went wrong try later" });
-
             return Ok(result);
         }
     }

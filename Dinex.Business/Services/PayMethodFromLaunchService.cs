@@ -3,51 +3,62 @@
     public class PayMethodFromLaunchService : IPayMethodFromLaunchService
     {
         private readonly IPayMethodFromLaunchRepository _repository;
+        private readonly IMapper _mapper;
 
-        public PayMethodFromLaunchService(IPayMethodFromLaunchRepository repository)
+        public PayMethodFromLaunchService(IPayMethodFromLaunchRepository repository, IMapper mapper)
         {
             _repository = repository;
+            _mapper = mapper;
         }
 
-        public async Task<PayMethodFromLaunch> CreateAsync(PayMethodFromLaunch payMethodFromLaunch)
+        public async Task<PayMethodFromLaunchResponseDto> CreateAsync(PayMethodFromLaunchRequestDto payMethodRequest, int launchId)
         {
+            var payMethodFromLaunch = _mapper.Map<PayMethodFromLaunch>(payMethodRequest);
+            payMethodFromLaunch.LaunchId = launchId;
             payMethodFromLaunch.CreatedAt = DateTime.Now;
             payMethodFromLaunch.UpdatedAt = payMethodFromLaunch.DeletedAt = null;
+
             var result = await _repository.AddAsync(payMethodFromLaunch);
             if (result != 1)
-                return null;
+                throw new AppException("there was a problem to create launch");
 
-            return payMethodFromLaunch;
+            var payMethodFromLaunchResponse = _mapper.Map<PayMethodFromLaunchResponseDto>(payMethodFromLaunch);
+            return payMethodFromLaunchResponse;
         }
 
-        public async Task<bool> SoftDeleteAsync(PayMethodFromLaunch payMethodFromLaunch)
+        public async Task SoftDeleteAsync(PayMethodFromLaunch payMethodFromLaunch)
         {
             payMethodFromLaunch.DeletedAt = DateTime.Now;
             var result = await _repository.UpdateAsync(payMethodFromLaunch);
             if (result != 1)
-                return false;
-            return true;
+                throw new AppException("there was a problem to delete launch");
         }
 
-        public async Task<PayMethodFromLaunch> UpdateAsync(PayMethodFromLaunch payMethodFromLaunch)
+        public async Task<PayMethodFromLaunchResponseDto> UpdateAsync(PayMethodFromLaunchRequestDto payMethodRequest, int launchId)
         {
+            var payMethodFromLaunch = _mapper.Map<PayMethodFromLaunch>(payMethodRequest);
+            payMethodFromLaunch.LaunchId = launchId;
             payMethodFromLaunch.UpdatedAt = DateTime.Now;
+
             var result = await _repository.UpdateAsync(payMethodFromLaunch);
             if (result != 1)
-                return null;
+                throw new AppException("there was a problem to update launch");
 
-            return payMethodFromLaunch;
+            var payMethodFromLaunchResponse = _mapper.Map<PayMethodFromLaunchResponseDto>(payMethodFromLaunch);
+            return payMethodFromLaunchResponse;
         }
 
-        public Task<PayMethodFromLaunch> GetAsync(int launchId)
+        public async Task<PayMethodFromLaunchResponseDto> GetAsync(int launchId)
         {
-            var result = _repository.FindRelationAsync(launchId);
-            return result;
+            var result = await _repository.FindRelationAsync(launchId);
+
+            var payMethodFromLaunchResponse = _mapper.Map<PayMethodFromLaunchResponseDto>(result);
+            return payMethodFromLaunchResponse;
         }
 
-        public Task<List<PayMethodFromLaunch>> ListAsync(List<int> launchIds)
+        public async Task<List<PayMethodFromLaunch>> ListAsync(List<int> launchIds)
         {
-            var result = _repository.ListRelationsAsync(launchIds);
+            var result = await _repository.ListRelationsAsync(launchIds);
             return result;
         }
     }

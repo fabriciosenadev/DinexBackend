@@ -3,25 +3,43 @@ namespace Dinex.Business
 {
     public class UserService : IUserService
     {
+        const int success = 1;
+
         private readonly IUserRepository _userRepository;
         private readonly ICryptographyService _cryptographyService;
+        private readonly IMapper _mapper;
 
-        public UserService(IUserRepository userRepository, ICryptographyService cryptographyService)
+
+        public UserService(IUserRepository userRepository, ICryptographyService cryptographyService, IMapper mapper)
         {
             _userRepository = userRepository;
             _cryptographyService = cryptographyService;
+            _mapper = mapper;
         }
 
-        public async Task<int> CreateAsync(User user)
+        private async Task<User> GetFromContextAsync(HttpContext httpContext)
         {
+            var user = await (Task<User>)httpContext.Items["User"];
+
+            httpContext.Items["User"] = null;
+
+            return user;
+        }
+
+        public async Task<UserResponseDto> CreateAsync(UserRequestDto request)
+        {
+            var user = _mapper.Map<User>(request);
+
             user.IsActive = UserActivatioStatus.Inactive;
             user.CreatedAt = DateTime.Now;
             user.Password = _cryptographyService.Encrypt(user.Password);
 
             var result = await _userRepository.AddAsync(user);
+            if (result != success)
+                throw new AppException("Error to create user");
 
-            user.Password = null;
-            return result;
+            var userResult = _mapper.Map<UserResponseDto>(user);
+            return userResult;
         }
 
         public async Task<User> GetByIdAsync(Guid id)
@@ -36,28 +54,34 @@ namespace Dinex.Business
             return user;
         }
 
-
-
-        public async Task<User> UpdateAsync(User user, bool needUpdatePassword)
+        public async Task<UserResponseDto> UpdateAsync(
+            UserRequestDto userData,
+            bool needUpdatePassword,
+            Guid userId)
         {
+            var user = await GetByIdAsync(userId);
+
             user.UpdatedAt = DateTime.Now;
+            
+            if (userData.IsActive != null)
+                user.IsActive = (UserActivatioStatus)userData.IsActive;
 
             if (needUpdatePassword)
-                user.Password = _cryptographyService.Encrypt(user.Password);
+                user.Password = _cryptographyService.Encrypt(userData.Password);
 
             var result = await _userRepository.UpdateAsync(user);
+            if (result != success)
+                throw new AppException("Error to update user");
 
-            user.Password = null;
-            return user;
+            var userResult = _mapper.Map<UserResponseDto>(user);
+            return userResult;
         }
 
-        public async Task<User> GetFromContextAsync(HttpContext httpContext)
+        public async Task<UserResponseDto> GetUser(HttpContext httpContext)
         {
-            var user = await (Task<User>)httpContext.Items["User"];
-            
-            httpContext.Items["User"] = null;
-            
-            return user;
+            var user = await GetFromContextAsync(httpContext);
+
+            return _mapper.Map<UserResponseDto>(user);
         }
 
         #region exclusive for middleware

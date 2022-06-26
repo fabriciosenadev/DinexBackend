@@ -7,7 +7,7 @@
         /// </summary>
         /// <param name="user">dados do usuario</param>
         /// <returns>dados do usuario</returns>
-        Task<int> CreateAsync(User user);
+        Task<UserResponseDto> CreateAsync(UserRequestDto request);
 
         /// <summary>
         /// busca usuario por codigo identificador
@@ -36,13 +36,13 @@
         /// <param name="user">dados do usuario</param>
         /// <param name="needUpdatePassword">avalia necessidade de atualizar a senha</param>
         /// <returns>dados do usuario atualizados</returns>
-        Task<User> UpdateAsync(User user, bool needUpdatePassword);
+        Task<UserResponseDto> UpdateAsync(UserRequestDto userData, bool needUpdatePassword, Guid userId);
 
         /// <summary>
         /// obtem o usuario do contexto http passado
         /// </summary>
         /// <param name="httpContext">contexto http</param>
         /// <returns>o usuario inserido no contexto http</returns>
-        Task<User> GetFromContextAsync(HttpContext httpContext);
+        Task<UserResponseDto> GetUser(HttpContext httpContext);
     }
 }

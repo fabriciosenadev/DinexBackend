@@ -7,6 +7,6 @@
         /// </summary>
         /// <param name="loginData">dados de login</param>
         /// <returns></returns>
-        Task<(User, string)> AuthenticateAsync(Login loginData);
+        Task<AuthenticationResponseDto> AuthenticateAsync(AuthenticationRequestDto request);
     }
 }

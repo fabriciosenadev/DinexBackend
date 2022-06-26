@@ -1,7 +1,7 @@
 ﻿namespace Dinex.WebApi.API.Controllers
 {
     [EnableCors("_myAllowSpecificOrigins")]
-    [Route("v1/[controller]")]
+    [Route("/[controller]")]
     [ApiController]
     public class ActivationsController : ControllerBase
     {
@@ -12,14 +12,14 @@
         }
 
         [HttpPost("send-code")]
-        public async Task<IActionResult> SendActivationCode([FromBody] ActivationRequestModel activation)
+        public async Task<IActionResult> SendActivationCode([FromBody] ActivationRequestDto activation)
         {
             var result = await _activationService.SendActivationCodeAsync(activation.Email);
             return Ok(new { message = result });
         }
 
         [HttpPost("activate-account")]
-        public async Task<IActionResult> ActivateAccount([FromBody] ActivationRequestModel activation)
+        public async Task<IActionResult> ActivateAccount([FromBody] ActivationRequestDto activation)
         {
             var reason = await _activationService.ActivateAccountAsync(activation.Email, activation.ActivationCode);
 

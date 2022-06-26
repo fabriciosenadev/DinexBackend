@@ -13,5 +13,7 @@
 
         [Required]
         public string ConfirmPassword { get; set; }
+
+        public UserActivatioStatus? IsActive { get; set; }
     }
 }
