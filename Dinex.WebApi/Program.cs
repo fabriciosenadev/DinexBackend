@@ -9,6 +9,11 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+//connection string
+//builder.Services.AddDbContext<DinexBackendContext>(
+//    options => options.UseNpgsql(builder.Configuration.GetConnectionString("DinExDB"))
+//    );
+
 var appSettings = new AppSettings();
 new ConfigureFromConfigurationOptions<AppSettings>(builder.Configuration.GetSection("AppSettings")).Configure(appSettings);
 builder.Services.AddSingleton(appSettings);
@@ -23,12 +28,12 @@ builder.Services.AddCors( options =>
         builder =>
         {
             builder.WithOrigins( appSettings.AllowedOrigin)
-                .WithMethods("POST", "PUT", "GET", "DELETE")
+                .WithMethods("POST", "PUT", "GET", "DELETE", "OPTIONS")
                 .WithHeaders("accept", "content-type", "origin", "authorization");
         });
 });
 
-builder.Services.RegisterAllDependecies();
+builder.Services.RegisterBusinessDependecies();
 
 var app = builder.Build();
 
@@ -41,20 +46,20 @@ var app = builder.Build();
     app.UseCors(MyAllowSpecificOrigins);
 
     app.UseMiddleware<JwtMiddleware>();
+    app.UseMiddleware<ErrorHandlerMiddleware>();
 }
 
 if (app.Environment.IsDevelopment())
 {
-    // Execute Migrations on start app
-    //using (var scope = app.Services.CreateScope())
-    //{
-    //    var dataContext = scope.ServiceProvider.GetRequiredService<DinexBackendContext>();
-    //    dataContext.Database.Migrate();
-    //}
-
     app.UseSwagger();
     app.UseSwaggerUI();
+}
 
+// Execute Migrations on start app
+using (var scope = app.Services.CreateScope())
+{
+    var dataContext = scope.ServiceProvider.GetRequiredService<DinexBackendContext>();
+    dataContext.Database.Migrate();
 }
 
 app.UseHttpsRedirection();
