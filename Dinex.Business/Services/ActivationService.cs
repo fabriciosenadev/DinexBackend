@@ -12,8 +12,7 @@
             IActivationRepository activationRepository,
             IUserService userService,
             ISendMailService sendMailService,
-            ICategoryService categoryService
-,
+            ICategoryService categoryService,
             IMapper mapper)
         {
             _activationRepository = activationRepository;
@@ -23,46 +22,7 @@
             _mapper = mapper;
         }
 
-        public async Task<ActivationReason> ActivateAccountAsync(string email, string activationCode)
-        {
-            var user = await _userService.GetByEmailAsync(email);
-            var listOfActivations = await _activationRepository.ListByUserIdAsync(user.Id);
-
-            listOfActivations.RemoveAll(a => !a.ActivationCode.Equals(activationCode));
-            if(listOfActivations.Count != 1)
-            {
-                return ActivationReason.InvalidCode;
-            }
-
-            const int activationExpiresInMinutes = 120;
-            var createdAt = listOfActivations[0].CreatedAt;
-            var currentTimeToExpire = DateTime.Now.AddMinutes(-activationExpiresInMinutes);
-            if (currentTimeToExpire >= createdAt)
-            {
-                return ActivationReason.ExpiredCode;
-            }
-
-            await _categoryService.BindStandardCategoriesAsync(user.Id);
-
-            await ClearActivationCodesAsync(user.Id);
-
-            await ActivateUserAsync(user);
-
-            return ActivationReason.Success;
-        }
-
-        public async Task<string> SendActivationCodeAsync(string email)
-        {
-            const int codeLength = 32;
-            var activationCode = GenerateActivatioCodeAsync(codeLength);
-
-            var user = await _userService.GetByEmailAsync(email);
-
-            await AddActivationOnDatabaseAsync(user.Id, activationCode);
-
-            var sendResult = await _sendMailService.SendActivationCodeAsync(activationCode, user.FullName, user.Email);
-            return sendResult;
-        }
+        #region Private Methods
 
         private async Task<int> AddActivationOnDatabaseAsync(Guid userId, string activationCode)
         {
@@ -100,6 +60,55 @@
         private async Task ClearActivationCodesAsync(Guid userId)
         {
             await _activationRepository.DeleteByUserIdAsync(userId);
+        }
+
+        #endregion
+
+        public async Task ActivateAccountAsync(string email, string activationCode)
+        {
+            var user = await _userService.GetByEmailAsync(email);
+            if(user is null)
+            {
+                // msg: Error to search user
+                throw new Exception(User.Error.ErrorToSearchUser.ToString());
+            }
+
+            var listOfActivations = await _activationRepository.ListByUserIdAsync(user.Id);
+
+            listOfActivations.RemoveAll(a => !a.ActivationCode.Equals(activationCode));
+            if(listOfActivations.Count != 1)
+            {
+                // msg: Invalid activation code
+                throw new AppException(Activation.Error.InvalidCode.ToString());
+            }
+
+            const int activationExpiresInMinutes = 120;
+            var createdAt = listOfActivations[0].CreatedAt;
+            var currentTimeToExpire = DateTime.Now.AddMinutes(-activationExpiresInMinutes);
+            if (currentTimeToExpire >= createdAt)
+            {
+                // msg: Expired activation code
+                throw new AppException(Activation.Error.ExpiredCode.ToString());
+            }
+
+            await _categoryService.BindStandardCategoriesAsync(user.Id);
+
+            await ClearActivationCodesAsync(user.Id);
+
+            await ActivateUserAsync(user);
+        }
+
+        public async Task<string> SendActivationCodeAsync(string email)
+        {
+            const int codeLength = 32;
+            var activationCode = GenerateActivatioCodeAsync(codeLength);
+
+            var user = await _userService.GetByEmailAsync(email);
+
+            await AddActivationOnDatabaseAsync(user.Id, activationCode);
+
+            var sendResult = await _sendMailService.SendActivationCodeAsync(activationCode, user.FullName, user.Email);
+            return sendResult;
         }
     }
 }
