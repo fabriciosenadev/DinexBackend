@@ -1,6 +1,4 @@
-﻿using System.Globalization;
-
-namespace Dinex.Infra
+﻿namespace Dinex.Infra
 {
     public class AppException : Exception
     {
