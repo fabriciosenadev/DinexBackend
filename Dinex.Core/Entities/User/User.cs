@@ -1,6 +1,6 @@
 ﻿namespace Dinex.Core
 {
-    public class User
+    public partial class User
     {
         public Guid Id { get; set; }
         public string FullName { get; set; }

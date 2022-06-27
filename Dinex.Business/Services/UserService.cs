@@ -36,7 +36,10 @@ namespace Dinex.Business
 
             var result = await _userRepository.AddAsync(user);
             if (result != success)
-                throw new AppException("Error to create user");
+            {
+                // msg : Error to create user
+                throw new Exception(User.Error.ErrorToCreateUser.ToString());
+            }
 
             var userResult = _mapper.Map<UserResponseDto>(user);
             return userResult;
@@ -62,7 +65,7 @@ namespace Dinex.Business
             var user = await GetByIdAsync(userId);
 
             user.UpdatedAt = DateTime.Now;
-            
+
             if (userData.IsActive != null)
                 user.IsActive = (UserActivatioStatus)userData.IsActive;
 
@@ -71,7 +74,10 @@ namespace Dinex.Business
 
             var result = await _userRepository.UpdateAsync(user);
             if (result != success)
-                throw new AppException("Error to update user");
+            {
+                // msg: Error to update user
+                throw new Exception(User.Error.ErrorToUpdateUser.ToString());
+            }
 
             var userResult = _mapper.Map<UserResponseDto>(user);
             return userResult;
@@ -80,6 +86,11 @@ namespace Dinex.Business
         public async Task<UserResponseDto> GetUser(HttpContext httpContext)
         {
             var user = await GetFromContextAsync(httpContext);
+            if (user is null)
+            {
+                // msg: "User not found"
+                throw new AppException(User.Error.ErrorToSearchUser.ToString());
+            }
 
             return _mapper.Map<UserResponseDto>(user);
         }
