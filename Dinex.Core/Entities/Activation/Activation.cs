@@ -1,6 +1,6 @@
 ﻿namespace Dinex.Core
 {
-    public class Activation
+    public partial class Activation
     {
         public int Id { get; set; }
         public string ActivationCode { get; set; }
