@@ -33,9 +33,6 @@
         public async Task<ActionResult<UserResponseDto>> Get()
         {
             var user = await _userService.GetUser(HttpContext);
-            if (user is null)
-                return BadRequest(new { message = "User not found" });
-
             return Ok(user);
         }
 

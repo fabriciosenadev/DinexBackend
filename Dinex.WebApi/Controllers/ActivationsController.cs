@@ -21,21 +21,7 @@
         [HttpPost("activate-account")]
         public async Task<IActionResult> ActivateAccount([FromBody] ActivationRequestDto activation)
         {
-            var reason = await _activationService.ActivateAccountAsync(activation.Email, activation.ActivationCode);
-
-            string message = null;
-            switch (reason)
-            {
-                case ActivationReason.ExpiredCode:
-                    message = "activation code was expired";
-                    break;
-                case ActivationReason.InvalidCode:
-                    message = "activation code was invalid";
-                    break;
-            }
-
-            if (!string.IsNullOrEmpty(message))
-                return BadRequest(message);
+            await _activationService.ActivateAccountAsync(activation.Email, activation.ActivationCode);
 
             return Ok();
         }
