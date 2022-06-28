@@ -56,6 +56,12 @@
             return payMethodFromLaunchResponse;
         }
 
+        public async Task<PayMethodFromLaunch> GetByLaunchIdWithoutDtoAsync(int launchId)
+        {
+            var result = await _repository.FindRelationAsync(launchId);
+            return result;
+        }
+
         public async Task<List<PayMethodFromLaunch>> ListAsync(List<int> launchIds)
         {
             var result = await _repository.ListRelationsAsync(launchIds);
