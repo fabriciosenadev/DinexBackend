@@ -34,11 +34,12 @@
         [Authorize]
         public async Task<ActionResult<LaunchAndPayMethodResponseDto>> Update(
             [FromRoute] int id,
+            [FromQuery] bool isJustStatus,
             [FromBody] LaunchAndPayMethodRequestDto request)
         {
             var userId = await GetUserId();
 
-            var response = await _launchService.UpdateAsync(request, id, userId);
+            var response = await _launchService.UpdateAsync(request, id, userId, isJustStatus);
             return Ok(response);
         }
 
