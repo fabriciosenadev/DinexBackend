@@ -5,18 +5,21 @@
         private readonly ILaunchRepository _launchRepository;
         private readonly IPayMethodFromLaunchService _payMethodFromLaunchService;
         private readonly ICategoryToUserService _categoryToUserService;
+        private readonly ICategoryService _categoryService;
         private readonly IMapper _mapper;
 
         public LaunchService(
             ILaunchRepository launchRepository,
             IPayMethodFromLaunchService payMethodFromLaunchService,
             ICategoryToUserService categoryToUserService,
-            IMapper mapper)
+            IMapper mapper,
+            ICategoryService categoryService)
         {
             _launchRepository = launchRepository;
             _payMethodFromLaunchService = payMethodFromLaunchService;
             _categoryToUserService = categoryToUserService;
             _mapper = mapper;
+            _categoryService = categoryService;
         }
 
         private List<LaunchResponseDto> FillApplicableToLaunchResponseModel(List<LaunchResponseDto> launchesResponseModel, List<CategoryToUser> categoriesToUser)
@@ -51,6 +54,20 @@
             return response;
         }
 
+        private async Task<LaunchStatus> GetNewStatus(Launch launch)
+        {
+            var category = await _categoryService.GetCategoryAsync(launch.CategoryId, launch.UserId);
+            if (launch.Status == LaunchStatus.Pending)
+            {
+                if (category.Applicable == Applicable.In.ToString())
+                    return LaunchStatus.Paid;
+                else
+                    return LaunchStatus.Received;
+            }
+
+            return LaunchStatus.Pending;
+        }
+
         public async Task<LaunchAndPayMethodResponseDto> CreateAsync(LaunchAndPayMethodRequestDto request, Guid userId)
         {
             var (launchModel, payMethodModel) = SplitLaunchAndPayMethodRequests(request);
@@ -78,7 +95,7 @@
             return response;
         }
 
-        public async Task<LaunchAndPayMethodResponseDto> UpdateAsync(LaunchAndPayMethodRequestDto request, int launchId, Guid userId)
+        public async Task<LaunchAndPayMethodResponseDto> UpdateAsync(LaunchAndPayMethodRequestDto request, int launchId, Guid userId, bool isJustStatus)
         {
             var (launchModel, payMethodModel) = SplitLaunchAndPayMethodRequests(request);
 
@@ -87,12 +104,15 @@
             launch.UserId = userId;
             launch.UpdatedAt = DateTime.Now;
 
+            if (isJustStatus)
+                launch.Status = await GetNewStatus(launch);
+
             var launchResult = await _launchRepository.UpdateAsync(launch);
 
             if (launchResult != 1)
                 throw new AppException("there was a problem to update launch");
 
-            var launchResponse = _mapper.Map<LaunchResponseDto>(launchResult);
+            var launchResponse = _mapper.Map<LaunchResponseDto>(launch);
 
             PayMethodFromLaunchResponseDto? payMethodFromLaunchResponse = null;
             if (payMethodModel is not null)
@@ -109,22 +129,19 @@
 
         public async Task SoftDeleteAsync(int launchId)
         {
-            var result = await GetAsync(launchId);
-
-            var launch = _mapper.Map<Launch>(result.Launch);
-            var payMethodFromLaunch = _mapper.Map<PayMethodFromLaunch>(result.PayMethodFromLaunch);
-
+            var launch = await _launchRepository.GetByIdAsync(launchId);
             if (launch is null)
                 throw new AppException("Launch not found");
 
             launch.DeletedAt = DateTime.Now;
-            var resultCategory = await _launchRepository.UpdateAsync(launch);
 
-            if (resultCategory != 1)
+            var result = await _launchRepository.UpdateAsync(launch);
+            if (result != 1)
                 throw new AppException("there was a problem to delete launch");
 
-            if (payMethodFromLaunch != null)
-                await _payMethodFromLaunchService.SoftDeleteAsync(payMethodFromLaunch);
+            var payMethod = await _payMethodFromLaunchService.GetByLaunchIdWithoutDtoAsync(launchId);
+            if (payMethod != null)
+                await _payMethodFromLaunchService.SoftDeleteAsync(payMethod);
         }
 
         public async Task<LaunchAndPayMethodResponseDto> GetAsync(int launchId)
