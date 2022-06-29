@@ -1,6 +1,6 @@
 ﻿namespace Dinex.Core
 {
-    public class Launch
+    public partial class Launch
     {
         public int Id { get; set; }
         public DateTime Date { get; set; }

@@ -19,13 +19,12 @@
             await _categoryToUserRepository.AddAsync(relation);
         }
 
-        public async Task<bool> SoftDeleteRelationAsync(CategoryToUser categoryToUser)
+        public async Task SoftDeleteRelationAsync(CategoryToUser categoryToUser)
         {
             categoryToUser.DeletedAt = DateTime.Now;
             var result = await _categoryToUserRepository.UpdateAsync(categoryToUser);
-            if(result != 1)
-                return false;
-            return true;
+            if (result != 1)
+                throw new InfraException("Error to create category relation");
         }
 
         public async Task<CategoryToUser> GetRelationAsync(int categoryId, Guid userId)
@@ -49,6 +48,8 @@
         public async Task<CategoryToUser> RestoreDeletedCategoryAsync(Guid userId, int categoryId)
         {
             var relation = await _categoryToUserRepository.FindDeletedRelationAsync(categoryId, userId);
+            if (relation is null)
+                throw new AppException("Category relation not found");
 
             relation.DeletedAt = null;
             var result = await _categoryToUserRepository.UpdateAsync(relation);

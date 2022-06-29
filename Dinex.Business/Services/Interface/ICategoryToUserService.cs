@@ -6,7 +6,7 @@
 
         Task<CategoryToUser> GetRelationAsync(int categoryId, Guid userId);
 
-        Task<bool> SoftDeleteRelationAsync(CategoryToUser categoryToUser);
+        Task SoftDeleteRelationAsync(CategoryToUser categoryToUser);
 
         Task<List<CategoryToUser>> ListCategoryRelationIdsAsync(Guid userId);
 

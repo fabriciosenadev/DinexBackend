@@ -70,7 +70,7 @@
             if(user is null)
             {
                 // msg: Error to search user
-                throw new Exception(User.Error.ErrorToSearchUser.ToString());
+                throw new InfraException(User.Error.ErrorToSearchUser.ToString());
             }
 
             var listOfActivations = await _activationRepository.ListByUserIdAsync(user.Id);

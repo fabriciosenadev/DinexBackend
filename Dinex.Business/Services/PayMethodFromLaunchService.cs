@@ -20,7 +20,10 @@
 
             var result = await _repository.AddAsync(payMethodFromLaunch);
             if (result != 1)
-                throw new AppException("there was a problem to create launch");
+            {
+                // msg: there was a problem to create launch
+                throw new InfraException(PayMethodFromLaunch.Error.ErrorToCreatePayMethodFromLaunch.ToString());
+            }
 
             var payMethodFromLaunchResponse = _mapper.Map<PayMethodFromLaunchResponseDto>(payMethodFromLaunch);
             return payMethodFromLaunchResponse;
@@ -31,7 +34,10 @@
             payMethodFromLaunch.DeletedAt = DateTime.Now;
             var result = await _repository.UpdateAsync(payMethodFromLaunch);
             if (result != 1)
-                throw new AppException("there was a problem to delete launch");
+            {
+                // msg: there was a problem to delete launch
+                throw new InfraException(PayMethodFromLaunch.Error.ErrorToDeletePayMethodFromLaunch.ToString());
+            }
         }
 
         public async Task<PayMethodFromLaunchResponseDto> UpdateAsync(PayMethodFromLaunchRequestDto payMethodRequest, int launchId)
@@ -42,7 +48,10 @@
 
             var result = await _repository.UpdateAsync(payMethodFromLaunch);
             if (result != 1)
-                throw new AppException("there was a problem to update launch");
+            {
+                // msg: there was a problem to update launch
+                throw new InfraException(PayMethodFromLaunch.Error.ErrorToUpdatePayMethodFromLaunch.ToString());
+            }
 
             var payMethodFromLaunchResponse = _mapper.Map<PayMethodFromLaunchResponseDto>(payMethodFromLaunch);
             return payMethodFromLaunchResponse;

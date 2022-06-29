@@ -97,7 +97,10 @@
 
             var hasRelation = await GetCategoryToUserRelation(result.Id, userId);
             if (hasRelation is not null)
-                throw new AppException("Category already exists");
+            {
+                // msg: Category already exists
+                throw new AppException(Category.Error.CategoryAlreadyExists.ToString());
+            }
 
             var applicableEnum = EnumConvertion
                 .StringToEnum<Applicable>(_categoryToUserService.CapitalizeFirstLetter(applicable));
@@ -112,11 +115,17 @@
         public async Task DeleteAsync(int categoryId, Guid userId)
         {
             if (categoryId == 0)
-                throw new AppException("Category not provided");
+            {
+                // msg: Category not provided
+                throw new InfraException(Category.Error.CategoryNotProvided.ToString());
+            }
 
             var relation = await _categoryToUserService.GetRelationAsync(categoryId, userId);
             if (relation is null)
-                throw new AppException("Category not found");
+            {
+                // msg: Category not found
+                throw new AppException(Category.Error.CategoryNotFound.ToString());
+            }
 
             await _categoryToUserService.SoftDeleteRelationAsync(relation);
         }
@@ -124,11 +133,17 @@
         public async Task<CategoryResponseDto> GetCategoryAsync(int categoryId, Guid userId)
         {
             if (categoryId == 0)
-                throw new AppException("Category not provided");
+            {
+                // msg: Category not provided
+                throw new InfraException(Category.Error.CategoryNotProvided.ToString());
+            }
 
             var relation = await _categoryToUserService.GetRelationAsync(categoryId, userId);
             if (relation is null)
-                throw new AppException("Category not found");
+            {
+                // msg: Category not found
+                throw new AppException(Category.Error.CategoryNotFound.ToString());
+            }
 
             var category = await _categoryRepository.GetByIdAsync(categoryId);
 
@@ -179,11 +194,12 @@
         {
             var category = await _categoryRepository.GetByIdAsync(categoryId);
             if (category is null)
-                throw new AppException("Category not found");
+            {
+                // msg: Category not found
+                throw new AppException(Category.Error.CategoryNotFound.ToString());
+            }
 
             var relationResult = await _categoryToUserService.RestoreDeletedCategoryAsync(userId, categoryId);
-            if (relationResult is null)
-                throw new AppException("Category not found");
 
             var categoryResult = _mapper.Map<CategoryResponseDto>(category);
             return categoryResult;

@@ -1,6 +1,6 @@
 ﻿namespace Dinex.Core
 {
-    public class PayMethodFromLaunch
+    public partial class PayMethodFromLaunch
     {
         public int Id { get; set; }
         public LaunchPayMethod PayMethod { get; set; }

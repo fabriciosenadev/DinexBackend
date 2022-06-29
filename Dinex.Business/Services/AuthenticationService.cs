@@ -26,14 +26,23 @@
 
             var user = await _userRepository.GetByEmailAsync(login.Email);
             if(user is null)
-                throw new AppException("Usuário não localizado");
+            {
+                // msg: Usuário não localizado
+                throw new AppException(Login.Error.LoginNotFound.ToString());
+            }
 
             var passwordsMatch = _cryptographyService.CompareValues(user.Password, login.Password);
             if (!passwordsMatch)
-                throw new AppException("Usuário ou senha incorreto");
+            {
+                // msg: Usuário ou senha incorreto
+                throw new AppException(Login.Error.LoginOrPassIncorrect.ToString());
+            }
 
             if (user.IsActive == UserActivatioStatus.Inactive)
-                throw new AppException("Ative sua conta");
+            {
+                // msg: Ative sua conta
+                throw new AppException(Login.Error.LoginInactive.ToString());
+            }
 
             var token = _jwtService.GenerateToken(user);
 

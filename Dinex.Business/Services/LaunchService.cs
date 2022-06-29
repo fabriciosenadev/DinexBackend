@@ -79,7 +79,10 @@
 
             var launchResult = await _launchRepository.AddAsync(launch);
             if (launchResult != 1)
-                throw new AppException("there was a problem to create launch");
+            {
+                // msg:  there was a problem to create launch
+                throw new Exception(Launch.Error.ErrorToCreateLaunch.ToString());
+            }
 
             var launchResponse = _mapper.Map<LaunchResponseDto>(launch);
 
@@ -98,8 +101,11 @@
         public async Task<LaunchAndPayMethodResponseDto> UpdateAsync(LaunchAndPayMethodRequestDto request, int launchId, Guid userId, bool isJustStatus)
         {
             var launchStored = await _launchRepository.GetByIdAsync(launchId);
-            if(launchStored is null)
-                throw new AppException("launch does not exist");
+            if (launchStored is null)
+            {
+                // msg: launch not found
+                throw new AppException(Launch.Error.LaunchNotFound.ToString());
+            }
 
             var (launchModel, payMethodModel) = SplitLaunchAndPayMethodRequests(request);
 
@@ -114,7 +120,10 @@
 
             var launchResult = await _launchRepository.UpdateAsync(launch);
             if (launchResult != 1)
-                throw new AppException("there was a problem to update launch");
+            {
+                // msg: there was a problem to update launch
+                throw new AppException(Launch.Error.ErrorToUpdateLaunch.ToString());
+            }
 
             var launchResponse = _mapper.Map<LaunchResponseDto>(launch);
 
@@ -133,13 +142,19 @@
         {
             var launch = await _launchRepository.GetByIdAsync(launchId);
             if (launch is null)
-                throw new AppException("Launch not found");
+            {
+                // msg: launch not found
+                throw new AppException(Launch.Error.LaunchNotFound.ToString());
+            }
 
             launch.DeletedAt = DateTime.Now;
 
             var result = await _launchRepository.UpdateAsync(launch);
             if (result != 1)
-                throw new AppException("there was a problem to delete launch");
+            {
+                // msg: there was a problem to delete launch
+                throw new AppException(Launch.Error.ErrorToDeleteLaunch.ToString());
+            }
 
             var payMethod = await _payMethodFromLaunchService.GetByLaunchIdWithoutDtoAsync(launchId);
             if (payMethod != null)
@@ -151,7 +166,10 @@
             var launch = await _launchRepository.GetByIdAsync(launchId);
 
             if (launch is null)
-                throw new AppException("Launch not found");
+            {
+                // msg: launch not found
+                throw new AppException(Launch.Error.LaunchNotFound.ToString());
+            }
 
             var payMethodFromLaunchResponse = await _payMethodFromLaunchService.GetAsync(launchId);
 
