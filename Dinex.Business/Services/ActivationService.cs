@@ -69,8 +69,8 @@
             var user = await _userService.GetByEmailAsync(email);
             if(user is null)
             {
-                // msg: Error to search user
-                throw new InfraException(User.Error.ErrorToSearchUser.ToString());
+                // msg: User not found
+                throw new InfraException(User.Error.UserNotFound.ToString());
             }
 
             var listOfActivations = await _activationRepository.ListByUserIdAsync(user.Id);
