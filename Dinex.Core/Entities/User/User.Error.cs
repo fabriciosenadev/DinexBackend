@@ -6,7 +6,8 @@
         {
             ErrorToCreateUser,
             ErrorToUpdateUser,
-            ErrorToSearchUser,
+
+            UserNotFound,
         }
     }
 }
