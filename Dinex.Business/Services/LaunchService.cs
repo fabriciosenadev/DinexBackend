@@ -97,18 +97,22 @@
 
         public async Task<LaunchAndPayMethodResponseDto> UpdateAsync(LaunchAndPayMethodRequestDto request, int launchId, Guid userId, bool isJustStatus)
         {
+            var launchStored = await _launchRepository.GetByIdAsync(launchId);
+            if(launchStored is null)
+                throw new AppException("launch does not exist");
+
             var (launchModel, payMethodModel) = SplitLaunchAndPayMethodRequests(request);
 
             var launch = _mapper.Map<Launch>(launchModel);
             launch.Id = launchId;
             launch.UserId = userId;
             launch.UpdatedAt = DateTime.Now;
+            launch.CreatedAt = launchStored.CreatedAt;
 
             if (isJustStatus)
                 launch.Status = await GetNewStatus(launch);
 
             var launchResult = await _launchRepository.UpdateAsync(launch);
-
             if (launchResult != 1)
                 throw new AppException("there was a problem to update launch");
 
@@ -116,9 +120,7 @@
 
             PayMethodFromLaunchResponseDto? payMethodFromLaunchResponse = null;
             if (payMethodModel is not null)
-            {
                 payMethodFromLaunchResponse = await _payMethodFromLaunchService.UpdateAsync(payMethodModel, launch.Id);
-            }
 
             var response = JoinLaunchAndPayMethodResponses(
                 launchResponse,
