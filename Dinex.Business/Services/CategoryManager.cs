@@ -64,9 +64,9 @@
 
             var applicableEnum = StringToEnum(applicable);
 
-            await _categoryToUserService.AssignCategoryToUserAsync(userId, category.Id, applicableEnum);
+            await _categoryToUserService.AssignCategoryToUserAsync(userId, resultCreation.Id, applicableEnum);
 
-            var categoryResult = _mapper.Map<CategoryResponseDto>(category);
+            var categoryResult = _mapper.Map<CategoryResponseDto>(resultCreation);
             categoryResult.Applicable = applicable;
             return categoryResult;
         }
