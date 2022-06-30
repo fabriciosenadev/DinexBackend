@@ -5,7 +5,7 @@
         private readonly ILaunchRepository _launchRepository;
         private readonly IPayMethodFromLaunchService _payMethodFromLaunchService;
         private readonly ICategoryToUserService _categoryToUserService;
-        private readonly ICategoryService _categoryService;
+        private readonly ICategoryManager _categoryService;
         private readonly IMapper _mapper;
 
         public LaunchService(
@@ -13,7 +13,7 @@
             IPayMethodFromLaunchService payMethodFromLaunchService,
             ICategoryToUserService categoryToUserService,
             IMapper mapper,
-            ICategoryService categoryService)
+            ICategoryManager categoryService)
         {
             _launchRepository = launchRepository;
             _payMethodFromLaunchService = payMethodFromLaunchService;
@@ -190,12 +190,19 @@
         public async Task<List<LaunchResponseDto>> ListLast(Guid userId)
         {
             var launches = await _launchRepository.ListLast(userId);
-            var categoriesToUser = await _categoryToUserService.ListCategoryRelationIdsAsync(userId);
+            var categoriesToUser = await _categoryToUserService.ListCategoryRelationIdsAsync(userId, false);
 
             var response = _mapper.Map<List<LaunchResponseDto>>(launches);
             response = FillApplicableToLaunchResponseModel(response, categoriesToUser);
 
             return response;
+        }
+
+        public async Task CheckExistsByCategoryIdAsync(int categoryId, Guid userId)
+        {
+            var count = await _launchRepository.CountByCategoryIdAsync(categoryId, userId);
+            if(count > 0)
+                throw new AppException("Exists launch with this category");
         }
     }
 }

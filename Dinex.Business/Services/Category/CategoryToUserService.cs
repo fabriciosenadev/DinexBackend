@@ -3,6 +3,7 @@
     public class CategoryToUserService : ICategoryToUserService
     {
         private readonly ICategoryToUserRepository _categoryToUserRepository;
+
         public CategoryToUserService(ICategoryToUserRepository categoryToUserRepository)
         {
             _categoryToUserRepository = categoryToUserRepository;
@@ -19,6 +20,17 @@
             await _categoryToUserRepository.AddAsync(relation);
         }
 
+        public async Task AssignStandardCategoriesToUserAsync(Guid userId, List<Category> standardCategories)
+        {
+            foreach (var category in standardCategories)
+            {
+                if (category.Name == "Salário")
+                    await AssignCategoryToUserAsync(userId, category.Id, Applicable.In);
+                else
+                    await AssignCategoryToUserAsync(userId, category.Id, Applicable.Out);
+            }
+        }
+
         public async Task SoftDeleteRelationAsync(CategoryToUser categoryToUser)
         {
             categoryToUser.DeletedAt = DateTime.Now;
@@ -33,16 +45,12 @@
             return result;
         }
 
-        public async Task<List<CategoryToUser>> ListCategoryRelationIdsAsync(Guid userId)
+        public async Task<List<CategoryToUser>> ListCategoryRelationIdsAsync(Guid userId, bool isToListDeleted)
         {
-            var result = await _categoryToUserRepository.ListCategoryRelationIdsAsync(userId);
-            return result;
-        }
-
-        public async Task<List<CategoryToUser>> ListCategoryRelationIdsDeletedAsync(Guid userId)
-        {
-            var result = await _categoryToUserRepository.ListCategoryRelationIdsDeletedAsync(userId);
-            return result;
+            if (!isToListDeleted)
+                return await _categoryToUserRepository.ListCategoryRelationIdsAsync(userId);
+            else
+                return await _categoryToUserRepository.ListCategoryRelationIdsDeletedAsync(userId);
         }
 
         public async Task<CategoryToUser> RestoreDeletedCategoryAsync(Guid userId, int categoryId)
@@ -59,10 +67,24 @@
         public List<int> ListCategoryIds(List<CategoryToUser> categoryToUsers)
             => categoryToUsers.Select(x => x.CategoryId).ToList();
 
-        public string CapitalizeFirstLetter(string value)
+        public async Task CheckExistsCategoryRelationToUser(int categoryId, Guid userId)
         {
-            var newStr = char.ToUpper(value[0]) + value.Substring(1);
-            return newStr;
+            var relation = await GetRelationAsync(categoryId, userId);
+            if (relation is not null)
+            {
+                // msg: Category already exists
+                throw new AppException(Category.Error.CategoryAlreadyExists.ToString());
+            }
+        }
+
+        public async Task CheckNotExistsCategoryRelationToUser(int categoryId, Guid userId)
+        {
+            var relation = await GetRelationAsync(categoryId, userId);
+            if (relation is null)
+            {
+                // msg: Category not found
+                throw new AppException(Category.Error.CategoryNotFound.ToString());
+            }
         }
     }
 }

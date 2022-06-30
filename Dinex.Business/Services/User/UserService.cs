@@ -100,6 +100,16 @@ namespace Dinex.Business
             return _mapper.Map<UserResponseDto>(user);
         }
 
+        public async Task ActivateUserAsync(User user)
+        {
+            user.IsActive = UserActivatioStatus.Active;
+            user.UpdatedAt = DateTime.Now;
+
+            var userDto = _mapper.Map<UserRequestDto>(user);
+
+            await UpdateAsync(userDto, false, user.Id);
+        }
+
         #region exclusive for middleware
         public async Task<User> GetByIdAsNoTracking(Guid userId)
         {
