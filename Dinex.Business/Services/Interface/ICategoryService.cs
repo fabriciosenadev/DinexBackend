@@ -2,12 +2,12 @@
 {
     public interface ICategoryService
     {
-        Task BindStandardCategoriesAsync(Guid userId);
-        Task<CategoryResponseDto> CreateAsync(CategoryRequestDto category, Guid userId, string applicable);
-        Task DeleteAsync(int categoryId, Guid userId);
-        Task<CategoryResponseDto> GetCategoryAsync(int categoryId, Guid userId);
-        Task<List<CategoryResponseDto>> ListCategoriesAsync(Guid userId);
-        Task<List<CategoryResponseDto>> ListCategoriesDeletedAsync(Guid userId);
-        Task<CategoryResponseDto> RestoreDeletedCategoryAsync(Guid userId, int categoryId);
+        Task<Category> CreateCategoryAsync(Category category);
+        Task AddStandardCategoriesAsync();
+        Task<List<Category>> ListCategoriesAsync(List<int> categoryIdsList);
+        Task<List<Category>> ListStandardCategoriesAsync();
+        Task<Category> GetByNameAsync(string categoryName);
+        Task<Category> GetByIdAsync(int categoryId);
+        void ValidateCategoryId(int categoryId);
     }
 }

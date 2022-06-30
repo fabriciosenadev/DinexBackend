@@ -8,6 +8,6 @@
 
         Task<Category> GetByIdAsync(int categoryId);
 
-        Task<List<Category>> ListCategoriesAsync(List<int> listCategoryRelationIds);
+        Task<List<Category>> ListCategoriesAsync(List<int> categoryIdsList);
     }
 }

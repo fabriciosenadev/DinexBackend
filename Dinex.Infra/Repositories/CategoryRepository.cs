@@ -24,10 +24,10 @@
             return result;
         }
 
-        public async Task<List<Category>> ListCategoriesAsync(List<int> listCategoryRelationIds)
+        public async Task<List<Category>> ListCategoriesAsync(List<int> categoryIdsList)
         {
             var result = await _context.Categories
-                .Where(c => listCategoryRelationIds.Contains(c.Id))
+                .Where(c => categoryIdsList.Contains(c.Id))
                 .ToListAsync();
             return result;
         }

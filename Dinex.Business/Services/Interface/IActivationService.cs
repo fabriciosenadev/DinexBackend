@@ -2,7 +2,9 @@
 {
     public interface IActivationService
     {
-        Task<string> SendActivationCodeAsync(string email);
-        Task ActivateAccountAsync(string email, string activationCode);
+        Task ValidateActivationCode(string activationCode, Guid userId);
+        Task ClearActivationCodesAsync(Guid userId);
+        string GenerateActivatioCodeAsync(int codeLength);
+        Task<int> AddActivationOnDatabaseAsync(Guid userId, string activationCode);
     }
 }

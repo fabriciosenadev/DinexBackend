@@ -26,6 +26,11 @@
             services.AddScoped<IValidator<CategoryRequestDto>, CategoryRequestModelValidation>();
             #endregion
 
+            #region business managers
+            services.AddScoped<IActivationManager, ActivationManager>();
+            services.AddScoped<ICategoryManager, CategoryManager>();
+            #endregion
+
             #region business services
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IAuthenticationService, AuthenticationService>();

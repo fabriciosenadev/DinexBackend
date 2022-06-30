@@ -8,5 +8,6 @@
         Task<LaunchAndPayMethodResponseDto> GetAsync(int launchId);
         Task<List<LaunchAndPayMethodResponseDto>> ListAsync();
         Task<List<LaunchResponseDto>> ListLast(Guid userId);
+        Task CheckExistsByCategoryIdAsync(int categoryId, Guid userId);
     }
 }

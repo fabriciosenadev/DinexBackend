@@ -44,5 +44,7 @@
         /// <param name="httpContext">contexto http</param>
         /// <returns>o usuario inserido no contexto http</returns>
         Task<UserResponseDto> GetUser(HttpContext httpContext);
+
+        Task ActivateUserAsync(User user);
     }
 }

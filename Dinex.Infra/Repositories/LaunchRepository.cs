@@ -6,6 +6,15 @@
         {
 
         }
+
+        public async Task<int> CountByCategoryIdAsync(int categoryId, Guid userId)
+        {
+            var result = await _context.Launches
+                .Where(x => x.CategoryId.Equals(categoryId))
+                .CountAsync();
+            return result;
+        }
+
         public async Task<Launch> GetByIdAsync(int launchId)
         {
             var result = await _context.Launches

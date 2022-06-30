@@ -5,13 +5,13 @@
     [ApiController]
     public class CategoriesController : ControllerBase
     {
-        private readonly ICategoryService _categoryService;
+        private readonly ICategoryManager _categoryManager;
         private readonly IUserService _userService;
 
 
-        public CategoriesController(ICategoryService categoryService, IUserService userService)
+        public CategoriesController(ICategoryManager categoryManager, IUserService userService)
         {
-            _categoryService = categoryService;
+            _categoryManager = categoryManager;
             _userService = userService;
         }
 
@@ -27,7 +27,7 @@
         {
             var userId = await GetUserId();
             
-            var resultCreation = await _categoryService
+            var resultCreation = await _categoryManager
                 .CreateAsync(request, userId, request.Applicable);
 
             return Ok(resultCreation);
@@ -39,7 +39,7 @@
         {
             var userId = await GetUserId();
 
-            await _categoryService.DeleteAsync(id, userId);
+            await _categoryManager.DeleteAsync(id, userId);
 
             return Ok();
         }
@@ -50,7 +50,7 @@
         {
             var userId = await GetUserId();
 
-            var result = await _categoryService.GetCategoryAsync(id, userId);
+            var result = await _categoryManager.GetCategoryAsync(id, userId);
             return Ok(result);
         }
 
@@ -60,7 +60,7 @@
         {
             var userId = await GetUserId();
 
-            var listResult = await _categoryService.ListCategoriesAsync(userId);
+            var listResult = await _categoryManager.ListCategoriesAsync(userId, false);
             return listResult;
         }
 
@@ -70,7 +70,7 @@
         {
             var userId = await GetUserId();
 
-            var listResult = await _categoryService.ListCategoriesDeletedAsync(userId);
+            var listResult = await _categoryManager.ListCategoriesAsync(userId, true);
             return listResult;
         }
 
@@ -80,7 +80,7 @@
         {
             var userId = await GetUserId();
 
-            var result = await _categoryService.RestoreDeletedCategoryAsync(userId, id);
+            var result = await _categoryManager.RestoreDeletedCategoryAsync(userId, id);
             return Ok(result);
         }
     }
