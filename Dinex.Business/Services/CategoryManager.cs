@@ -58,9 +58,9 @@
         {
             var category = _mapper.Map<Category>(request);
 
-            await _categoryService.CreateCategoryAsync(category);
+            var resultCreation = await _categoryService.CreateCategoryAsync(category);
 
-            await _categoryToUserService.CheckExistsCategoryRelationToUser(category.Id, userId);
+            await _categoryToUserService.CheckExistsCategoryRelationToUser(resultCreation.Id, userId);
 
             var applicableEnum = StringToEnum(applicable);
 
