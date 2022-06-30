@@ -5,20 +5,20 @@
         private readonly ILaunchService _launchService;
         private readonly IPayMethodFromLaunchService _payMethodFromLaunchService;
         private readonly ICategoryToUserService _categoryToUserService;
-        private readonly ICategoryManager _categoryService;
+        private readonly ICategoryManager _categoryManager;
         private readonly IMapper _mapper;
 
         public LaunchManager(
             ILaunchService launchServie,
             IPayMethodFromLaunchService payMethodFromLaunchService,
             ICategoryToUserService categoryToUserService,
-            ICategoryManager categoryService,
+            ICategoryManager categoryManager,
             IMapper mapper)
         {
             _launchService = launchServie;
             _payMethodFromLaunchService = payMethodFromLaunchService;
             _categoryToUserService = categoryToUserService;
-            _categoryService = categoryService;
+            _categoryManager = categoryManager;
             _mapper = mapper;
         }
 
@@ -56,7 +56,7 @@
 
         private async Task<LaunchStatus> GetNewStatus(Launch launch)
         {
-            var category = await _categoryService.GetCategoryAsync(launch.CategoryId, launch.UserId);
+            var category = await _categoryManager.GetCategoryAsync(launch.CategoryId, launch.UserId);
             if (launch.Status == LaunchStatus.Pending)
             {
                 if (category.Applicable == Applicable.In.ToString())
