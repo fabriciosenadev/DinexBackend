@@ -2,7 +2,7 @@
 {
     public interface IPayMethodFromLaunchService
     {
-        Task<PayMethodFromLaunchResponseDto> CreateAsync(PayMethodFromLaunchRequestDto payMethodFromLaunch, int launchId);
+        Task<PayMethodFromLaunch> CreateAsync(PayMethodFromLaunch payMethodFromLaunch, int launchId);
         Task<PayMethodFromLaunchResponseDto> UpdateAsync(PayMethodFromLaunchRequestDto payMethodFromLaunch, int launchId);
         Task SoftDeleteAsync(PayMethodFromLaunch payMethodFromLaunch);
         Task<PayMethodFromLaunchResponseDto> GetAsync(int launchId);

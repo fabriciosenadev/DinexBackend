@@ -11,9 +11,8 @@
             _mapper = mapper;
         }
 
-        public async Task<PayMethodFromLaunchResponseDto> CreateAsync(PayMethodFromLaunchRequestDto payMethodRequest, int launchId)
+        public async Task<PayMethodFromLaunch> CreateAsync(PayMethodFromLaunch payMethodFromLaunch, int launchId)
         {
-            var payMethodFromLaunch = _mapper.Map<PayMethodFromLaunch>(payMethodRequest);
             payMethodFromLaunch.LaunchId = launchId;
             payMethodFromLaunch.CreatedAt = DateTime.Now;
             payMethodFromLaunch.UpdatedAt = payMethodFromLaunch.DeletedAt = null;
@@ -25,8 +24,7 @@
                 throw new InfraException(PayMethodFromLaunch.Error.ErrorToCreatePayMethodFromLaunch.ToString());
             }
 
-            var payMethodFromLaunchResponse = _mapper.Map<PayMethodFromLaunchResponseDto>(payMethodFromLaunch);
-            return payMethodFromLaunchResponse;
+            return payMethodFromLaunch;
         }
 
         public async Task SoftDeleteAsync(PayMethodFromLaunch payMethodFromLaunch)

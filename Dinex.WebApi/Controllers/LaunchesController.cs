@@ -5,12 +5,12 @@
     [ApiController]
     public class LaunchesController : ControllerBase
     {
-        private readonly ILaunchService _launchService;
+        private readonly ILaunchManager _launchManager;
         private readonly IUserService _userService;        
 
-        public LaunchesController(ILaunchService launchService, IUserService userService)
+        public LaunchesController(ILaunchManager launchManager, IUserService userService)
         {
-            _launchService = launchService;
+            _launchManager = launchManager;
             _userService = userService;
         }
 
@@ -26,7 +26,7 @@
         {
             var userId = await GetUserId();
 
-            var response = await _launchService.CreateAsync(request, userId);            
+            var response = await _launchManager.CreateAsync(request, userId);            
             return Ok(response);
         }
 
@@ -39,7 +39,7 @@
         {
             var userId = await GetUserId();
 
-            var response = await _launchService.UpdateAsync(request, id, userId, isJustStatus);
+            var response = await _launchManager.UpdateAsync(request, id, userId, isJustStatus);
             return Ok(response);
         }
 
@@ -47,7 +47,7 @@
         [Authorize]
         public async Task<IActionResult> Delete(int id)
         {
-            await _launchService.SoftDeleteAsync(id);
+            await _launchManager.SoftDeleteAsync(id);
 
             return Ok();
         }
@@ -56,7 +56,7 @@
         [Authorize]
         public async Task<ActionResult<LaunchAndPayMethodResponseDto>> Get([FromRoute] int id)
         {
-            var response = await _launchService.GetAsync(id);
+            var response = await _launchManager.GetAsync(id);
             return Ok(response);
 
         }
@@ -67,7 +67,7 @@
         {
             var userId = await GetUserId();
 
-            var response = await _launchService.ListLast(userId);
+            var response = await _launchManager.ListLast(userId);
             return Ok(response);
         }
 

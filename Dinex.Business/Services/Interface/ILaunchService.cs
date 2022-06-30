@@ -2,12 +2,12 @@
 {
     public interface ILaunchService
     {
-        Task<LaunchAndPayMethodResponseDto> CreateAsync(LaunchAndPayMethodRequestDto request, Guid userId);
-        Task<LaunchAndPayMethodResponseDto> UpdateAsync(LaunchAndPayMethodRequestDto request, int launchId, Guid userId, bool isJustStatus);
-        Task SoftDeleteAsync(int launchId);
-        Task<LaunchAndPayMethodResponseDto> GetAsync(int launchId);
+        Task<Launch> CreateAsync(Launch launch, Guid userId);
+        Task<Launch> UpdateAsync(Launch launch, int launchId, Guid userId, bool isJustStatus, DateTime createdAt, LaunchStatus? newStatus);
+        Task SoftDeleteAsync(Launch launch);
         Task<List<LaunchAndPayMethodResponseDto>> ListAsync();
-        Task<List<LaunchResponseDto>> ListLast(Guid userId);
+        Task<List<Launch>> ListLast(Guid userId);
         Task CheckExistsByCategoryIdAsync(int categoryId, Guid userId);
+        Task<Launch> GetByIdAsync(int launchId);
     }
 }
