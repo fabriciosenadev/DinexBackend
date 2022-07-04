@@ -10,7 +10,9 @@
         public async Task<int> CountByCategoryIdAsync(int categoryId, Guid userId)
         {
             var result = await _context.Launches
-                .Where(x => x.CategoryId.Equals(categoryId))
+                .Where(x => 
+                    x.CategoryId.Equals(categoryId) && x.UserId.Equals(userId)
+                )
                 .CountAsync();
             return result;
         }
