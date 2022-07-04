@@ -21,7 +21,7 @@
         {
             var result = await _context.Launches
                 .Where(x => x.Id.Equals(launchId))
-                .FirstOrDefaultAsync();
+                .FirstAsync();
 
             return result;
         }
