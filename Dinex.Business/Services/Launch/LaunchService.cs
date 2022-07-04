@@ -25,15 +25,9 @@
             return launch;
         }
 
-        public async Task<Launch> UpdateAsync(Launch launch, int launchId, Guid userId, bool isJustStatus, DateTime createdAt, LaunchStatus? newStatus)
+        public async Task<Launch> UpdateAsync(Launch launch)
         {
-            launch.Id = launchId;
-            launch.UserId = userId;
             launch.UpdatedAt = DateTime.Now;
-            launch.CreatedAt = createdAt;
-
-            if (isJustStatus)
-                launch.Status = (LaunchStatus)newStatus;
 
             var launchResult = await _launchRepository.UpdateAsync(launch);
             if (launchResult != 1)

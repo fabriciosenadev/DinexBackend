@@ -22,6 +22,15 @@
             _mapper = mapper;
         }
 
+        private async Task TransferRequestToEntityFieldsAsync(LaunchRequestDto request, Launch launch, bool isJustStatus)
+        {
+            launch.Date = request.Date;
+            launch.Status = isJustStatus ? await GetNewStatus(launch) : launch.Status;
+            launch.Amount = request.Amount;
+            launch.CategoryId = request.CategoryId;
+            launch.Description = request.Description;
+        }
+
         private List<LaunchResponseDto> FillApplicableToLaunchResponseModel(List<LaunchResponseDto> launchesResponseModel, List<CategoryToUser> categoriesToUser)
         {
             launchesResponseModel.ForEach(launch =>
@@ -56,13 +65,15 @@
 
         private async Task<LaunchStatus> GetNewStatus(Launch launch)
         {
-            var category = await _categoryManager.GetCategoryAsync(launch.CategoryId, launch.UserId);
+            var categoryRelation = await _categoryToUserService
+                .GetRelationAsync(launch.CategoryId, launch.UserId);
+
             if (launch.Status == LaunchStatus.Pending)
             {
-                if (category.Applicable == Applicable.In.ToString())
-                    return LaunchStatus.Paid;
-                else
+                if (categoryRelation.Applicable == Applicable.In)
                     return LaunchStatus.Received;
+                else
+                    return LaunchStatus.Paid;
             }
 
             return LaunchStatus.Pending;
@@ -98,17 +109,15 @@
 
             var (launchModel, payMethodModel) = SplitLaunchAndPayMethodRequests(request);
 
-            var launch = _mapper.Map<Launch>(launchModel);
+            await TransferRequestToEntityFieldsAsync(launchModel, launchStored, isJustStatus);
 
-            LaunchStatus? newStatus = isJustStatus ? await GetNewStatus(launch) : null;
+            await _launchService.UpdateAsync(launchStored);
 
-            await _launchService.UpdateAsync(launch, launchId, userId, isJustStatus, launchStored.CreatedAt, newStatus);
-
-            var launchResponse = _mapper.Map<LaunchResponseDto>(launch);
+            var launchResponse = _mapper.Map<LaunchResponseDto>(launchStored);
 
             PayMethodFromLaunchResponseDto? payMethodFromLaunchResponse = null;
             if (payMethodModel is not null)
-                payMethodFromLaunchResponse = await _payMethodFromLaunchService.UpdateAsync(payMethodModel, launch.Id);
+                payMethodFromLaunchResponse = await _payMethodFromLaunchService.UpdateAsync(payMethodModel, launchStored.Id);
 
             var response = JoinLaunchAndPayMethodResponses(
                 launchResponse,
