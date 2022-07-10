@@ -1,6 +1,6 @@
 ﻿namespace Dinex.Core
 {
-    public class CategoryToUser
+    public partial class CategoryToUser
     {
         public int Id { get; set; }
         public Guid UserId { get; set; }

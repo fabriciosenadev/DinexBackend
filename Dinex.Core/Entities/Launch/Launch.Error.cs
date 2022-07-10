@@ -8,7 +8,8 @@
             ErrorToUpdateLaunch,
             ErrorToDeleteLaunch,
 
-            LaunchNotFound
+            LaunchNotFound,
+            HasLaunchWithCategory,
         }
     }
 }

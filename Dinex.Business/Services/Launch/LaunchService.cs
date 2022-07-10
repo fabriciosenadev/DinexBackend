@@ -66,7 +66,10 @@
         {
             var count = await _launchRepository.CountByCategoryIdAsync(categoryId, userId);
             if(count > 0)
-                throw new AppException("Exists launch with this category");
+            {
+                // msg : "Exists launch with this category"
+                throw new AppException(Launch.Error.HasLaunchWithCategory.ToString());
+            }
         }
 
         public async Task<Launch> GetByIdAsync(int launchId)
