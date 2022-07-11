@@ -22,6 +22,7 @@
             _mapper = mapper;
         }
 
+        #region private methods
         private async Task TransferRequestToEntityFieldsAsync(LaunchRequestDto request, Launch launch, bool isJustStatus)
         {
             launch.Date = request.Date;
@@ -79,6 +80,18 @@
             return LaunchStatus.Pending;
 
         }
+
+        private async Task<List<int>> ListCategoryIdsByApplicable(Applicable applicable, Guid userId)
+        {
+            var categories = await _categoryManager.ListCategoriesAsync(userId, false);
+            var list = categories.Where(x => x.Applicable.Equals(applicable.ToString()))
+                .Select(x => x.Id)
+                .ToList();
+
+            return list;
+        }
+
+        #endregion
 
         public async Task<LaunchAndPayMethodResponseDto> CreateAsync(LaunchAndPayMethodRequestDto request, Guid userId)
         {
@@ -163,6 +176,33 @@
 
             response = FillApplicableToLaunchResponseModel(response, categoriesToUser);
             return response;
+        }
+
+        public async Task<LaunchConsolidationResponseDto> GetConsolidationByYearAndMonthAsync(int year, int month, Guid userId)
+        {
+            var categoryIdsIn = await ListCategoryIdsByApplicable(Applicable.In, userId);
+            var categoryIdsOut = await ListCategoryIdsByApplicable(Applicable.Out, userId);
+
+            var received = await _launchService.GetSumAmountByStatus(
+                categoryIdsIn,
+                userId,
+                LaunchStatus.Received,
+                year,
+                month);
+
+            var paid = await _launchService.GetSumAmountByStatus(
+                categoryIdsOut,
+                userId,
+                LaunchStatus.Paid,
+                year,
+                month);
+
+            var result = new LaunchConsolidationResponseDto
+            {
+                Received = received,
+                Paid = paid
+            };
+            return result;
         }
     }
 }

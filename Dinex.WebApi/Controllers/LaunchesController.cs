@@ -71,5 +71,15 @@
             return Ok(response);
         }
 
+        [HttpGet("{year}/{month}")]
+        [Authorize]
+        public async Task<IActionResult> GetConsolidationByYearAndMonth([FromRoute] int year, [FromRoute] int month)
+        {
+            var userId = await GetUserId();
+
+            var result = await _launchManager.GetConsolidationByYearAndMonthAsync(year, month, userId);
+            return Ok(result);
+        }
+
     }
 }
