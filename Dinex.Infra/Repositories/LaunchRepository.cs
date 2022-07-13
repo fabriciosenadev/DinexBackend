@@ -36,7 +36,9 @@
             var list = await _context.Launches
                 .Where(x => 
                     x.Status.Equals(launchStatus) && 
-                    x.UserId.Equals(userId) && 
+                    x.UserId.Equals(userId) &&
+                    x.Date >= startDate &&
+                    x.Date <= endDate &&
                     x.DeletedAt == null && 
                     categoryIds.Contains(x.CategoryId)
                 ).ToListAsync();
