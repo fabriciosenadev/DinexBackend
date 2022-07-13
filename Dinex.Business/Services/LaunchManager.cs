@@ -178,8 +178,11 @@
             return response;
         }
 
-        public async Task<LaunchConsolidationResponseDto> GetConsolidationByYearAndMonthAsync(int year, int month, Guid userId)
+        public async Task<LaunchResumeByYearAndMonthResponseDto> GetConsolidationByYearAndMonthAsync(int year, int month, Guid userId)
         {
+            var startDate = new DateTime(year, month, 1);
+            var endDate = startDate.AddMonths(1).AddDays(-1);
+
             var categoryIdsIn = await ListCategoryIdsByApplicable(Applicable.In, userId);
             var categoryIdsOut = await ListCategoryIdsByApplicable(Applicable.Out, userId);
 
@@ -187,20 +190,39 @@
                 categoryIdsIn,
                 userId,
                 LaunchStatus.Received,
-                year,
-                month);
+                startDate,
+                endDate);
 
             var paid = await _launchService.GetSumAmountByStatus(
                 categoryIdsOut,
                 userId,
                 LaunchStatus.Paid,
-                year,
-                month);
+                startDate,
+                endDate);
 
-            var result = new LaunchConsolidationResponseDto
+            var pendingIn = await _launchService.GetSumAmountByStatus(
+                categoryIdsIn,
+                userId,
+                LaunchStatus.Pending,
+                startDate,
+                endDate);
+
+            var pendingOut = await _launchService.GetSumAmountByStatus(
+                categoryIdsOut,
+                userId,
+                LaunchStatus.Pending,
+                startDate,
+                endDate);
+
+            var hasPending = pendingIn > 0 || pendingOut > 0;
+
+            var result = new LaunchResumeByYearAndMonthResponseDto
             {
                 Received = received,
-                Paid = paid
+                Paid = paid,
+                HasPending = hasPending,
+                StartDate = startDate,
+                EndDate = endDate
             };
             return result;
         }

@@ -83,13 +83,9 @@
             return result;
         }
 
-        public Task<decimal> GetSumAmountByStatus(List<int> categoryIds, Guid userId, LaunchStatus launchStatus, int selectedYear, int selectedMonth)
+        public Task<decimal> GetSumAmountByStatus(List<int> categoryIds, Guid userId, LaunchStatus launchStatus, DateTime startDate, DateTime endDate)
         {
-            var startDate = new DateTime(selectedYear, selectedMonth, 1);
-            var endDate = startDate.AddMonths(1).AddDays(-1);
-
             var result = _launchRepository.GetSumAmountByStatus(categoryIds, userId, launchStatus, startDate, endDate);
-
             return result;
         }
     }
