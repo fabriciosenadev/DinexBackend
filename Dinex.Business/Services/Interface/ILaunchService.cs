@@ -9,6 +9,6 @@
         Task<List<Launch>> ListLast(Guid userId);
         Task CheckExistsByCategoryIdAsync(int categoryId, Guid userId);
         Task<Launch> GetByIdAsync(int launchId);
-        Task<decimal> GetSumAmountByStatus(List<int> categoryIds, Guid userId, LaunchStatus launchStatus, int selectedYear, int selectedMonth);
+        Task<decimal> GetSumAmountByStatus(List<int> categoryIds, Guid userId, LaunchStatus launchStatus, DateTime startDate, DateTime endDate);
     }
 }
