@@ -91,6 +91,51 @@
             return list;
         }
 
+        private (DateTime, DateTime) GetStartAndEndDateByYearAndMonth(int year, int month)
+        {
+            var startDate = new DateTime(year, month, 1);
+            var endDate = startDate.AddMonths(1).AddDays(-1);
+            return (startDate, endDate);
+        }
+
+        private async Task<List<ChartDataResponseDto>> GetPieChartData(Guid userId, List<Launch> launches)
+        {
+            var categories = await _categoryManager.ListCategoriesAsync(userId, false);
+
+            List<ChartDataResponseDto> pieChartData = new();
+            categories.ForEach(async (category) =>
+            {
+                var categoryId = category.Id;
+                var categoryName = category.Name;
+                var applicable = category.Applicable;
+
+                var amount = launches.Where(x => x.CategoryId.Equals(categoryId)).Sum(x => x.Amount);
+                var launch = launches.Find(x => x.CategoryId.Equals(categoryId));
+
+                string? payMethodName = string.Empty;
+
+                if (amount > 0)
+                {
+                    PayMethodFromLaunchResponseDto payMethod;
+                    payMethod = await _payMethodFromLaunchService.GetAsync(launch.Id);
+                    if (payMethod is not null)
+                        payMethodName = payMethod?.PayMethod;
+
+                    var chartData = new ChartDataResponseDto
+                    {
+                        CategoryId = categoryId,
+                        CategoryName = categoryName,
+                        Applicable = applicable,
+                        Amount = amount,
+                        PayMethod = payMethodName
+                    };
+                    pieChartData.Add(chartData);
+                }
+            });
+
+            return pieChartData;
+        }
+
         #endregion
 
         public async Task<LaunchAndPayMethodResponseDto> CreateAsync(LaunchAndPayMethodRequestDto request, Guid userId)
@@ -178,10 +223,9 @@
             return response;
         }
 
-        public async Task<LaunchResumeByYearAndMonthResponseDto> GetConsolidationByYearAndMonthAsync(int year, int month, Guid userId)
+        public async Task<LaunchResumeByYearAndMonthResponseDto> GetResumeByYearAndMonthAsync(int year, int month, Guid userId)
         {
-            var startDate = new DateTime(year, month, 1);
-            var endDate = startDate.AddMonths(1).AddDays(-1);
+            var (startDate, endDate) = GetStartAndEndDateByYearAndMonth(year, month);
 
             var categoryIdsIn = await ListCategoryIdsByApplicable(Applicable.In, userId);
             var categoryIdsOut = await ListCategoryIdsByApplicable(Applicable.Out, userId);
@@ -226,5 +270,28 @@
             };
             return result;
         }
+
+        public async Task<LaunchDetailsByYearAndMonthResponseDto> GetDetailsByYearAndMonthAsync(int year, int month, Guid userId)
+        {
+            var (startDate, endDate) = GetStartAndEndDateByYearAndMonth(year, month);
+
+            var launches = await _launchService.ListAsync(startDate, endDate, userId);
+            var launchesResponse = _mapper.Map<List<LaunchResponseDto>>(launches);
+
+            var categoriesToUser = await _categoryToUserService.ListCategoryRelationIdsAsync(userId, false);
+
+            launchesResponse = FillApplicableToLaunchResponseModel(launchesResponse, categoriesToUser);
+
+            var pieChartData = await GetPieChartData(userId, launches);
+
+            var result = new LaunchDetailsByYearAndMonthResponseDto
+            {
+                Launches = launchesResponse,
+                PieChartData = pieChartData
+            };
+            return result;
+        }
+
+
     }
 }

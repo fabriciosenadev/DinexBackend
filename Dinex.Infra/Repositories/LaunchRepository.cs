@@ -10,7 +10,7 @@
         public async Task<int> CountByCategoryIdAsync(int categoryId, Guid userId)
         {
             var result = await _context.Launches
-                .Where(x => 
+                .Where(x =>
                     x.CategoryId.Equals(categoryId) && x.UserId.Equals(userId)
                 )
                 .CountAsync();
@@ -27,23 +27,38 @@
         }
 
         public async Task<decimal> GetSumAmountByStatus(
-            List<int> categoryIds, 
-            Guid userId, 
-            LaunchStatus launchStatus, 
-            DateTime startDate, 
+            List<int> categoryIds,
+            Guid userId,
+            LaunchStatus launchStatus,
+            DateTime startDate,
             DateTime endDate)
         {
             var list = await _context.Launches
-                .Where(x => 
-                    x.Status.Equals(launchStatus) && 
+                .Where(x =>
+                    x.Status.Equals(launchStatus) &&
                     x.UserId.Equals(userId) &&
                     x.Date >= startDate &&
                     x.Date <= endDate &&
-                    x.DeletedAt == null && 
+                    x.DeletedAt == null &&
                     categoryIds.Contains(x.CategoryId)
                 ).ToListAsync();
 
             var result = list.Sum(x => x.Amount);
+            return result;
+        }
+
+        public async Task<List<Launch>> ListAsync(DateTime startDate, DateTime endDate, Guid userId)
+        {
+            var result = await _context.Launches
+                .Where(x => 
+                    x.UserId.Equals(userId) && 
+                    x.Date >= startDate && 
+                    x.Date <= endDate && 
+                    x.DeletedAt == null
+                ).OrderByDescending(x => x.Date)
+                .OrderByDescending(x => x.CreatedAt)
+                .ToListAsync();
+
             return result;
         }
 

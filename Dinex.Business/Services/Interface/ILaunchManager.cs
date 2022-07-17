@@ -7,6 +7,7 @@
         Task SoftDeleteAsync(int launchId);
         Task<LaunchAndPayMethodResponseDto> GetAsync(int launchId);
         Task<List<LaunchResponseDto>> ListLast(Guid userId);
-        Task<LaunchResumeByYearAndMonthResponseDto> GetConsolidationByYearAndMonthAsync(int year, int month, Guid userId);
+        Task<LaunchResumeByYearAndMonthResponseDto> GetResumeByYearAndMonthAsync(int year, int month, Guid userId);
+        Task<LaunchDetailsByYearAndMonthResponseDto> GetDetailsByYearAndMonthAsync(int year, int month, Guid userId);
     }
 }

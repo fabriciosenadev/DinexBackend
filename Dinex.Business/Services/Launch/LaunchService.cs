@@ -51,9 +51,10 @@
             }
         }
 
-        public Task<List<LaunchAndPayMethodResponseDto>> ListAsync()
+        public Task<List<Launch>> ListAsync(DateTime startDate, DateTime endDate, Guid userId)
         {
-            throw new NotImplementedException();
+            var result = _launchRepository.ListAsync(startDate, endDate, userId);
+            return result;
         }
 
         public async Task<List<Launch>> ListLast(Guid userId)

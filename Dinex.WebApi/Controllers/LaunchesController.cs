@@ -71,13 +71,23 @@
             return Ok(response);
         }
 
-        [HttpGet("{year}/{month}")]
+        [HttpGet("{year}/{month}/resume")]
         [Authorize]
-        public async Task<IActionResult> GetConsolidationByYearAndMonth([FromRoute] int year, [FromRoute] int month)
+        public async Task<IActionResult> GetResumeByYearAndMonth([FromRoute] int year, [FromRoute] int month)
         {
             var userId = await GetUserId();
 
-            var result = await _launchManager.GetConsolidationByYearAndMonthAsync(year, month, userId);
+            var result = await _launchManager.GetResumeByYearAndMonthAsync(year, month, userId);
+            return Ok(result);
+        }
+
+        [HttpGet("{year}/{month}/details")]
+        [Authorize]
+        public async Task<IActionResult> GetDetailsByYearAndMonth([FromRoute] int year, [FromRoute] int month)
+        {
+            var userId = await GetUserId();
+
+            var result = await _launchManager.GetDetailsByYearAndMonthAsync(year, month, userId);
             return Ok(result);
         }
 
