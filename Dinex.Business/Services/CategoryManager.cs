@@ -29,7 +29,8 @@
             return newStr;
         }
 
-        private List<CategoryResponseDto> FillApplicableToToCategoriesReponse(List<CategoryResponseDto> categoriesResponse, List<CategoryToUser> categoriesToUser)
+        private List<CategoryResponseDto> FillApplicableToToCategoriesReponse(
+            List<CategoryResponseDto> categoriesResponse, List<CategoryToUser> categoriesToUser)
         {
             categoriesResponse.ForEach(category =>
             {
@@ -109,7 +110,8 @@
         public async Task<List<CategoryResponseDto>> ListCategoriesAsync(Guid userId, bool isToListDeleted)
         {
 
-            var listCategoryRelations = await _categoryToUserService.ListCategoryRelationIdsAsync(userId, isToListDeleted);
+            var listCategoryRelations = await _categoryToUserService
+                .ListCategoryRelationIdsAsync(userId, isToListDeleted);
 
             if (listCategoryRelations is null)
                 return new List<CategoryResponseDto>();
@@ -119,7 +121,8 @@
 
             var listResultModel = _mapper.Map<List<CategoryResponseDto>>(categoriesList);
 
-            var listResult = FillApplicableToToCategoriesReponse(listResultModel, listCategoryRelations);
+            var listResult = FillApplicableToToCategoriesReponse(
+                listResultModel, listCategoryRelations);
             return listResult;
         }
     }

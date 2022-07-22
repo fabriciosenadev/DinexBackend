@@ -43,7 +43,11 @@
 
         public async Task AddStandardCategoriesAsync()
         {
-            string[] standardCategories = new string[] { "Salário", "Alimentação", "Beleza", "Educação", "Lazer", "Saúde", "Transporte" };
+            string[] standardCategories = new string[] { 
+                "Salário", "Alimentação", 
+                "Beleza", "Educação", 
+                "Lazer", "Saúde", "Transporte" 
+            };
 
             foreach (string category in standardCategories)
                 await AddCategoryAsync(category, false);

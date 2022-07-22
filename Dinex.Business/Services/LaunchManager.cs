@@ -32,7 +32,8 @@
             launch.Description = request.Description;
         }
 
-        private List<LaunchResponseDto> FillApplicableToLaunchResponseModel(List<LaunchResponseDto> launchesResponseModel, List<CategoryToUser> categoriesToUser)
+        private List<LaunchResponseDto> FillApplicableToLaunchResponseModel(
+            List<LaunchResponseDto> launchesResponseModel, List<CategoryToUser> categoriesToUser)
         {
             launchesResponseModel.ForEach(launch =>
             {
@@ -150,7 +151,8 @@
             if (payMethodModel is not null)
             {
                 var payMethodFromLaunch = _mapper.Map<PayMethodFromLaunch>(payMethodModel);
-                var payMethodFromLaunchCreation = await _payMethodFromLaunchService.CreateAsync(payMethodFromLaunch, launch.Id);
+                var payMethodFromLaunchCreation = await _payMethodFromLaunchService
+                    .CreateAsync(payMethodFromLaunch, launch.Id);
                 payMethodFromLaunchResponse = _mapper.Map<PayMethodFromLaunchResponseDto>(payMethodFromLaunchCreation);
             }
 
@@ -161,7 +163,8 @@
             return response;
         }
 
-        public async Task<LaunchAndPayMethodResponseDto> UpdateAsync(LaunchAndPayMethodRequestDto request, int launchId, Guid userId, bool isJustStatus)
+        public async Task<LaunchAndPayMethodResponseDto> UpdateAsync(
+            LaunchAndPayMethodRequestDto request, int launchId, Guid userId, bool isJustStatus)
         {
             var launchStored = await _launchService.GetByIdAsync(launchId);
 
@@ -175,7 +178,8 @@
 
             PayMethodFromLaunchResponseDto? payMethodFromLaunchResponse = null;
             if (payMethodModel is not null)
-                payMethodFromLaunchResponse = await _payMethodFromLaunchService.UpdateAsync(payMethodModel, launchStored.Id);
+                payMethodFromLaunchResponse = await _payMethodFromLaunchService
+                    .UpdateAsync(payMethodModel, launchStored.Id);
 
             var response = JoinLaunchAndPayMethodResponses(
                 launchResponse,
@@ -187,8 +191,6 @@
         public async Task SoftDeleteAsync(int launchId)
         {
             var launch = await _launchService.GetByIdAsync(launchId);
-
-            launch.DeletedAt = DateTime.Now;
 
             await _launchService.SoftDeleteAsync(launch);
 
