@@ -18,6 +18,7 @@
             services.AddScoped<IJwtService, JwtService>();
             services.AddScoped<ISendMailService, SendMailService>();
             services.AddScoped<ICryptographyService, CryptographyService>();
+            services.AddScoped<INotificationService, NotificationService>();
             #endregion
 
             #region repositories
