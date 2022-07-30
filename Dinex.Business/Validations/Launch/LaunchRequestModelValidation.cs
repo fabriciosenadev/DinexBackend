@@ -8,7 +8,7 @@ namespace Dinex.Business
             ValidatePayMethod();
         }
 
-        private bool ForPayMethodisNotNull(PayMethodFromLaunchRequestDto payMethod)
+        private bool ForNotNullPayMethod(PayMethodFromLaunchRequestDto? payMethod)
         {
             var result = true;
 
@@ -37,7 +37,7 @@ namespace Dinex.Business
         public void ValidatePayMethod()
         {
             RuleFor(request => request.PayMethodFromLaunch)
-                .Must(ForPayMethodisNotNull)
+                .Must(ForNotNullPayMethod)
                 .WithMessage("Informe o metodo de pagamento");
         }
     }
