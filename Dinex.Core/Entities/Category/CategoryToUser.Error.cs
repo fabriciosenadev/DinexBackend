@@ -4,8 +4,9 @@
     {
         public enum Error
         {
-            FailToCreateRelation,
-            CateoryRelationNotFound
+            CategoryRelationFailToCreate,
+            CategoryRelationNotFound,
+            CategoryRelationAlreadyExists
         }
     }
 }
