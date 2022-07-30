@@ -1,20 +1,20 @@
 ﻿
 namespace Dinex.Business
 {
-    public class UserService : IUserService
+    public class UserService : BaseService, IUserService
     {
-        const int success = 1;
-
         private readonly IUserRepository _userRepository;
         private readonly ICryptographyService _cryptographyService;
-        private readonly IMapper _mapper;
 
-
-        public UserService(IUserRepository userRepository, ICryptographyService cryptographyService, IMapper mapper)
+        public UserService(
+            IUserRepository userRepository, 
+            ICryptographyService cryptographyService, 
+            IMapper mapper,
+            INotificationService notification)
+            : base(mapper, notification)
         {
             _userRepository = userRepository;
             _cryptographyService = cryptographyService;
-            _mapper = mapper;
         }
 
         private async Task<User> GetFromContextAsync(HttpContext httpContext)
@@ -23,7 +23,7 @@ namespace Dinex.Business
             if (user is null)
             {
                 // msg: "User not found"
-                throw new AppException(User.Error.UserNotFound.ToString());
+                Notification.AppRaiseError(User.Error.UserNotFound);
             }
 
             httpContext.Items["User"] = null;
@@ -40,10 +40,10 @@ namespace Dinex.Business
             user.Password = _cryptographyService.Encrypt(user.Password);
 
             var result = await _userRepository.AddAsync(user);
-            if (result != success)
+            if (result != Success)
             {
                 // msg : Error to create user
-                throw new InfraException(User.Error.ErrorToCreateUser.ToString());
+                Notification.InfraRaiseError(User.Error.ErrorToCreateUser);
             }
 
             var userResult = _mapper.Map<UserResponseDto>(user);
@@ -78,10 +78,10 @@ namespace Dinex.Business
                 user.Password = _cryptographyService.Encrypt(userData.Password);
 
             var result = await _userRepository.UpdateAsync(user);
-            if (result != success)
+            if (result != Success)
             {
                 // msg: Error to update user
-                throw new InfraException(User.Error.ErrorToUpdateUser.ToString());
+                Notification.InfraRaiseError(User.Error.ErrorToUpdateUser);
             }
 
             var userResult = _mapper.Map<UserResponseDto>(user);
@@ -94,7 +94,7 @@ namespace Dinex.Business
             if (user is null)
             {
                 // msg: "User not found"
-                throw new AppException(User.Error.UserNotFound.ToString());
+                Notification.AppRaiseError(User.Error.UserNotFound);
             }
 
             return _mapper.Map<UserResponseDto>(user);
@@ -117,7 +117,7 @@ namespace Dinex.Business
             if (user is null)
             {
                 // msg: "User not found"
-                throw new AppException(User.Error.UserNotFound.ToString());
+                Notification.AppRaiseError(User.Error.UserNotFound);
             }
             return user;
         }

@@ -1,23 +1,22 @@
 ﻿namespace Dinex.Business
 {
-    public class AuthenticationService : IAuthenticationService
+    public class AuthenticationService : BaseService, IAuthenticationService
     {
         private readonly IUserRepository _userRepository;
         private readonly IJwtService _jwtService;
         private readonly ICryptographyService _cryptographyService;
-        private readonly IMapper _mapper;
 
         public AuthenticationService(
             IUserRepository userRepository,
             IJwtService jwtService,
-            ICryptographyService cryptographyService
-,
-            IMapper mapper)
+            ICryptographyService cryptographyService,           
+            IMapper mapper,
+            INotificationService notification)
+            : base(mapper, notification)
         {
             _userRepository = userRepository;
             _jwtService = jwtService;
             _cryptographyService = cryptographyService;
-            _mapper = mapper;
         }
 
         public async Task<AuthenticationResponseDto> AuthenticateAsync(AuthenticationRequestDto request)
@@ -28,20 +27,20 @@
             if(user is null)
             {
                 // msg: Usuário não localizado
-                throw new AppException(Login.Error.LoginNotFound.ToString());
+                Notification.AppRaiseError(Login.Error.LoginNotFound);
             }
 
             var passwordsMatch = _cryptographyService.CompareValues(user.Password, login.Password);
             if (!passwordsMatch)
             {
                 // msg: Usuário ou senha incorreto
-                throw new AppException(Login.Error.LoginOrPassIncorrect.ToString());
+                Notification.AppRaiseError(Login.Error.LoginOrPassIncorrect);
             }
 
             if (user.IsActive == UserActivatioStatus.Inactive)
             {
                 // msg: Ative sua conta
-                throw new AppException(Login.Error.LoginInactive.ToString());
+                Notification.AppRaiseError(Login.Error.LoginInactive);
             }
 
             var token = _jwtService.GenerateToken(user);

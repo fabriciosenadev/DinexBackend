@@ -1,10 +1,16 @@
 ﻿namespace Dinex.Business
 {
-    public class ActivationService : IActivationService
+    public class ActivationService : BaseService, IActivationService
     {
+        const int MaxActivationCodesAllowed = 1;
+
         private readonly IActivationRepository _activationRepository;      
 
-        public ActivationService(IActivationRepository activationRepository)
+        public ActivationService(
+            IActivationRepository activationRepository, 
+            IMapper mapper,
+            INotificationService notification)
+            : base(mapper, notification)
         {
             _activationRepository = activationRepository;
         }
@@ -14,10 +20,10 @@
             var listOfActivations = await _activationRepository.ListByUserIdAsync(userId);
 
             listOfActivations.RemoveAll(a => !a.ActivationCode.Equals(activationCode));
-            if (listOfActivations.Count != 1)
+            if (listOfActivations.Count != MaxActivationCodesAllowed)
             {
                 // msg: Invalid activation code
-                throw new AppException(Activation.Error.InvalidCode.ToString());
+                Notification.AppRaiseError(Activation.Error.InvalidCode);
             }
 
             const int activationExpiresInMinutes = 120;
@@ -26,7 +32,7 @@
             if (currentTimeToExpire >= createdAt)
             {
                 // msg: Expired activation code
-                throw new AppException(Activation.Error.ExpiredCode.ToString());
+                Notification.AppRaiseError(Activation.Error.ExpiredCode);
             }
         }
 

@@ -1,19 +1,23 @@
 ﻿namespace Dinex.Business
 {
-    public class CategoryService : ICategoryService
+    public class CategoryService : BaseService, ICategoryService
     {
         private readonly ICategoryRepository _categoryRepository;
 
-        public CategoryService(ICategoryRepository categoryRepository)
+        public CategoryService(
+            ICategoryRepository categoryRepository, 
+            IMapper mapper,
+            INotificationService notification)
+            : base(mapper, notification)
         {
             _categoryRepository = categoryRepository;
         }
         public void ValidateCategoryId(int categoryId)
         {
-            if (categoryId == 0)
+            if (categoryId == InvalidId)
             {
                 // msg: Category not provided
-                throw new InfraException(Category.Error.CategoryNotProvided.ToString());
+                Notification.InfraRaiseError(Category.Error.CategoryNotProvided);
             }
         }
 
@@ -76,7 +80,7 @@
             if (result is null)
             {
                 // msg: Category not found
-                throw new AppException(Category.Error.CategoryNotFound.ToString());
+                Notification.AppRaiseError(Category.Error.CategoryNotFound);
             }
             return result;
         }

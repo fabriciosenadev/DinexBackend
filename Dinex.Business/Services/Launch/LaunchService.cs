@@ -1,10 +1,13 @@
 ﻿namespace Dinex.Business
 {
-    public class LaunchService : ILaunchService
+    public class LaunchService : BaseService, ILaunchService
     {
         private readonly ILaunchRepository _launchRepository;
 
-        public LaunchService(ILaunchRepository launchRepository)
+        public LaunchService(ILaunchRepository launchRepository, 
+            IMapper mapper, 
+            INotificationService notification) 
+            : base(mapper, notification)
         {
             _launchRepository = launchRepository;
         }
@@ -16,10 +19,10 @@
             launch.UpdatedAt = launch.DeletedAt = null;
 
             var result = await _launchRepository.AddAsync(launch);
-            if (result != 1)
+            if (result != Success)
             {
                 // msg:  there was a problem to create launch
-                throw new InfraException(Launch.Error.ErrorToCreateLaunch.ToString());
+                Notification.InfraRaiseError(Launch.Error.ErrorToCreateLaunch);
             }
 
             return launch;
@@ -30,10 +33,10 @@
             launch.UpdatedAt = DateTime.Now;
 
             var launchResult = await _launchRepository.UpdateAsync(launch);
-            if (launchResult != 1)
+            if (launchResult != Success)
             {
                 // msg: there was a problem to update launch
-                throw new AppException(Launch.Error.ErrorToUpdateLaunch.ToString());
+                Notification.InfraRaiseError(Launch.Error.ErrorToUpdateLaunch);
             }
 
             return launch;
@@ -44,10 +47,10 @@
             launch.DeletedAt = DateTime.Now;
 
             var result = await _launchRepository.UpdateAsync(launch);
-            if (result != 1)
+            if (result != Success)
             {
                 // msg: there was a problem to delete launch
-                throw new AppException(Launch.Error.ErrorToDeleteLaunch.ToString());
+                Notification.AppRaiseError(Launch.Error.ErrorToDeleteLaunch);
             }
         }
 
@@ -66,20 +69,20 @@
         public async Task CheckExistsByCategoryIdAsync(int categoryId, Guid userId)
         {
             var count = await _launchRepository.CountByCategoryIdAsync(categoryId, userId);
-            if(count > 0)
+            if (count > 0)
             {
                 // msg : "Exists launch with this category"
-                throw new AppException(Launch.Error.HasLaunchWithCategory.ToString());
+                Notification.AppRaiseError(Launch.Error.HasLaunchWithCategory);
             }
         }
 
         public async Task<Launch> GetByIdAsync(int launchId)
         {
-            var result  = await _launchRepository.GetByIdAsync(launchId);
+            var result = await _launchRepository.GetByIdAsync(launchId);
             if (result is null)
             {
                 // msg: launch not found
-                throw new AppException(Launch.Error.LaunchNotFound.ToString());
+                Notification.AppRaiseError(Launch.Error.LaunchNotFound);
             }
             return result;
         }

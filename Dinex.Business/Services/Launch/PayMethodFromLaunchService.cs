@@ -1,14 +1,16 @@
 ﻿namespace Dinex.Business
 {
-    public class PayMethodFromLaunchService : IPayMethodFromLaunchService
+    public class PayMethodFromLaunchService : BaseService, IPayMethodFromLaunchService
     {
         private readonly IPayMethodFromLaunchRepository _payMethodFromLaunchRepository;
-        private readonly IMapper _mapper;
 
-        public PayMethodFromLaunchService(IPayMethodFromLaunchRepository repository, IMapper mapper)
+        public PayMethodFromLaunchService(
+            IPayMethodFromLaunchRepository repository, 
+            IMapper mapper, 
+            INotificationService notification)
+            : base (mapper, notification)
         {
             _payMethodFromLaunchRepository = repository;
-            _mapper = mapper;
         }
 
         public async Task<PayMethodFromLaunch> CreateAsync(PayMethodFromLaunch payMethodFromLaunch, int launchId)
@@ -18,10 +20,10 @@
             payMethodFromLaunch.UpdatedAt = payMethodFromLaunch.DeletedAt = null;
 
             var result = await _payMethodFromLaunchRepository.AddAsync(payMethodFromLaunch);
-            if (result != 1)
+            if (result != Success)
             {
                 // msg: there was a problem to create launch
-                throw new InfraException(PayMethodFromLaunch.Error.ErrorToCreatePayMethodFromLaunch.ToString());
+                Notification.InfraRaiseError(PayMethodFromLaunch.Error.ErrorToCreatePayMethodFromLaunch);
             }
 
             return payMethodFromLaunch;
@@ -31,10 +33,10 @@
         {
             payMethodFromLaunch.DeletedAt = DateTime.Now;
             var result = await _payMethodFromLaunchRepository.UpdateAsync(payMethodFromLaunch);
-            if (result != 1)
+            if (result != Success)
             {
                 // msg: there was a problem to delete launch
-                throw new InfraException(PayMethodFromLaunch.Error.ErrorToDeletePayMethodFromLaunch.ToString());
+                Notification.InfraRaiseError(PayMethodFromLaunch.Error.ErrorToDeletePayMethodFromLaunch);
             }
         }
 
@@ -45,10 +47,10 @@
             payMethodFromLaunch.UpdatedAt = DateTime.Now;
 
             var result = await _payMethodFromLaunchRepository.UpdateAsync(payMethodFromLaunch);
-            if (result != 1)
+            if (result != Success)
             {
                 // msg: there was a problem to update launch
-                throw new InfraException(PayMethodFromLaunch.Error.ErrorToUpdatePayMethodFromLaunch.ToString());
+                Notification.InfraRaiseError(PayMethodFromLaunch.Error.ErrorToUpdatePayMethodFromLaunch);
             }
 
             var payMethodFromLaunchResponse = _mapper.Map<PayMethodFromLaunchResponseDto>(payMethodFromLaunch);

@@ -1,10 +1,14 @@
 ﻿namespace Dinex.Business
 {
-    public class CategoryToUserService : ICategoryToUserService
+    public class CategoryToUserService : BaseService, ICategoryToUserService
     {
         private readonly ICategoryToUserRepository _categoryToUserRepository;
 
-        public CategoryToUserService(ICategoryToUserRepository categoryToUserRepository)
+        public CategoryToUserService(
+            ICategoryToUserRepository categoryToUserRepository, 
+            IMapper mapper, 
+            INotificationService notification) 
+            : base(mapper, notification)
         {
             _categoryToUserRepository = categoryToUserRepository;
         }
@@ -35,10 +39,10 @@
         {
             categoryToUser.DeletedAt = DateTime.Now;
             var result = await _categoryToUserRepository.UpdateAsync(categoryToUser);
-            if (result != 1)
+            if (result != Success)
             {
                 // msg: "Error to create category relation"
-                throw new InfraException(CategoryToUser.Error.FailToCreateRelation.ToString());
+                Notification.InfraRaiseError(CategoryToUser.Error.CategoryRelationFailToCreate);
             }
         }
 
@@ -62,11 +66,11 @@
             if (relation is null)
             {
                 // msg : "Category relation not found"
-                throw new AppException(CategoryToUser.Error.CateoryRelationNotFound.ToString());
+                Notification.AppRaiseError(CategoryToUser.Error.CategoryRelationNotFound);
             }
 
             relation.DeletedAt = null;
-            var result = await _categoryToUserRepository.UpdateAsync(relation);
+            await _categoryToUserRepository.UpdateAsync(relation);
             return relation;
         }
 
@@ -79,7 +83,7 @@
             if (relation is not null)
             {
                 // msg: Category already exists
-                throw new AppException(Category.Error.CategoryAlreadyExists.ToString());
+                Notification.AppRaiseError(CategoryToUser.Error.CategoryRelationAlreadyExists);
             }
         }
 
@@ -89,7 +93,7 @@
             if (relation is null)
             {
                 // msg: Category not found
-                throw new AppException(Category.Error.CategoryNotFound.ToString());
+                Notification.AppRaiseError(CategoryToUser.Error.CategoryRelationNotFound);
             }
         }
     }
