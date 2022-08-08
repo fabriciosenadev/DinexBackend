@@ -28,6 +28,7 @@
             services.AddScoped<ICategoryToUserRepository, CategoryToUserRepository>();
             services.AddScoped<ILaunchRepository, LaunchRepository>();
             services.AddScoped<IPayMethodFromLaunchRepository, PayMethodFromLaunchRepository>();
+            services.AddScoped<IUserAmountAvailableRepository, UserAmountAvailableRepository>();
             #endregion
 
             return services;
