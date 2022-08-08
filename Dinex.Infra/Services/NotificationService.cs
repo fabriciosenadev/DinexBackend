@@ -7,16 +7,30 @@
 
         }
 
-        public void AppRaiseError<T>(T enumError) where T : Enum
+        private void AppRaiseError<T>(T enumError) where T : Enum
         {
             // TODO: need to implement a message translator
             throw new AppException(enumError.ToString());
         }
 
-        public void InfraRaiseError<T>(T enumError) where T : Enum
+        private void InfraRaiseError<T>(T enumError) where T : Enum
         {
             // TODO: need to implement a message translator
-            throw new AppException(enumError.ToString());
+            throw new InfraException(enumError.ToString());
+        }
+
+        public void RaiseError<T>(T enumError, string errorType = "app") where T : Enum
+        {
+            switch (errorType)
+            {
+                case "app":
+                    AppRaiseError(enumError);
+                    break;
+                case "infra":
+                    InfraRaiseError(enumError);
+                    break;
+            }
+
         }
     }
 }
