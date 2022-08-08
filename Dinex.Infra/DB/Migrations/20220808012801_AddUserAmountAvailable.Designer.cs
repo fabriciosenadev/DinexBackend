@@ -3,6 +3,7 @@ using System;
 using Dinex.Infra;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Dinex.Infra
 {
     [DbContext(typeof(DinexBackendContext))]
-    partial class DinexBackendContextModelSnapshot : ModelSnapshot
+    [Migration("20220808012801_AddUserAmountAvailable")]
+    partial class AddUserAmountAvailable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "6.0.6");

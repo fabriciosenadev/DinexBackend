@@ -14,7 +14,7 @@
         public DbSet<PayMethodFromLaunch> PayMethodFromLaunches { get; set; }
         //public DbSet<ScheduledLaunches> ScheduledLaunches { get; set; }
         public DbSet<User> Users { get; set; }
-        //public DbSet<UserAmounts> UserAmounts { get; set; }
+        public DbSet<UserAmountAvailable> UserAmountAvailable { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
