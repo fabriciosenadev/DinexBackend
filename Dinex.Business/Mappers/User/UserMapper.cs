@@ -6,6 +6,7 @@
         {
             CreateMap<UserRequestDto, User>().ReverseMap();
             CreateMap<UserResponseDto, User>().ReverseMap();
+            CreateMap<UserAmountAvailableResponseDto, UserAmountAvailable>().ReverseMap();
         }
     }
 }

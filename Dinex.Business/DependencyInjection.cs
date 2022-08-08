@@ -41,6 +41,7 @@
             services.AddScoped<ICategoryToUserService, CategoryToUserService>();
             services.AddScoped<ILaunchService, LaunchService>();
             services.AddScoped<IPayMethodFromLaunchService, PayMethodFromLaunchService>();
+            services.AddScoped<IUserAmountAvailableService, UserAmountAvailableService>();
             #endregion
 
             return services;

@@ -1,25 +1,31 @@
 ﻿namespace Dinex.Business
 {
-    public class LaunchManager : ILaunchManager
+    public class LaunchManager : BaseService, ILaunchManager
     {
         private readonly ILaunchService _launchService;
         private readonly IPayMethodFromLaunchService _payMethodFromLaunchService;
         private readonly ICategoryToUserService _categoryToUserService;
         private readonly ICategoryManager _categoryManager;
-        private readonly IMapper _mapper;
+        private readonly IUserAmountAvailableService _userAmountAvailableService;
+        private readonly IUserAmountAvailableRepository _userAmountAvailableRepository;
 
         public LaunchManager(
             ILaunchService launchServie,
             IPayMethodFromLaunchService payMethodFromLaunchService,
             ICategoryToUserService categoryToUserService,
             ICategoryManager categoryManager,
-            IMapper mapper)
+            IMapper mapper,
+            INotificationService notificationService,
+            IUserAmountAvailableService userAmountAvailableService,
+            IUserAmountAvailableRepository userAmountAvailableRepository)
+            : base(mapper, notificationService)
         {
             _launchService = launchServie;
             _payMethodFromLaunchService = payMethodFromLaunchService;
             _categoryToUserService = categoryToUserService;
             _categoryManager = categoryManager;
-            _mapper = mapper;
+            _userAmountAvailableService = userAmountAvailableService;
+            _userAmountAvailableRepository = userAmountAvailableRepository;
         }
 
         #region private methods
@@ -137,6 +143,29 @@
             return pieChartData;
         }
 
+        private async Task UserAmountAvailableManaging(LaunchAndPayMethodResponseDto launchAndPayMethodResponse, Guid userId)
+        {
+            var userAmountAvailable = await _userAmountAvailableRepository.GetAmountAvailableAsync(userId);
+            if (userAmountAvailable is null)
+            {
+                userAmountAvailable = new UserAmountAvailable
+                {
+                    AmountAvailable = launchAndPayMethodResponse.Launch.Amount,
+                    UserId = userId
+                };
+                await _userAmountAvailableService.CreateAsync(userAmountAvailable);
+                
+                return;
+            }
+
+            if (launchAndPayMethodResponse.PayMethodFromLaunch is not null)
+                userAmountAvailable.AmountAvailable -= launchAndPayMethodResponse.Launch.Amount;
+            else
+                userAmountAvailable.AmountAvailable += launchAndPayMethodResponse.Launch.Amount;
+
+            await _userAmountAvailableService.UpdateAsync(userAmountAvailable);
+        }
+
         #endregion
 
         public async Task<LaunchAndPayMethodResponseDto> CreateAsync(LaunchAndPayMethodRequestDto request, Guid userId)
@@ -159,6 +188,8 @@
             var response = JoinLaunchAndPayMethodResponses(
                 launchResponse,
                 payMethodFromLaunchResponse);
+
+            UserAmountAvailableManaging(response, userId);
 
             return response;
         }
