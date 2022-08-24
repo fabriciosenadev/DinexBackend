@@ -23,7 +23,7 @@
             if (listOfActivations.Count != MaxActivationCodesAllowed)
             {
                 // msg: Invalid activation code
-                Notification.AppRaiseError(Activation.Error.InvalidCode);
+                Notification.RaiseError(Activation.Error.InvalidCode);
             }
 
             const int activationExpiresInMinutes = 120;
@@ -32,7 +32,7 @@
             if (currentTimeToExpire >= createdAt)
             {
                 // msg: Expired activation code
-                Notification.AppRaiseError(Activation.Error.ExpiredCode);
+                Notification.RaiseError(Activation.Error.ExpiredCode);
             }
         }
 

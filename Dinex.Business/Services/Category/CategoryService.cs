@@ -17,7 +17,9 @@
             if (categoryId == InvalidId)
             {
                 // msg: Category not provided
-                Notification.InfraRaiseError(Category.Error.CategoryNotProvided);
+                Notification.RaiseError(
+                    Category.Error.CategoryNotProvided, 
+                    NotificationService.ErrorType.Infra);
             }
         }
 
@@ -80,7 +82,7 @@
             if (result is null)
             {
                 // msg: Category not found
-                Notification.AppRaiseError(Category.Error.CategoryNotFound);
+                Notification.RaiseError(Category.Error.CategoryNotFound);
             }
             return result;
         }

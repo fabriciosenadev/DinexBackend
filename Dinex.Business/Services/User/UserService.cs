@@ -23,7 +23,7 @@ namespace Dinex.Business
             if (user is null)
             {
                 // msg: "User not found"
-                Notification.AppRaiseError(User.Error.UserNotFound);
+                Notification.RaiseError(User.Error.UserNotFound);
             }
 
             httpContext.Items["User"] = null;
@@ -43,7 +43,9 @@ namespace Dinex.Business
             if (result != Success)
             {
                 // msg : Error to create user
-                Notification.InfraRaiseError(User.Error.ErrorToCreateUser);
+                Notification.RaiseError(
+                    User.Error.UserErrorToCreate, 
+                    NotificationService.ErrorType.Infra);
             }
 
             var userResult = _mapper.Map<UserResponseDto>(user);
@@ -81,7 +83,9 @@ namespace Dinex.Business
             if (result != Success)
             {
                 // msg: Error to update user
-                Notification.InfraRaiseError(User.Error.ErrorToUpdateUser);
+                Notification.RaiseError(
+                    User.Error.UserErrorToCreate, 
+                    NotificationService.ErrorType.Infra);
             }
 
             var userResult = _mapper.Map<UserResponseDto>(user);
@@ -94,7 +98,7 @@ namespace Dinex.Business
             if (user is null)
             {
                 // msg: "User not found"
-                Notification.AppRaiseError(User.Error.UserNotFound);
+                Notification.RaiseError(User.Error.UserNotFound);
             }
 
             return _mapper.Map<UserResponseDto>(user);
@@ -117,7 +121,7 @@ namespace Dinex.Business
             if (user is null)
             {
                 // msg: "User not found"
-                Notification.AppRaiseError(User.Error.UserNotFound);
+                Notification.RaiseError(User.Error.UserNotFound);
             }
             return user;
         }

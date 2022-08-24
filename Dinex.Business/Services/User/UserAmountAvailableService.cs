@@ -31,8 +31,11 @@
         public async Task<UserAmountAvailable> CreateAsync(UserAmountAvailable userAmountAvailable)
         {
             var result = await _userAmountAvailableRepository.UpdateAsync(userAmountAvailable);
-            if(result != Success)
-                Notification.InfraRaiseError(UserAmountAvailable.Error.ErrorToCreateUserAmount);
+            if (result != Success)
+                Notification.RaiseError(
+                    UserAmountAvailable.Error.ErrorToCreateUserAmount, 
+                    NotificationService.ErrorType.Infra);
+
 
             return userAmountAvailable;
         }

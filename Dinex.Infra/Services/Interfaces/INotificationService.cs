@@ -1,8 +1,9 @@
-﻿namespace Dinex.Infra
+﻿using static Dinex.Infra.NotificationService;
+
+namespace Dinex.Infra
 {
     public interface INotificationService
     {
-        void AppRaiseError<T>(T enumError) where T : Enum;
-        void InfraRaiseError<T>(T enumError) where T : Enum;
+        void RaiseError<T>(T enumError, ErrorType errorType = ErrorType.App) where T : Enum;
     }
 }

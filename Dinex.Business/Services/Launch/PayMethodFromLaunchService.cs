@@ -23,7 +23,9 @@
             if (result != Success)
             {
                 // msg: there was a problem to create launch
-                Notification.InfraRaiseError(PayMethodFromLaunch.Error.ErrorToCreatePayMethodFromLaunch);
+                Notification.RaiseError(
+                    PayMethodFromLaunch.Error.PayMethodFromLaunchErrorToCreate, 
+                    NotificationService.ErrorType.Infra);
             }
 
             return payMethodFromLaunch;
@@ -36,7 +38,9 @@
             if (result != Success)
             {
                 // msg: there was a problem to delete launch
-                Notification.InfraRaiseError(PayMethodFromLaunch.Error.ErrorToDeletePayMethodFromLaunch);
+                Notification.RaiseError(
+                    PayMethodFromLaunch.Error.PayMethodFromLaunchErrorToDelete, 
+                    NotificationService.ErrorType.Infra);
             }
         }
 
@@ -50,7 +54,9 @@
             if (result != Success)
             {
                 // msg: there was a problem to update launch
-                Notification.InfraRaiseError(PayMethodFromLaunch.Error.ErrorToUpdatePayMethodFromLaunch);
+                Notification.RaiseError(
+                    PayMethodFromLaunch.Error.PayMethodFromLaunchErrorToUpdate, 
+                    NotificationService.ErrorType.Infra);
             }
 
             var payMethodFromLaunchResponse = _mapper.Map<PayMethodFromLaunchResponseDto>(payMethodFromLaunch);

@@ -27,20 +27,20 @@
             if(user is null)
             {
                 // msg: Usuário não localizado
-                Notification.AppRaiseError(Login.Error.LoginNotFound);
+                Notification.RaiseError(Login.Error.LoginNotFound);
             }
 
             var passwordsMatch = _cryptographyService.CompareValues(user.Password, login.Password);
             if (!passwordsMatch)
             {
                 // msg: Usuário ou senha incorreto
-                Notification.AppRaiseError(Login.Error.LoginOrPassIncorrect);
+                Notification.RaiseError(Login.Error.LoginOrPassIncorrect);
             }
 
             if (user.IsActive == UserActivatioStatus.Inactive)
             {
                 // msg: Ative sua conta
-                Notification.AppRaiseError(Login.Error.LoginInactive);
+                Notification.RaiseError(Login.Error.LoginInactive);
             }
 
             var token = _jwtService.GenerateToken(user);

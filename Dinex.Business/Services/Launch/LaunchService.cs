@@ -22,7 +22,9 @@
             if (result != Success)
             {
                 // msg:  there was a problem to create launch
-                Notification.InfraRaiseError(Launch.Error.ErrorToCreateLaunch);
+                Notification.RaiseError(
+                    Launch.Error.ErrorToCreateLaunch, 
+                    NotificationService.ErrorType.Infra);
             }
 
             return launch;
@@ -36,7 +38,7 @@
             if (launchResult != Success)
             {
                 // msg: there was a problem to update launch
-                Notification.InfraRaiseError(Launch.Error.ErrorToUpdateLaunch);
+                Notification.RaiseError(Launch.Error.ErrorToUpdateLaunch, NotificationService.ErrorType.Infra);
             }
 
             return launch;
@@ -50,7 +52,7 @@
             if (result != Success)
             {
                 // msg: there was a problem to delete launch
-                Notification.AppRaiseError(Launch.Error.ErrorToDeleteLaunch);
+                Notification.RaiseError(Launch.Error.ErrorToDeleteLaunch);
             }
         }
 
@@ -72,7 +74,7 @@
             if (count > 0)
             {
                 // msg : "Exists launch with this category"
-                Notification.AppRaiseError(Launch.Error.HasLaunchWithCategory);
+                Notification.RaiseError(Launch.Error.HasLaunchWithCategory);
             }
         }
 
@@ -82,7 +84,7 @@
             if (result is null)
             {
                 // msg: launch not found
-                Notification.AppRaiseError(Launch.Error.LaunchNotFound);
+                Notification.RaiseError(Launch.Error.LaunchNotFound);
             }
             return result;
         }

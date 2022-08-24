@@ -42,7 +42,7 @@
             if (result != Success)
             {
                 // msg: "Error to create category relation"
-                Notification.InfraRaiseError(CategoryToUser.Error.CategoryRelationFailToCreate);
+                Notification.RaiseError(CategoryToUser.Error.CategoryRelationFailToCreate);
             }
         }
 
@@ -66,7 +66,7 @@
             if (relation is null)
             {
                 // msg : "Category relation not found"
-                Notification.AppRaiseError(CategoryToUser.Error.CategoryRelationNotFound);
+                Notification.RaiseError(CategoryToUser.Error.CategoryRelationNotFound);
             }
 
             relation.DeletedAt = null;
@@ -83,7 +83,7 @@
             if (relation is not null)
             {
                 // msg: Category already exists
-                Notification.AppRaiseError(CategoryToUser.Error.CategoryRelationAlreadyExists);
+                Notification.RaiseError(CategoryToUser.Error.CategoryRelationAlreadyExists);
             }
         }
 
@@ -93,7 +93,7 @@
             if (relation is null)
             {
                 // msg: Category not found
-                Notification.AppRaiseError(CategoryToUser.Error.CategoryRelationNotFound);
+                Notification.RaiseError(CategoryToUser.Error.CategoryRelationNotFound);
             }
         }
     }
