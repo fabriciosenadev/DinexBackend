@@ -1,0 +1,11 @@
+{
+  "UserNotFound": "Usuário não encontrado",
+  "UserErrorToCreate": "Erro ao criar usuário",
+  "UserErrorToUpdate": "Erro ao atualizar usuario",
+
+  "PayMethodFromLaunchErrorToCreate": "Erro ao adicionar metodo de pagamento",
+
+  "LoginNotFound": "Usuário não localizado",
+  "LoginOrPassIncorrect": "Usuário ou senha incorreto",
+  "LoginInactive": "Ative sua conta"
+}
