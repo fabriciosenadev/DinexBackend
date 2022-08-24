@@ -1,11 +1,31 @@
 {
+  "ActivationInvalidCode": "Código de ativação inválido",
+  "ActivationExpiredCode": "Código de ativação expirado",
+
+  "CategoryNotFound": "Categoria não encontrada",
+  "CategoryAlreadyExists": "Categoria já existe",
+  "CategoryInUse": "Categoria em uso",
+
+  "CategoryRelationFailToCreate": "Falha ao vincular categoria ao usuário",
+  "CategoryRelationNotFound": "Categoria vinculada, não encontrada",
+  "CategoryRelationAlreadyExists": "Vinculo entre usuário e categoria ja existe",
+
+  "LaunchErrorToCreate": "Falha ao criar lançamento",
+  "LaunchErrorToUpdate": "Falha ao atualizar lançamento",
+  "LaunchErrorToDelete": "Falha ao apagar lançamento",
+  "LaunchNotFound": "Lançamento não encontrado",
+
+  "PayMethodFromLaunchErrorToCreate": "Erro ao adicionar metodo de pagamento",
+  "PayMethodFromLaunchErrorToUpdate": "Erro ao atualizar metodo de pagamento",
+  "PayMethodFromLaunchErrorToDelete": ,
+
+  "LoginNotFound": "Usuário não localizado",
+  "LoginOrPassIncorrect": "Usuário ou senha incorreto",
+  "LoginInactive": "Ative sua conta",
+
   "UserNotFound": "Usuário não encontrado",
   "UserErrorToCreate": "Erro ao criar usuário",
   "UserErrorToUpdate": "Erro ao atualizar usuario",
 
-  "PayMethodFromLaunchErrorToCreate": "Erro ao adicionar metodo de pagamento",
-
-  "LoginNotFound": "Usuário não localizado",
-  "LoginOrPassIncorrect": "Usuário ou senha incorreto",
-  "LoginInactive": "Ative sua conta"
+  "UserAmountErrorToCreate": "Erro ao cadastrar saldo"
 }
