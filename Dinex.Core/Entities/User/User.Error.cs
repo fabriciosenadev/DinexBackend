@@ -4,8 +4,8 @@
     {
         public enum Error
         {
-            ErrorToCreateUser,
-            ErrorToUpdateUser,
+            UserErrorToCreate,
+            UserErrorToUpdate,
 
             UserNotFound,
         }

@@ -4,9 +4,9 @@
     {
         public enum Error
         {
-            ErrorToCreatePayMethodFromLaunch,
-            ErrorToUpdatePayMethodFromLaunch,
-            ErrorToDeletePayMethodFromLaunch
+            PayMethodFromLaunchErrorToCreate,
+            PayMethodFromLaunchErrorToUpdate,
+            PayMethodFromLaunchErrorToDelete
         }
     }
 }
