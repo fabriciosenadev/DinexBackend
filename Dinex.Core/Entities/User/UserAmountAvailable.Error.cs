@@ -10,7 +10,7 @@ namespace Dinex.Core
     {
         public enum Error
         {
-            ErrorToCreateUserAmount
+            UserAmountErrorToCreate
         }
     }
 }

@@ -23,7 +23,7 @@
             {
                 // msg:  there was a problem to create launch
                 Notification.RaiseError(
-                    Launch.Error.ErrorToCreateLaunch, 
+                    Launch.Error.LaunchErrorToCreate, 
                     NotificationService.ErrorType.Infra);
             }
 
@@ -38,7 +38,7 @@
             if (launchResult != Success)
             {
                 // msg: there was a problem to update launch
-                Notification.RaiseError(Launch.Error.ErrorToUpdateLaunch, NotificationService.ErrorType.Infra);
+                Notification.RaiseError(Launch.Error.LaunchErrorToUpdate, NotificationService.ErrorType.Infra);
             }
 
             return launch;
@@ -52,7 +52,7 @@
             if (result != Success)
             {
                 // msg: there was a problem to delete launch
-                Notification.RaiseError(Launch.Error.ErrorToDeleteLaunch);
+                Notification.RaiseError(Launch.Error.LaunchErrorToDelete);
             }
         }
 
@@ -68,14 +68,10 @@
             return launches;
         }
 
-        public async Task CheckExistsByCategoryIdAsync(int categoryId, Guid userId)
+        public async Task<int> CountByCategoryIdAsync(int categoryId, Guid userId)
         {
             var count = await _launchRepository.CountByCategoryIdAsync(categoryId, userId);
-            if (count > 0)
-            {
-                // msg : "Exists launch with this category"
-                Notification.RaiseError(Launch.Error.HasLaunchWithCategory);
-            }
+            return count;
         }
 
         public async Task<Launch> GetByIdAsync(int launchId)

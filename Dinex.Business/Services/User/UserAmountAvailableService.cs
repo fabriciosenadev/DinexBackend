@@ -33,7 +33,7 @@
             var result = await _userAmountAvailableRepository.UpdateAsync(userAmountAvailable);
             if (result != Success)
                 Notification.RaiseError(
-                    UserAmountAvailable.Error.ErrorToCreateUserAmount, 
+                    UserAmountAvailable.Error.UserAmountErrorToCreate, 
                     NotificationService.ErrorType.Infra);
 
 

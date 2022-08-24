@@ -4,8 +4,8 @@
     {
         public enum Error
         {
-            InvalidCode,
-            ExpiredCode
+            ActivationInvalidCode,
+            ActivationExpiredCode
         }
     }
 }

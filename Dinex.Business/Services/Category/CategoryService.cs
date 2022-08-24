@@ -18,7 +18,7 @@
             {
                 // msg: Category not provided
                 Notification.RaiseError(
-                    Category.Error.CategoryNotProvided, 
+                    Category.Error.CategoryNotFound, 
                     NotificationService.ErrorType.Infra);
             }
         }

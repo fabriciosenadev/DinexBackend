@@ -1,20 +1,20 @@
 ﻿namespace Dinex.Business
 {
-    public class CategoryManager : ICategoryManager
+    public class CategoryManager : BaseService, ICategoryManager
     {
         private readonly ICategoryService _categoryService;
         private readonly ICategoryToUserService _categoryToUserService;
         private readonly ILaunchService _launchService;
-        private readonly IMapper _mapper;
         public CategoryManager(
             ICategoryService categoryService,
             ICategoryToUserService categoryToUserService,
             IMapper mapper,
-            ILaunchService launchService)
+            ILaunchService launchService,
+            INotificationService notification)
+            : base(mapper, notification)
         {
             _categoryService = categoryService;
             _categoryToUserService = categoryToUserService;
-            _mapper = mapper;
             _launchService = launchService;
         }
 
@@ -76,7 +76,12 @@
         {
             _categoryService.ValidateCategoryId(categoryId);
 
-            await _launchService.CheckExistsByCategoryIdAsync(categoryId, userId);
+            var count = await _launchService.CountByCategoryIdAsync(categoryId, userId);
+            if (count > 0)
+            {
+                // msg : "Exists launch with this category"
+                Notification.RaiseError(Category.Error.CategoryInUse);
+            }
 
             await _categoryToUserService.CheckNotExistsCategoryRelationToUser(categoryId, userId);
 

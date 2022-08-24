@@ -4,10 +4,9 @@
     {
         public enum Error
         {
-            CategoryNotProvided,
-
             CategoryNotFound,
-            CategoryAlreadyExists
+            CategoryAlreadyExists,
+            CategoryInUse
         }
     }
 }

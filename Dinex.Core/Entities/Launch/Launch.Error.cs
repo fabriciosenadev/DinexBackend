@@ -3,13 +3,12 @@
     public partial class Launch
     {
         public enum Error 
-        { 
-            ErrorToCreateLaunch,
-            ErrorToUpdateLaunch,
-            ErrorToDeleteLaunch,
+        {
+            LaunchErrorToCreate,
+            LaunchErrorToUpdate,
+            LaunchErrorToDelete,
 
-            LaunchNotFound,
-            HasLaunchWithCategory,
+            LaunchNotFound
         }
     }
 }
