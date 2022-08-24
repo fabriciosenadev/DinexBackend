@@ -20,12 +20,9 @@
 
             var result = await _launchRepository.AddAsync(launch);
             if (result != Success)
-            {
-                // msg:  there was a problem to create launch
                 Notification.RaiseError(
                     Launch.Error.LaunchErrorToCreate, 
                     NotificationService.ErrorType.Infra);
-            }
 
             return launch;
         }
@@ -36,10 +33,7 @@
 
             var launchResult = await _launchRepository.UpdateAsync(launch);
             if (launchResult != Success)
-            {
-                // msg: there was a problem to update launch
                 Notification.RaiseError(Launch.Error.LaunchErrorToUpdate, NotificationService.ErrorType.Infra);
-            }
 
             return launch;
         }
@@ -50,10 +44,7 @@
 
             var result = await _launchRepository.UpdateAsync(launch);
             if (result != Success)
-            {
-                // msg: there was a problem to delete launch
                 Notification.RaiseError(Launch.Error.LaunchErrorToDelete);
-            }
         }
 
         public Task<List<Launch>> ListAsync(DateTime startDate, DateTime endDate, Guid userId)
@@ -78,10 +69,8 @@
         {
             var result = await _launchRepository.GetByIdAsync(launchId);
             if (result is null)
-            {
-                // msg: launch not found
                 Notification.RaiseError(Launch.Error.LaunchNotFound);
-            }
+            
             return result;
         }
 

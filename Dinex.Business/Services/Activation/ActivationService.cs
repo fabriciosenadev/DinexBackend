@@ -21,19 +21,13 @@
 
             listOfActivations.RemoveAll(a => !a.ActivationCode.Equals(activationCode));
             if (listOfActivations.Count != MaxActivationCodesAllowed)
-            {
-                // msg: Invalid activation code
                 Notification.RaiseError(Activation.Error.ActivationInvalidCode);
-            }
 
             const int activationExpiresInMinutes = 120;
             var createdAt = listOfActivations[0].CreatedAt;
             var currentTimeToExpire = DateTime.Now.AddMinutes(-activationExpiresInMinutes);
             if (currentTimeToExpire >= createdAt)
-            {
-                // msg: Expired activation code
                 Notification.RaiseError(Activation.Error.ActivationExpiredCode);
-            }
         }
 
         public async Task ClearActivationCodesAsync(Guid userId)

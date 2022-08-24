@@ -40,10 +40,7 @@
             categoryToUser.DeletedAt = DateTime.Now;
             var result = await _categoryToUserRepository.UpdateAsync(categoryToUser);
             if (result != Success)
-            {
-                // msg: "Error to create category relation"
                 Notification.RaiseError(CategoryToUser.Error.CategoryRelationFailToCreate);
-            }
         }
 
         public async Task<CategoryToUser> GetRelationAsync(int categoryId, Guid userId)
@@ -64,10 +61,7 @@
         {
             var relation = await _categoryToUserRepository.FindDeletedRelationAsync(categoryId, userId);
             if (relation is null)
-            {
-                // msg : "Category relation not found"
                 Notification.RaiseError(CategoryToUser.Error.CategoryRelationNotFound);
-            }
 
             relation.DeletedAt = null;
             await _categoryToUserRepository.UpdateAsync(relation);
@@ -81,20 +75,14 @@
         {
             var relation = await GetRelationAsync(categoryId, userId);
             if (relation is not null)
-            {
-                // msg: Category already exists
                 Notification.RaiseError(CategoryToUser.Error.CategoryRelationAlreadyExists);
-            }
         }
 
         public async Task CheckNotExistsCategoryRelationToUser(int categoryId, Guid userId)
         {
             var relation = await GetRelationAsync(categoryId, userId);
             if (relation is null)
-            {
-                // msg: Category not found
                 Notification.RaiseError(CategoryToUser.Error.CategoryRelationNotFound);
-            }
         }
     }
 }

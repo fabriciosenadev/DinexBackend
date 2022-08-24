@@ -21,10 +21,7 @@ namespace Dinex.Business
         {
             var user = await (Task<User>)httpContext.Items["User"];
             if (user is null)
-            {
-                // msg: "User not found"
                 Notification.RaiseError(User.Error.UserNotFound);
-            }
 
             httpContext.Items["User"] = null;
 
@@ -41,12 +38,9 @@ namespace Dinex.Business
 
             var result = await _userRepository.AddAsync(user);
             if (result != Success)
-            {
-                // msg : Error to create user
                 Notification.RaiseError(
                     User.Error.UserErrorToCreate, 
                     NotificationService.ErrorType.Infra);
-            }
 
             var userResult = _mapper.Map<UserResponseDto>(user);
             return userResult;
@@ -81,12 +75,9 @@ namespace Dinex.Business
 
             var result = await _userRepository.UpdateAsync(user);
             if (result != Success)
-            {
-                // msg: Error to update user
                 Notification.RaiseError(
                     User.Error.UserErrorToCreate, 
                     NotificationService.ErrorType.Infra);
-            }
 
             var userResult = _mapper.Map<UserResponseDto>(user);
             return userResult;
@@ -96,10 +87,7 @@ namespace Dinex.Business
         {
             var user = await GetFromContextAsync(httpContext);
             if (user is null)
-            {
-                // msg: "User not found"
                 Notification.RaiseError(User.Error.UserNotFound);
-            }
 
             return _mapper.Map<UserResponseDto>(user);
         }
@@ -119,10 +107,8 @@ namespace Dinex.Business
         {
             var user = _userRepository.GetByIdAsNoTracking(userId).Result;
             if (user is null)
-            {
-                // msg: "User not found"
                 Notification.RaiseError(User.Error.UserNotFound);
-            }
+            
             return user;
         }
         #endregion

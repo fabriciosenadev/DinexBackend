@@ -78,10 +78,7 @@
 
             var count = await _launchService.CountByCategoryIdAsync(categoryId, userId);
             if (count > 0)
-            {
-                // msg : "Exists launch with this category"
                 Notification.RaiseError(Category.Error.CategoryInUse);
-            }
 
             await _categoryToUserService.CheckNotExistsCategoryRelationToUser(categoryId, userId);
 

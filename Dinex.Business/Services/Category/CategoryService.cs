@@ -15,12 +15,9 @@
         public void ValidateCategoryId(int categoryId)
         {
             if (categoryId == InvalidId)
-            {
-                // msg: Category not provided
                 Notification.RaiseError(
                     Category.Error.CategoryNotFound, 
                     NotificationService.ErrorType.Infra);
-            }
         }
 
         private async Task<Category> AddCategoryAsync(string categoryName, bool isCustom)
@@ -80,10 +77,8 @@
         {
             var result = await _categoryRepository.ListStandardCategoriesAsync();
             if (result is null)
-            {
-                // msg: Category not found
                 Notification.RaiseError(Category.Error.CategoryNotFound);
-            }
+            
             return result;
         }
 
