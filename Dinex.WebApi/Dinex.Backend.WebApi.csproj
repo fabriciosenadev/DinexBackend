@@ -9,6 +9,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Remove="Localization\messages.pt-br.json" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="11.0.0" />
     <PackageReference Include="BCrypt.Net-Next" Version="4.0.3" />
     <PackageReference Include="FluentValidation.AspNetCore" Version="11.1.0" />
@@ -33,6 +37,10 @@
 
   <ItemGroup>
     <Folder Include="Templates\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="Localization\messages.pt-br.json" />
   </ItemGroup>
 
   <ItemGroup>
