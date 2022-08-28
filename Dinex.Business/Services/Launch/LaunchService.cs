@@ -74,9 +74,14 @@
             return result;
         }
 
-        public Task<decimal> GetSumAmountByStatus(List<int> categoryIds, Guid userId, LaunchStatus launchStatus, DateTime startDate, DateTime endDate)
+        public Task<decimal> GetSumAmountByStatus(List<int> categoriesId, Guid userId, LaunchStatus launchStatus, DateTime startDate, DateTime endDate)
         {
-            var result = _launchRepository.GetSumAmountByStatus(categoryIds, userId, launchStatus, startDate, endDate);
+            var result = _launchRepository.GetSumAmountByStatus(categoriesId, userId, launchStatus, startDate, endDate);
+            return result;
+        }
+        public async Task<decimal> GetLaunchesSumByCategoriesId(Guid userId, List<int> categoriesId)
+        {
+            var result = await _launchRepository.GetLaunchesSumByCategoriesId(userId, categoriesId);
             return result;
         }
     }

@@ -27,7 +27,7 @@
         }
 
         public async Task<decimal> GetSumAmountByStatus(
-            List<int> categoryIds,
+            List<int> categoriesId,
             Guid userId,
             LaunchStatus launchStatus,
             DateTime startDate,
@@ -40,7 +40,7 @@
                     x.Date >= startDate &&
                     x.Date <= endDate &&
                     x.DeletedAt == null &&
-                    categoryIds.Contains(x.CategoryId)
+                    categoriesId.Contains(x.CategoryId)
                 ).ToListAsync();
 
             var result = list.Sum(x => x.Amount);
@@ -73,6 +73,18 @@
 
             return result;
 
+        }
+
+        public async Task<decimal> GetLaunchesSumByCategoriesId(Guid userId, List<int> categoriesId)
+        {
+            var result = await _context.Launches
+                .Where(x => 
+                    x.UserId.Equals(userId) &&
+                    categoriesId.Contains(x.CategoryId)
+                ).Select(x => x.Amount)
+                .ToListAsync();
+
+            return result.Sum();
         }
     }
 }
