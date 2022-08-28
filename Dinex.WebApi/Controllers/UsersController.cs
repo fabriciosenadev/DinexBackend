@@ -7,14 +7,14 @@
     {
 
         private readonly IUserService _userService;
-        private readonly IUserAmountAvailableService _userAmountAvailableService;
+        private readonly IUserAmountManager _userAmountManager;
 
         public UsersController(
-            IUserService userService, 
-            IUserAmountAvailableService userAmountAvailableService)
+            IUserService userService,
+            IUserAmountManager userAmountManager)
         {
             _userService = userService;
-            _userAmountAvailableService = userAmountAvailableService;
+            _userAmountManager = userAmountManager;
         }
 
         private async Task<Guid> GetUserId()
@@ -56,7 +56,7 @@
         public async Task<ActionResult<UserAmountAvailableResponseDto>> GetAmountAvailableAsync()
         {
             var userId = await GetUserId();
-            var result = await _userAmountAvailableService.GetAmountAvailableAsync(userId);
+            var result = await _userAmountManager.GetAmountAvailableByUserId(userId);
 
             return Ok(result);
         }
