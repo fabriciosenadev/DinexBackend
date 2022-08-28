@@ -31,6 +31,7 @@
             services.AddScoped<IActivationManager, ActivationManager>();
             services.AddScoped<ICategoryManager, CategoryManager>();
             services.AddScoped<ILaunchManager, LaunchManager>();
+            services.AddScoped<IUserAmountManager, UserAmountManager>();
             #endregion
 
             #region business services

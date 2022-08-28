@@ -11,29 +11,18 @@
             _userAmountAvailableRepository = userAmountAvailableRepository;
         }
 
-        public async Task<UserAmountAvailableResponseDto> GetAmountAvailableAsync(Guid userId)
+        public async Task<UserAmountAvailable> GetAmountAvailableAsync(Guid userId)
         {
             var result = await _userAmountAvailableRepository.GetAmountAvailableAsync(userId);
-
-            var amountAvailable = _mapper.Map<UserAmountAvailableResponseDto>(result);
-
-            if (amountAvailable is null)
-            {
-                amountAvailable = new UserAmountAvailableResponseDto
-                {
-                    AmountAvailable = 0
-                };
-            }
-
-            return amountAvailable;
+            return result;
         }
 
         public async Task<UserAmountAvailable> CreateAsync(UserAmountAvailable userAmountAvailable)
         {
-            var result = await _userAmountAvailableRepository.UpdateAsync(userAmountAvailable);
+            var result = await _userAmountAvailableRepository.AddAsync(userAmountAvailable);
             if (result != Success)
                 Notification.RaiseError(
-                    UserAmountAvailable.Error.UserAmountErrorToCreate, 
+                    UserAmountAvailable.Error.UserAmountErrorToCreate,
                     NotificationService.ErrorType.Infra);
 
 

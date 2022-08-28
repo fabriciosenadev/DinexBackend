@@ -2,5 +2,6 @@
 {
     public interface IUserAmountManager
     {
+        Task<UserAmountAvailableResponseDto> GetAmountAvailableByUserId(Guid userId);
     }
 }
