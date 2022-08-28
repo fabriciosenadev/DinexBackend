@@ -189,7 +189,7 @@
                 launchResponse,
                 payMethodFromLaunchResponse);
 
-            UserAmountAvailableManaging(response, userId);
+            await UserAmountAvailableManaging(response, userId);
 
             return response;
         }
