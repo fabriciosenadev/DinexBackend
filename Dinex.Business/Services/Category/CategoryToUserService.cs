@@ -5,9 +5,9 @@
         private readonly ICategoryToUserRepository _categoryToUserRepository;
 
         public CategoryToUserService(
-            ICategoryToUserRepository categoryToUserRepository, 
-            IMapper mapper, 
-            INotificationService notification) 
+            ICategoryToUserRepository categoryToUserRepository,
+            IMapper mapper,
+            INotificationService notification)
             : base(mapper, notification)
         {
             _categoryToUserRepository = categoryToUserRepository;
@@ -45,7 +45,7 @@
 
         public async Task<CategoryToUser> GetRelationAsync(int categoryId, Guid userId)
         {
-            var result = await _categoryToUserRepository.FindRelationAsync(categoryId, userId);
+            var result = await _categoryToUserRepository.FindNotDeletedRelationAsync(categoryId, userId);
             return result;
         }
 
@@ -73,8 +73,8 @@
 
         public async Task CheckExistsCategoryRelationToUser(int categoryId, Guid userId)
         {
-            var relation = await GetRelationAsync(categoryId, userId);
-            if (relation is not null)
+            var categoryToUser = await _categoryToUserRepository.FindRelationAsync(categoryId, userId);
+            if (categoryToUser is not null)
                 Notification.RaiseError(CategoryToUser.Error.CategoryRelationAlreadyExists);
         }
 

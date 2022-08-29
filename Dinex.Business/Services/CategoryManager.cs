@@ -5,17 +5,20 @@
         private readonly ICategoryService _categoryService;
         private readonly ICategoryToUserService _categoryToUserService;
         private readonly ILaunchService _launchService;
+        private readonly ICategoryToUserRepository _categoryToUserRepository;
         public CategoryManager(
             ICategoryService categoryService,
             ICategoryToUserService categoryToUserService,
             IMapper mapper,
             ILaunchService launchService,
-            INotificationService notification)
+            INotificationService notification,
+            ICategoryToUserRepository categoryToUserRepository)
             : base(mapper, notification)
         {
             _categoryService = categoryService;
             _categoryToUserService = categoryToUserService;
             _launchService = launchService;
+            _categoryToUserRepository = categoryToUserRepository;
         }
 
         private Applicable StringToEnum(string applicable)
@@ -61,7 +64,7 @@
 
             var resultCreation = await _categoryService.CreateCategoryAsync(category);
 
-            await _categoryToUserService.CheckExistsCategoryRelationToUser(resultCreation.Id, userId);
+            await _categoryToUserService.CheckExistsCategoryRelationToUser(resultCreation.Id, userId, false);
 
             var applicableEnum = StringToEnum(applicable);
 

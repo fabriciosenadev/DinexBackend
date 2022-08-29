@@ -11,7 +11,18 @@
             var result = await _context.CategoriesToUsers
                 .Where(r => 
                     r.UserId.Equals(userId) && 
-                    r.CategoryId.Equals(categoryId) && 
+                    r.CategoryId.Equals(categoryId))
+                .FirstOrDefaultAsync();
+
+            return result;
+        }
+
+        public async Task<CategoryToUser> FindNotDeletedRelationAsync(int categoryId, Guid userId)
+        {
+            var result = await _context.CategoriesToUsers
+                .Where(r =>
+                    r.UserId.Equals(userId) &&
+                    r.CategoryId.Equals(categoryId) &&
                     r.DeletedAt.Equals(null))
                 .FirstOrDefaultAsync();
 
