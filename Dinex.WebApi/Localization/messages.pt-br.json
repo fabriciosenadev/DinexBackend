@@ -17,7 +17,7 @@
 
   "PayMethodFromLaunchErrorToCreate": "Erro ao adicionar metodo de pagamento",
   "PayMethodFromLaunchErrorToUpdate": "Erro ao atualizar metodo de pagamento",
-  "PayMethodFromLaunchErrorToDelete": ,
+  "PayMethodFromLaunchErrorToDelete": "Erro ao deletar metodo de pagamento",
 
   "LoginNotFound": "Usuário não localizado",
   "LoginOrPassIncorrect": "Usuário ou senha incorreto",
