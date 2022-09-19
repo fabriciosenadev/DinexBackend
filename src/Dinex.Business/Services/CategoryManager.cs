@@ -64,7 +64,7 @@
 
             var resultCreation = await _categoryService.CreateCategoryAsync(category);
 
-            await _categoryToUserService.CheckExistsCategoryRelationToUser(resultCreation.Id, userId, false);
+            await _categoryToUserService.CheckExistsCategoryRelationToUser(resultCreation.Id, userId);
 
             var applicableEnum = StringToEnum(applicable);
 
