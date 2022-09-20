@@ -16,7 +16,8 @@
                 FullName = _faker.Name.FullName(),
                 Email = _faker.Internet.Email(),
                 IsActive = UserActivatioStatus.Inactive,
-                Password = _faker.Lorem.Word(),
+                Password = _faker.Random.String2(10),
+                CreatedAt = DateTime.Now,
             };
 
         }
