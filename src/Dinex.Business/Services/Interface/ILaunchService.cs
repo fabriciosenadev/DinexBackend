@@ -10,6 +10,6 @@
         Task<int> CountByCategoryIdAsync(int categoryId, Guid userId);
         Task<Launch> GetByIdAsync(int launchId);
         Task<decimal> GetSumAmountByStatus(List<int> categoriesId, Guid userId, LaunchStatus launchStatus, DateTime startDate, DateTime endDate);
-        Task<decimal> GetLaunchesSumByCategoriesId(Guid userId, List<int> categoriesId);
+        Task<decimal> GetLaunchesSumByCategoriesIdAndStatus(Guid userId, List<int> categoriesId, LaunchStatus status);
     }
 }

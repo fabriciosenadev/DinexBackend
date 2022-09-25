@@ -28,14 +28,14 @@
 
             var inCategories = userCategories
                 .Where(x => x.Applicable.Equals(Applicable.In))
-                .Select(x => x.Id).ToList();
+                .Select(x => x.CategoryId).ToList();
 
             var outCategories = userCategories
                 .Where(x => x.Applicable.Equals(Applicable.Out))
-                .Select(x => x.Id).ToList();
+                .Select(x => x.CategoryId).ToList();
 
-            var inLaunchesValue = await _launchService.GetLaunchesSumByCategoriesId(userId, inCategories);
-            var outLaunchesValue = await _launchService.GetLaunchesSumByCategoriesId(userId, outCategories);
+            var inLaunchesValue = await _launchService.GetLaunchesSumByCategoriesIdAndStatus(userId, inCategories, LaunchStatus.Received);
+            var outLaunchesValue = await _launchService.GetLaunchesSumByCategoriesIdAndStatus(userId, outCategories, LaunchStatus.Paid);
 
             var availableValue = inLaunchesValue - outLaunchesValue;
 

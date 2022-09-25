@@ -79,9 +79,9 @@
             var result = _launchRepository.GetSumAmountByStatus(categoriesId, userId, launchStatus, startDate, endDate);
             return result;
         }
-        public async Task<decimal> GetLaunchesSumByCategoriesId(Guid userId, List<int> categoriesId)
+        public async Task<decimal> GetLaunchesSumByCategoriesIdAndStatus(Guid userId, List<int> categoriesId, LaunchStatus status)
         {
-            var result = await _launchRepository.GetLaunchesSumByCategoriesId(userId, categoriesId);
+            var result = await _launchRepository.GetLaunchesSumByCategoriesIdAndStatus(userId, categoriesId, status);
             return result;
         }
     }
