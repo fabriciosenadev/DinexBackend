@@ -143,25 +143,35 @@
             return pieChartData;
         }
 
-        private async Task UserAmountAvailableManaging(LaunchAndPayMethodResponseDto launchAndPayMethodResponse, Guid userId)
+        private async Task ManagingUserAmountAvailable(Launch launch, PayMethodFromLaunch? payMethodFromLaunch, Guid userId, bool isDeletingLaunch)
         {
             var userAmountAvailable = await _userAmountAvailableRepository.GetAmountAvailableAsync(userId);
             if (userAmountAvailable is null)
             {
                 userAmountAvailable = new UserAmountAvailable
                 {
-                    AmountAvailable = launchAndPayMethodResponse.Launch.Amount,
+                    AmountAvailable = launch.Amount,
                     UserId = userId
                 };
                 await _userAmountAvailableService.CreateAsync(userAmountAvailable);
-                
+
                 return;
             }
 
-            if (launchAndPayMethodResponse.PayMethodFromLaunch is not null)
-                userAmountAvailable.AmountAvailable -= launchAndPayMethodResponse.Launch.Amount;
+            if (isDeletingLaunch)
+            {
+                if (payMethodFromLaunch is not null)
+                    userAmountAvailable.AmountAvailable += launch.Amount;
+                else
+                    userAmountAvailable.AmountAvailable -= launch.Amount;
+            }
             else
-                userAmountAvailable.AmountAvailable += launchAndPayMethodResponse.Launch.Amount;
+            {
+                if (payMethodFromLaunch is not null)
+                    userAmountAvailable.AmountAvailable -= launch.Amount;
+                else
+                    userAmountAvailable.AmountAvailable += launch.Amount;
+            }
 
             await _userAmountAvailableService.UpdateAsync(userAmountAvailable);
         }
@@ -177,9 +187,10 @@
             var launchResponse = _mapper.Map<LaunchResponseDto>(resultLaunchCreation);
 
             PayMethodFromLaunchResponseDto? payMethodFromLaunchResponse = null;
+            PayMethodFromLaunch payMethodFromLaunch = null;
             if (payMethodModel is not null)
             {
-                var payMethodFromLaunch = _mapper.Map<PayMethodFromLaunch>(payMethodModel);
+                payMethodFromLaunch = _mapper.Map<PayMethodFromLaunch>(payMethodModel);
                 var payMethodFromLaunchCreation = await _payMethodFromLaunchService
                     .CreateAsync(payMethodFromLaunch, launch.Id);
                 payMethodFromLaunchResponse = _mapper.Map<PayMethodFromLaunchResponseDto>(payMethodFromLaunchCreation);
@@ -189,7 +200,7 @@
                 launchResponse,
                 payMethodFromLaunchResponse);
 
-            await UserAmountAvailableManaging(response, userId);
+            await ManagingUserAmountAvailable(launch, payMethodFromLaunch, userId, false);
 
             return response;
         }
@@ -225,9 +236,11 @@
 
             await _launchService.SoftDeleteAsync(launch);
 
-            var payMethod = await _payMethodFromLaunchService.GetByLaunchIdWithoutDtoAsync(launchId);
-            if (payMethod != null)
-                await _payMethodFromLaunchService.SoftDeleteAsync(payMethod);
+            var payMethodFromLaunch = await _payMethodFromLaunchService.GetByLaunchIdWithoutDtoAsync(launchId);
+            if (payMethodFromLaunch != null)
+                await _payMethodFromLaunchService.SoftDeleteAsync(payMethodFromLaunch);
+
+            await ManagingUserAmountAvailable(launch, payMethodFromLaunch, launch.UserId, true);
         }
 
         public async Task<LaunchAndPayMethodResponseDto> GetAsync(int launchId)
