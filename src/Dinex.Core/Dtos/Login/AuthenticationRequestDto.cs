@@ -1,11 +1,9 @@
 ﻿namespace Dinex.Core
 {
-    public class AuthenticationRequestDto
+    public struct AuthenticationRequestDto
     {
-        [Required]
         public string Email { get; set; }
 
-        [Required]
         public string Password { get; set; }
     }
 }

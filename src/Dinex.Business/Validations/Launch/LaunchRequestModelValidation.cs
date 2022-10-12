@@ -12,7 +12,7 @@ namespace Dinex.Business
         {
             var result = true;
 
-            if(payMethod is not null && string.IsNullOrEmpty(payMethod.PayMethod))
+            if(payMethod is not null && string.IsNullOrEmpty(payMethod?.PayMethod))
             {
                 return false;
             }

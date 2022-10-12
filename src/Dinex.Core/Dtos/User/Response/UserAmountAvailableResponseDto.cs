@@ -1,6 +1,6 @@
 ﻿namespace Dinex.Core
 {
-    public class UserAmountAvailableResponseDto
+    public struct UserAmountAvailableResponseDto
     {
         public decimal AmountAvailable { get; set; }
     }

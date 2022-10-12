@@ -1,6 +1,6 @@
 ﻿namespace Dinex.Core
 {
-    public class ChartDataResponseDto
+    public struct ChartDataResponseDto
     {
         public int CategoryId { get; set; }
         public string CategoryName { get; set; }

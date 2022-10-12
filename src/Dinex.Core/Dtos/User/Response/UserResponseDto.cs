@@ -1,6 +1,6 @@
 ﻿namespace Dinex.Core
 {
-    public class UserResponseDto
+    public struct UserResponseDto
     {
         public Guid Id { get; set; }
         public string FullName { get; set; }

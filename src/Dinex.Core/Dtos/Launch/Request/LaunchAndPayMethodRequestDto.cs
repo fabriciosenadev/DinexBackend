@@ -1,6 +1,6 @@
 ﻿namespace Dinex.Core
 {
-    public class LaunchAndPayMethodRequestDto
+    public struct LaunchAndPayMethodRequestDto
     {
         public LaunchRequestDto Launch { get; set; }
         public PayMethodFromLaunchRequestDto? PayMethodFromLaunch { get; set; }

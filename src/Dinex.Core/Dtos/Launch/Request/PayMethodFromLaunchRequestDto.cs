@@ -1,6 +1,6 @@
 ﻿namespace Dinex.Core
 {
-    public class PayMethodFromLaunchRequestDto
+    public struct PayMethodFromLaunchRequestDto
     {
         public string PayMethod { get; set; }
     }

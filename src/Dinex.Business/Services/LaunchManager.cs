@@ -123,7 +123,7 @@
 
                 if (amount > 0)
                 {
-                    PayMethodFromLaunchResponseDto payMethod;
+                    PayMethodFromLaunchResponseDto? payMethod;
                     payMethod = await _payMethodFromLaunchService.GetAsync(launch.Id);
                     if (payMethod is not null)
                         payMethodName = payMethod?.PayMethod;
@@ -220,8 +220,11 @@
 
             PayMethodFromLaunchResponseDto? payMethodFromLaunchResponse = null;
             if (payMethodModel is not null)
+            {
+
                 payMethodFromLaunchResponse = await _payMethodFromLaunchService
-                    .UpdateAsync(payMethodModel, launchStored.Id);
+                    .UpdateAsync((PayMethodFromLaunchRequestDto)payMethodModel, launchStored.Id);
+            }
 
             var response = JoinLaunchAndPayMethodResponses(
                 launchResponse,

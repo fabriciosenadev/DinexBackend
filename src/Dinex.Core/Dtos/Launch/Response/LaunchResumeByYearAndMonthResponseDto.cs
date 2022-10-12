@@ -1,6 +1,6 @@
 ﻿namespace Dinex.Core
 {
-    public class LaunchResumeByYearAndMonthResponseDto
+    public struct LaunchResumeByYearAndMonthResponseDto
     {
         public decimal Received { get; set; }
         public decimal Paid { get; set; }
