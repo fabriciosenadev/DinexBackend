@@ -59,19 +59,22 @@ namespace Dinex.Business
         }
 
         public async Task<UserResponseDto> UpdateAsync(
-            UserRequestDto userData,
-            bool needUpdatePassword,
-            Guid userId)
+            UserRequestDto request,
+            bool needUpdatePassword)
         {
+            Guid userId = Guid.NewGuid();
+            if(request.Id.HasValue)
+                userId = request.Id.Value;
+
             var user = await GetByIdAsync(userId);
 
             user.UpdatedAt = DateTime.Now;
 
-            if (userData.IsActive != null)
-                user.IsActive = (UserActivatioStatus)userData.IsActive;
+            if (request.IsActive != null)
+                user.IsActive = request.IsActive.Value;
 
             if (needUpdatePassword)
-                user.Password = _cryptographyService.Encrypt(userData.Password);
+                user.Password = _cryptographyService.Encrypt(request.Password);
 
             var result = await _userRepository.UpdateAsync(user);
             if (result != Success)
@@ -99,7 +102,7 @@ namespace Dinex.Business
 
             var userDto = _mapper.Map<UserRequestDto>(user);
 
-            await UpdateAsync(userDto, false, user.Id);
+            await UpdateAsync(userDto, false);
         }
 
         #region exclusive for middleware

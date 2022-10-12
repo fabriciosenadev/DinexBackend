@@ -43,10 +43,10 @@
         [HttpPut]
         public async Task<ActionResult<UserResponseDto>> Update([FromBody] UserRequestDto request)
         {
-            var userId = await GetUserId();
+            request.Id = await GetUserId();
 
             var userResult = await _userService
-                .UpdateAsync(request, true, userId);
+                .UpdateAsync(request, true);
 
             return Ok(userResult);
         }
