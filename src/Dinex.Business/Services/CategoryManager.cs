@@ -1,4 +1,6 @@
-﻿namespace Dinex.Business
+﻿using System.Collections.Generic;
+
+namespace Dinex.Business
 {
     public class CategoryManager : BaseService, ICategoryManager
     {
@@ -35,15 +37,23 @@
         private List<CategoryResponseDto> FillApplicableToToCategoriesReponse(
             List<CategoryResponseDto> categoriesResponse, List<CategoryToUser> categoriesToUser)
         {
+            var categoriesResult = new List<CategoryResponseDto>();
             categoriesResponse.ForEach(category =>
             {
                 var applicable = categoriesToUser
                     .Where(x => x.CategoryId == category.Id)
                     .Select(x => x.Applicable);
 
-                category.Applicable = applicable.ElementAt(0).ToString();
+                categoriesResult.Add(new CategoryResponseDto
+                {
+                    Id = category.Id,
+                    Name = category.Name,
+                    IsCustom = category.IsCustom,
+                    CreatedAt = category.CreatedAt,
+                    Applicable = applicable.First().ToString()
+                });
             });
-            return categoriesResponse;
+            return categoriesResult;
         }
 
         public async Task BindStandardCategoriesAsync(Guid userId)
