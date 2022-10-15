@@ -39,7 +39,18 @@
 
             await _activationService.AddActivationOnDatabaseAsync(user.Id, activationCode);
 
-            var sendResult = await _sendMailService.SendActivationCodeAsync(activationCode, user.FullName, user.Email);
+            var sendEmailDto = new SendEmailDto { 
+                EmailSubject = email,
+                EmailTo = user.Email,
+                FullName = user.FullName,
+                EmailTemplateFileName = "activationAccount.html",
+                GeneratedCode = activationCode,
+                Origin = "activation",
+                TemplateFieldToName = "{name}",
+                TemplateFieldToUrl = "{activationUrl}"
+            };
+
+            var sendResult = await _sendMailService.SendActivationCodeAsync(sendEmailDto);
             return sendResult;
         }
     }
