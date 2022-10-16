@@ -41,15 +41,28 @@
         private List<LaunchResponseDto> FillApplicableToLaunchResponseModel(
             List<LaunchResponseDto> launchesResponseModel, List<CategoryToUser> categoriesToUser)
         {
+            var launchesResult = new List<LaunchResponseDto>();
             launchesResponseModel.ForEach(launch =>
             {
                 var applicable = categoriesToUser
                     .Where(x => x.CategoryId.Equals(launch.CategoryId))
                     .Select(x => x.Applicable);
 
-                launch.Applicable = applicable.ElementAt(0).ToString();
+
+                launchesResult.Add(new LaunchResponseDto
+                {
+                    Amount = launch.Amount,
+                    CategoryId = launch.CategoryId,
+                    CreatedAt = launch.CreatedAt,
+                    Date = launch.Date,
+                    Description = launch.Description,
+                    Id = launch.Id,
+                    Status = launch.Status,
+                    UpdatedAt = launch.UpdatedAt,
+                    Applicable = applicable.First().ToString()
+                });
             });
-            return launchesResponseModel;
+            return launchesResult;
         }
 
         private (LaunchRequestDto, PayMethodFromLaunchRequestDto?) SplitLaunchAndPayMethodRequests(LaunchAndPayMethodRequestDto model)
