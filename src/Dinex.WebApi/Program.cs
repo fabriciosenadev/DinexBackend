@@ -27,7 +27,7 @@ builder.Services.AddCors( options =>
     options.AddPolicy(name: MyAllowSpecificOrigins, 
         builder =>
         {
-            builder.WithOrigins( appSettings.AllowedOrigin)
+            builder.WithOrigins( appSettings.AllowedHost)
                 .WithMethods("POST", "PUT", "GET", "DELETE", "OPTIONS")
                 .WithHeaders("accept", "content-type", "origin", "authorization");
         });
