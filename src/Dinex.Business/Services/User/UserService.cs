@@ -38,9 +38,12 @@ namespace Dinex.Business
 
             var result = await _userRepository.AddAsync(user);
             if (result != Success)
+            {
                 Notification.RaiseError(
                     User.Error.UserErrorToCreate, 
                     NotificationService.ErrorType.Infra);
+                return default;
+            }
 
             var userResult = _mapper.Map<UserResponseDto>(user);
             return userResult;
