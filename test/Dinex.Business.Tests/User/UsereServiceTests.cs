@@ -78,14 +78,32 @@ namespace Dinex.Business.UserTests
             var userMock = GetUserMock(request);
 
             _userRepository.AddAsync(userMock)
-                .ReturnsForAnyArgs(1);
-            
+                .ReturnsForAnyArgs(1);            
 
             var result = await _userService
                 .CreateAsync(request);
 
-            Assert.NotNull(result);
+            Assert.NotNull(result.Email);
+            Assert.NotNull(result.FullName);
             Assert.True(result.Id == userMock.Id);
+        }
+
+        [Fact]
+        public async Task Should_Fail_Create_User()
+        {
+            var request = GetUserRequestDtoMock();
+
+            var userMock = GetUserMock(request);
+
+            _userRepository.AddAsync(userMock)
+                .ReturnsForAnyArgs(0);
+
+            var result = await _userService
+                .CreateAsync(request);
+
+            Assert.Null(result.Email);
+            Assert.Null(result.FullName);
+            Assert.True(result.Id == Guid.Empty);
         }
     }
 }
