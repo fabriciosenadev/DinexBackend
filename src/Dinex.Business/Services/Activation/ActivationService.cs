@@ -35,16 +35,6 @@
             await _activationRepository.DeleteByUserIdAsync(userId);
         }
 
-        public string GenerateActivatioCodeAsync(int codeLength)
-        {
-            var random = new Random();
-            const string lower = "abcdefghijklmnopqrstuvwxyz";
-            const string upper = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-            const string numbers = "0123456789";
-            const string chars = lower + upper + numbers;
-            return new string(Enumerable.Repeat(chars, codeLength)
-                .Select(s => s[random.Next(s.Length)]).ToArray());
-        }
         public async Task<int> AddActivationOnDatabaseAsync(Guid userId, string activationCode)
         {
             var activation = new Activation();

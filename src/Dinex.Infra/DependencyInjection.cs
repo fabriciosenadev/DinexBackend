@@ -1,4 +1,6 @@
-﻿namespace Dinex.Infra
+﻿using Dinex.Infra.Services;
+
+namespace Dinex.Infra
 {
     public static class DependencyInjection
     {
@@ -19,6 +21,7 @@
             services.AddScoped<ISendMailService, SendMailService>();
             services.AddScoped<ICryptographyService, CryptographyService>();
             services.AddScoped<INotificationService, NotificationService>();
+            services.AddScoped<IGenerationCodeService, GenerationCodeService>();
             #endregion
 
             #region repositories

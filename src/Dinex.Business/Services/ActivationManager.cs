@@ -6,16 +6,19 @@
         private readonly IActivationService _activationService;
         private readonly ICategoryManager _categoryManager;
         private readonly ISendMailService _sendMailService;
+        private readonly IGenerationCodeService _generationCodeService;
         public ActivationManager(
             IUserService userService,
             IActivationService activationService,
             ICategoryManager categoryManager,
-            ISendMailService sendMailService)
+            ISendMailService sendMailService,
+            IGenerationCodeService generationCodeService)
         {
             _userService = userService;
             _activationService = activationService;
             _categoryManager = categoryManager;
             _sendMailService = sendMailService;
+            _generationCodeService = generationCodeService;
         }
         public async Task ActivateAccountAsync(string email, string activationCode)
         {
@@ -33,7 +36,7 @@
         public async Task<string> SendActivationCodeAsync(string email)
         {
             const int codeLength = 32;
-            var activationCode = _activationService.GenerateActivatioCodeAsync(codeLength);
+            var activationCode = _generationCodeService.GenerateCode(codeLength);
 
             var user = await _userService.GetByEmailAsync(email);
 
