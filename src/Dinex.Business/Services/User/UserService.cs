@@ -5,18 +5,22 @@ namespace Dinex.Business
     {
         private readonly IUserRepository _userRepository;
         private readonly ICryptographyService _cryptographyService;
+        private readonly IGenerationCodeService _generationCodeService;
 
         public UserService(
-            IUserRepository userRepository, 
-            ICryptographyService cryptographyService, 
+            IUserRepository userRepository,
+            ICryptographyService cryptographyService,
             IMapper mapper,
-            INotificationService notification)
+            INotificationService notification,
+            IGenerationCodeService generationCodeService)
             : base(mapper, notification)
         {
             _userRepository = userRepository;
             _cryptographyService = cryptographyService;
+            _generationCodeService = generationCodeService;
         }
 
+        #region Private methods
         private async Task<User> GetFromContextAsync(HttpContext httpContext)
         {
             var user = await (Task<User>)httpContext.Items["User"];
@@ -27,6 +31,18 @@ namespace Dinex.Business
 
             return user;
         }
+        #endregion
+
+        #region exclusive for middleware
+        public async Task<User> GetByIdAsNoTracking(Guid userId)
+        {
+            var user = _userRepository.GetByIdAsNoTracking(userId).Result;
+            if (user is null)
+                Notification.RaiseError(User.Error.UserNotFound);
+
+            return user;
+        }
+        #endregion
 
         public async Task<UserResponseDto> CreateAsync(UserRequestDto request)
         {
@@ -108,15 +124,6 @@ namespace Dinex.Business
             await UpdateAsync(userDto, false);
         }
 
-        #region exclusive for middleware
-        public async Task<User> GetByIdAsNoTracking(Guid userId)
-        {
-            var user = _userRepository.GetByIdAsNoTracking(userId).Result;
-            if (user is null)
-                Notification.RaiseError(User.Error.UserNotFound);
-            
-            return user;
-        }
-        #endregion
+
     }
 }
