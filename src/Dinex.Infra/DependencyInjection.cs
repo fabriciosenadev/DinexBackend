@@ -18,7 +18,7 @@ namespace Dinex.Infra
 
             #region infra services
             services.AddScoped<IJwtService, JwtService>();
-            services.AddScoped<ISendMailService, SendMailService>();
+            services.AddScoped<IEmailService, EmailService>();
             services.AddScoped<ICryptographyService, CryptographyService>();
             services.AddScoped<INotificationService, NotificationService>();
             services.AddScoped<IGenerationCodeService, GenerationCodeService>();

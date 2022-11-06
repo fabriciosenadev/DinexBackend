@@ -1,24 +1,14 @@
-﻿using Dinex.Core;
-
-namespace Dinex.Infra
+﻿namespace Dinex.Infra
 {
-    public class SendMailService : ISendMailService
+    public class EmailService : IEmailService
     {
         private readonly AppSettings _appSettings;
-        public SendMailService(IOptions<AppSettings> appSettings)
+        public EmailService(IOptions<AppSettings> appSettings)
         {
             _appSettings = appSettings.Value;
         }
 
-        [Obsolete("This method no longer will be used")]
-        public async Task<string> SendActivationCodeAsync(string activationCode, string fullName, string to)
-        {
-            var message = CreateMessage(activationCode, fullName, to);
-            var result = await SendMessageAsync(message);
-            return result;
-        }
-
-        public async Task<string> SendActivationCodeAsync(SendEmailDto sendEmailDto)
+        public async Task<string> SendByTemplateAsync(SendEmailDto sendEmailDto)
         {
             var message = CreateMessage(sendEmailDto);
             var result = await SendMessageAsync(message);
@@ -42,23 +32,6 @@ namespace Dinex.Infra
             return result;
         }
 
-        [Obsolete("This method no longer will be used")]
-        private MimeMessage CreateMessage(string activationCode, string fullName, string to)
-        {
-            var message = new MimeMessage();
-
-            var fromAddress = new MailboxAddress(_appSettings.MailboxName, _appSettings.MailboxAddress);
-            message.From.Add(fromAddress);
-
-            var toAddress = new MailboxAddress(fullName, to);
-            message.To.Add(toAddress);
-
-            message.Subject = "Ative sua conta | Dinheiro Exato";
-            message.Body = CreateBodyToMessage(activationCode, fullName);
-
-            return message;
-        }
-
         private MimeMessage CreateMessage(SendEmailDto sendEmailDto)
         {
             var message = new MimeMessage();
@@ -73,30 +46,6 @@ namespace Dinex.Infra
             message.Body = CreateBodyToMessage(sendEmailDto);
 
             return message;
-        }
-
-        [Obsolete("This method no longer will be used")]
-        private MimeEntity CreateBodyToMessage(string activationCode, string fullName)
-        {
-            var templateName = "activationAccount.html";
-            var partialTemplatePath = $"{_appSettings.MailTemplateFolder}/{templateName}";
-            var fullTemplatePath = Path.GetFullPath(partialTemplatePath);
-
-            var bodyBuilder = new BodyBuilder();
-            var html = string.Empty;
-            using (StreamReader Source = File.OpenText(fullTemplatePath))
-            {
-                html = Source.ReadToEnd();
-            }
-
-            var activationUrl = $"{_appSettings.AllowedHost}/activation/{activationCode}";
-
-            bodyBuilder.HtmlBody = html
-                .Replace("{name}", fullName)
-                .Replace("{activationUrl}", activationUrl);
-
-            var msgBody = bodyBuilder.ToMessageBody();
-            return msgBody;
         }
 
         private MimeEntity CreateBodyToMessage(SendEmailDto sendEmailDto)
