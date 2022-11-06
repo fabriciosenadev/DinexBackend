@@ -1,6 +1,6 @@
 ﻿namespace Dinex.Core
 {
-    public struct ActivationRequestDto
+    public class ActivationRequestDto
     {
         public string Email { get; set; }
         public string? ActivationCode { get; set; }

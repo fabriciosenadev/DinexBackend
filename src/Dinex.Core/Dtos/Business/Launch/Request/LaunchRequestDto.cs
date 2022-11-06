@@ -1,6 +1,6 @@
 ﻿namespace Dinex.Core
 {
-    public struct LaunchRequestDto
+    public class LaunchRequestDto
     {
         public DateTime Date { get; set; }
         public int CategoryId { get; set; }
