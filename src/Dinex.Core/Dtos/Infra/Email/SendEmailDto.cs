@@ -1,6 +1,6 @@
 ﻿namespace Dinex.Core
 {
-    public struct SendEmailDto
+    public class SendEmailDto
     {
         public string GeneratedCode { get; set; }
         public string FullName { get; set; }
