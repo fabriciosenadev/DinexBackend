@@ -3,7 +3,10 @@
     public class BaseService
     {
         public const int Success = 1;
+
         public const int InvalidId = 0;
+
+        public const int DefaultCodeLength = 32;
 
         public readonly INotificationService Notification;
         public readonly IMapper _mapper;

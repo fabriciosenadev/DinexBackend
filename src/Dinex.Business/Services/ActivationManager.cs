@@ -1,23 +1,26 @@
 ﻿namespace Dinex.Business
 {
-    public class ActivationManager : IActivationManager
+    public class ActivationManager : BaseService, IActivationManager
     {
         private readonly IUserService _userService;
         private readonly IActivationService _activationService;
         private readonly ICategoryManager _categoryManager;
-        private readonly ISendMailService _sendMailService;
+        private readonly IEmailService _emailService;
         private readonly IGenerationCodeService _generationCodeService;
         public ActivationManager(
             IUserService userService,
             IActivationService activationService,
             ICategoryManager categoryManager,
-            ISendMailService sendMailService,
-            IGenerationCodeService generationCodeService)
+            IEmailService sendMailService,
+            IGenerationCodeService generationCodeService,
+            IMapper mapper,
+            INotificationService notification)
+            : base(mapper, notification)
         {
             _userService = userService;
             _activationService = activationService;
             _categoryManager = categoryManager;
-            _sendMailService = sendMailService;
+            _emailService = sendMailService;
             _generationCodeService = generationCodeService;
         }
         public async Task ActivateAccountAsync(string email, string activationCode)
@@ -35,8 +38,7 @@
 
         public async Task<string> SendActivationCodeAsync(string email)
         {
-            const int codeLength = 32;
-            var activationCode = _generationCodeService.GenerateCode(codeLength);
+            var activationCode = _generationCodeService.GenerateCode(DefaultCodeLength);
 
             var user = await _userService.GetByEmailAsync(email);
 
@@ -53,7 +55,7 @@
                 TemplateFieldToUrl = "{activationUrl}"
             };
 
-            var sendResult = await _sendMailService.SendActivationCodeAsync(sendEmailDto);
+            var sendResult = await _emailService.SendByTemplateAsync(sendEmailDto);
             return sendResult;
         }
     }
