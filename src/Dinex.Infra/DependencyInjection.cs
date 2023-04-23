@@ -1,6 +1,4 @@
-﻿using Dinex.Infra.Services;
-
-namespace Dinex.Infra
+﻿namespace Dinex.Infra
 {
     public static class DependencyInjection
     {
@@ -21,7 +19,6 @@ namespace Dinex.Infra
             services.AddScoped<IEmailService, EmailService>();
             services.AddScoped<ICryptographyService, CryptographyService>();
             services.AddScoped<INotificationService, NotificationService>();
-            services.AddScoped<IGenerationCodeService, GenerationCodeService>();
             #endregion
 
             #region repositories
@@ -32,6 +29,7 @@ namespace Dinex.Infra
             services.AddScoped<ILaunchRepository, LaunchRepository>();
             services.AddScoped<IPayMethodFromLaunchRepository, PayMethodFromLaunchRepository>();
             services.AddScoped<IUserAmountAvailableRepository, UserAmountAvailableRepository>();
+            services.AddScoped<ICodeManagerRepository, CodeManagerRepository>();
             #endregion
 
             return services;

@@ -5,8 +5,8 @@
     [ApiController]
     public class ActivationsController : ControllerBase
     {
-        private readonly IActivationManager _activationManager;
-        public ActivationsController(IActivationManager activationManager)
+        private readonly IActivationAccountManager _activationManager;
+        public ActivationsController(IActivationAccountManager activationManager)
         {
             _activationManager = activationManager;
         }

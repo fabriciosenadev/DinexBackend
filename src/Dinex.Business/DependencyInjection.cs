@@ -28,10 +28,11 @@
             #endregion
 
             #region business managers
-            services.AddScoped<IActivationManager, ActivationManager>();
+            services.AddScoped<IActivationAccountManager, ActivationAccountManager>();
             services.AddScoped<ICategoryManager, CategoryManager>();
             services.AddScoped<ILaunchManager, LaunchManager>();
             services.AddScoped<IUserAmountManager, UserAmountManager>();
+            services.AddScoped<ICodeManagerService, CodeManagerService>();
             #endregion
 
             #region business services

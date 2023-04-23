@@ -5,14 +5,14 @@ namespace Dinex.Business
     {
         private readonly IUserRepository _userRepository;
         private readonly ICryptographyService _cryptographyService;
-        private readonly IGenerationCodeService _generationCodeService;
+        private readonly ICodeManagerService _generationCodeService;
 
         public UserService(
             IUserRepository userRepository,
             ICryptographyService cryptographyService,
             IMapper mapper,
             INotificationService notification,
-            IGenerationCodeService generationCodeService)
+            ICodeManagerService generationCodeService)
             : base(mapper, notification)
         {
             _userRepository = userRepository;

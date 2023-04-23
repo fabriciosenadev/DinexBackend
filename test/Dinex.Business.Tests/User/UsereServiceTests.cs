@@ -21,6 +21,7 @@ namespace Dinex.Business.UserTests
         private readonly IMapper _mapper;
         private readonly INotificationService _notificationService;
         private readonly ICryptographyService _cryptographyService;
+        private readonly ICodeManagerService _codeManagerService;
         private readonly Faker _faker;
 
         public UsereServiceTests()
@@ -30,6 +31,7 @@ namespace Dinex.Business.UserTests
             _userRepository = Substitute.For<IUserRepository>();
             _notificationService = Substitute.For<INotificationService>();
             _cryptographyService = Substitute.For<ICryptographyService>();
+            _codeManagerService = Substitute.For<ICodeManagerService>();
 
             var mapperConfig = new MapperConfiguration(opt => 
             {
@@ -41,7 +43,8 @@ namespace Dinex.Business.UserTests
             _userService = new UserService(_userRepository,
                 _cryptographyService,
                 _mapper,
-                _notificationService);
+                _notificationService,
+                _codeManagerService);
         }
 
         private UserRequestDto GetUserRequestDtoMock()

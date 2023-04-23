@@ -8,6 +8,7 @@
         }
 
         public DbSet<Activation> Activations { get; set; }
+        public DbSet<CodeManager> CodeManager { get; set; }
         public DbSet<Category> Categories { get; set; }
         public DbSet<CategoryToUser> CategoriesToUsers { get; set; }
         public DbSet<Launch> Launches { get; set; }

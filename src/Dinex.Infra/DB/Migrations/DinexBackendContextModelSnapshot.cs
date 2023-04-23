@@ -85,6 +85,30 @@ namespace Dinex.Infra
                     b.ToTable("CategoriesToUsers");
                 });
 
+            modelBuilder.Entity("Dinex.Core.CodeManager", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("Reason")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("CodeManager");
+                });
+
             modelBuilder.Entity("Dinex.Core.Launch", b =>
                 {
                     b.Property<int>("Id")

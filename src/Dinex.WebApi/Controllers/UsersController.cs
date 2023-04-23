@@ -23,7 +23,7 @@
             return user.Id;
         }
 
-
+        #region Unauthenticated routes
         [HttpPost]
         public async Task<ActionResult<UserResponseDto>> Create([FromBody] UserRequestDto request)
         {
@@ -31,6 +31,22 @@
             return Ok(result);
         }
 
+        [HttpPost("send-reset-code")]
+        public async Task<IActionResult> SendResetPasswordCode([FromBody] UserResetPasswordDto request)
+        {
+            //TODO: need to implement service
+            return Ok();
+        }
+
+        [HttpPost("change-password")]
+        public async Task<IActionResult> ChangePassword([FromBody] UserResetPasswordDto request)
+        {
+            //TODO: need to implement service
+            return Ok();
+        }
+        #endregion
+
+        #region Authenticated routes
         [Authorize]
         [HttpGet]
         public async Task<ActionResult<UserResponseDto>> Get()
@@ -60,5 +76,6 @@
 
             return Ok(result);
         }
+        #endregion
     }
 }
