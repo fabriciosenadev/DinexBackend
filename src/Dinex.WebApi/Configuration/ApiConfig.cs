@@ -60,8 +60,14 @@
         public static IApplicationBuilder UseApiConfig(
             this IApplicationBuilder app, IWebHostEnvironment environment, IServiceProvider serviceScope)
         {
-            app.UseMiddleware<JwtMiddleware>();
-            app.UseMiddleware<ErrorHandlerMiddleware>();
+            // Execute Migrations on start app
+            using (var scope = serviceScope.CreateScope())
+            {
+                var dataContext = scope.ServiceProvider.GetRequiredService<DinexBackendContext>();
+                dataContext.Database.Migrate();
+            }
+
+            app.UseRouting();
 
             if (environment.IsDevelopment())
             {
@@ -73,16 +79,10 @@
                 app.UseHsts();
             }
 
-            // Execute Migrations on start app
-            using (var scope = serviceScope.CreateScope())
-            {
-                var dataContext = scope.ServiceProvider.GetRequiredService<DinexBackendContext>();
-                dataContext.Database.Migrate();
-            }
+            app.UseMiddleware<JwtMiddleware>();
+            app.UseMiddleware<ErrorHandlerMiddleware>();
 
-            app.UseHttpsRedirection();
-
-            app.UseRouting();
+            app.UseHttpsRedirection();            
 
             app.UseAuthentication();
             app.UseAuthorization();
