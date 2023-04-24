@@ -28,7 +28,7 @@ public class CategoriesController : MainController
         var resultCreation = await _categoryManager
             .CreateAsync(request, userId, request.Applicable);
 
-        return Ok(resultCreation);
+        return SuccessResponse(resultCreation);
     }
 
     [HttpDelete("{Id}")]
@@ -39,7 +39,7 @@ public class CategoriesController : MainController
 
         await _categoryManager.DeleteAsync(id, userId);
 
-        return Ok();
+        return SuccessResponse(HttpStatusCode.NoContent);
     }
 
     [HttpGet("{Id}")]
@@ -49,7 +49,7 @@ public class CategoriesController : MainController
         var userId = await GetUserId();
 
         var result = await _categoryManager.GetCategoryAsync(id, userId);
-        return Ok(result);
+        return SuccessResponse(result);
     }
 
     [HttpGet]
@@ -79,6 +79,6 @@ public class CategoriesController : MainController
         var userId = await GetUserId();
 
         var result = await _categoryManager.RestoreDeletedCategoryAsync(userId, id);
-        return Ok(result);
+        return SuccessResponse(result);
     }
 }

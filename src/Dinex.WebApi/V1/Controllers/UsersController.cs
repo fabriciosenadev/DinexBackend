@@ -26,21 +26,21 @@ public class UsersController : MainController
     public async Task<ActionResult<UserResponseDto>> Create([FromBody] UserRequestDto request)
     {
         var result = await _userService.CreateAsync(request);
-        return Ok(result);
+        return SuccessResponse(result);
     }
 
     [HttpPost("send-reset-code")]
     public async Task<IActionResult> SendResetPasswordCode([FromBody] UserResetPasswordDto request)
     {
         //TODO: need to implement service
-        return Ok();
+        return SuccessResponse(HttpStatusCode.NoContent);
     }
 
     [HttpPost("change-password")]
     public async Task<IActionResult> ChangePassword([FromBody] UserResetPasswordDto request)
     {
         //TODO: need to implement service
-        return Ok();
+        return SuccessResponse(HttpStatusCode.NoContent); ;
     }
     #endregion
 
@@ -50,7 +50,7 @@ public class UsersController : MainController
     public async Task<ActionResult<UserResponseDto>> Get()
     {
         var user = await _userService.GetUser(HttpContext);
-        return Ok(user);
+        return SuccessResponse(user);
     }
 
     [Authorize]
@@ -62,7 +62,7 @@ public class UsersController : MainController
         var userResult = await _userService
             .UpdateAsync(request, true);
 
-        return Ok(userResult);
+        return SuccessResponse(userResult);
     }
 
     [Authorize]
@@ -72,7 +72,7 @@ public class UsersController : MainController
         var userId = await GetUserId();
         var result = await _userAmountManager.GetAmountAvailableByUserId(userId);
 
-        return Ok(result);
+        return SuccessResponse(result);
     }
     #endregion
 }

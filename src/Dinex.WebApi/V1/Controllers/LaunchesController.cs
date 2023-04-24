@@ -25,7 +25,7 @@ public class LaunchesController : MainController
         var userId = await GetUserId();
 
         var response = await _launchManager.CreateAsync(request, userId);
-        return Ok(response);
+        return SuccessResponse(response);
     }
 
     [HttpPut("{Id}")]
@@ -38,7 +38,7 @@ public class LaunchesController : MainController
         var userId = await GetUserId();
 
         var response = await _launchManager.UpdateAsync(request, id, userId, isJustStatus);
-        return Ok(response);
+        return SuccessResponse(response);
     }
 
     [HttpDelete("{Id}")]
@@ -47,7 +47,7 @@ public class LaunchesController : MainController
     {
         await _launchManager.SoftDeleteAsync(id);
 
-        return Ok();
+        return SuccessResponse(HttpStatusCode.NoContent);
     }
 
     [HttpGet("{Id}")]
@@ -55,7 +55,7 @@ public class LaunchesController : MainController
     public async Task<ActionResult<LaunchAndPayMethodResponseDto>> Get([FromRoute] int id)
     {
         var response = await _launchManager.GetAsync(id);
-        return Ok(response);
+        return SuccessResponse(response);
 
     }
 
@@ -66,7 +66,7 @@ public class LaunchesController : MainController
         var userId = await GetUserId();
 
         var response = await _launchManager.ListLast(userId);
-        return Ok(response);
+        return SuccessResponse(response);
     }
 
     [HttpGet("{year}/{month}/resume")]
@@ -76,7 +76,7 @@ public class LaunchesController : MainController
         var userId = await GetUserId();
 
         var result = await _launchManager.GetResumeByYearAndMonthAsync(year, month, userId);
-        return Ok(result);
+        return SuccessResponse(result);
     }
 
     [HttpGet("{year}/{month}/details")]
@@ -86,7 +86,7 @@ public class LaunchesController : MainController
         var userId = await GetUserId();
 
         var result = await _launchManager.GetDetailsByYearAndMonthAsync(year, month, userId);
-        return Ok(result);
+        return SuccessResponse(result);
     }
 
 }

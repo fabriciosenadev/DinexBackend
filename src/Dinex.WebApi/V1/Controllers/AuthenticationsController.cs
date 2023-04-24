@@ -15,6 +15,6 @@ public class AuthenticationsController : MainController
     public async Task<ActionResult<AuthenticationResponseDto>> Authenticate([FromBody] AuthenticationRequestDto request)
     {
         var response = await _authenticationService.AuthenticateAsync(request);
-        return Ok(response);
+        return SuccessResponse(response);
     }
 }

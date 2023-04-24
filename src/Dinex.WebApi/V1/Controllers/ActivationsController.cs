@@ -13,7 +13,7 @@ public class ActivationsController : MainController
     public async Task<IActionResult> SendActivationCode([FromBody] ActivationRequestDto activation)
     {
         var result = await _activationManager.SendActivationCodeAsync(activation.Email);
-        return Ok(new { message = result });
+        return SuccessResponse(new { message = result });
     }
 
     [HttpPost("activate-account")]
@@ -21,6 +21,6 @@ public class ActivationsController : MainController
     {
         await _activationManager.ActivateAccountAsync(activation.Email, activation.ActivationCode);
 
-        return Ok();
+        return SuccessResponse(HttpStatusCode.NoContent);
     }
 }
