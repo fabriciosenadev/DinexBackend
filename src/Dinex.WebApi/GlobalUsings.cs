@@ -1,4 +1,6 @@
-﻿global using Microsoft.AspNetCore.Cors;
+﻿global using System.Net;
+
+global using Microsoft.AspNetCore.Cors;
 global using Microsoft.AspNetCore.Mvc;
 
 global using Microsoft.EntityFrameworkCore;
