@@ -1,71 +1,22 @@
 
-var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
+using Dinex.Backend.WebApi.Configuration;
+using Microsoft.AspNetCore.Mvc.ApiExplorer;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
 
-//connection string
-//builder.Services.AddDbContext<DinexBackendContext>(
-//    options => options.UseNpgsql(builder.Configuration.GetConnectionString("DinExDB"))
-//    );
+builder.Services.AddApiConfig(builder.Configuration);
 
-var appSettings = new AppSettings();
-new ConfigureFromConfigurationOptions<AppSettings>(builder.Configuration.GetSection("AppSettings")).Configure(appSettings);
-builder.Services.AddSingleton(appSettings);
+builder.Services.AddSwaggerConfiguration();
 
-// fix to work with this section on classes and methods
-builder.Services.Configure<AppSettings>(builder.Configuration.GetSection("AppSettings"));
-
-//configuration add to working
-builder.Services.AddCors( options =>
-{
-    options.AddPolicy(name: MyAllowSpecificOrigins, 
-        builder =>
-        {
-            builder.WithOrigins( appSettings.AllowedHost)
-                .WithMethods("POST", "PUT", "GET", "DELETE", "OPTIONS")
-                .WithHeaders("accept", "content-type", "origin", "authorization");
-        });
-});
-
-builder.Services.RegisterBusinessDependecies();
+builder.Services.RegisterAllDepdencies();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
-{ 
-    //app.UseCors(x => x
-    //.AllowAnyOrigin()
-    //.AllowAnyMethod()
-    //.AllowAnyHeader());
-    app.UseCors(MyAllowSpecificOrigins);
+var apiVersionDescriptionProvider = app.Services.GetRequiredService<IApiVersionDescriptionProvider>();
 
-    app.UseMiddleware<JwtMiddleware>();
-    app.UseMiddleware<ErrorHandlerMiddleware>();
-}
+app.UseApiConfig(app.Environment, app.Services);
 
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
-
-// Execute Migrations on start app
-using (var scope = app.Services.CreateScope())
-{
-    var dataContext = scope.ServiceProvider.GetRequiredService<DinexBackendContext>();
-    dataContext.Database.Migrate();
-}
-
-app.UseHttpsRedirection();
-
-app.UseAuthorization();
-
-app.MapControllers();
+app.UseSwaggerConfiguration(apiVersionDescriptionProvider);
 
 app.Run();
