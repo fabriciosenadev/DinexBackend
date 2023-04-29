@@ -1,6 +1,7 @@
 ﻿namespace Dinex.Backend.WebApi.V1.Controllers;
 
-[Route("/[controller]")]
+[ApiVersion("1.0")]
+[Route("v{version:apiVersion}/[controller]")]
 public class UsersController : MainController
 {
 
