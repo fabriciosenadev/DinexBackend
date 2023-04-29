@@ -78,11 +78,11 @@ public class ConfigureSwaggerOptions : IConfigureOptions<SwaggerGenOptions>
     {
         var info = new OpenApiInfo()
         {
-            Title = "API - desenvolvedor.io",
+            Title = "API -Dinheiro Exato",
             Version = description.ApiVersion.ToString(),
-            Description = "Esta API faz parte do curso REST com ASP.NET Core WebAPI.",
-            Contact = new OpenApiContact() { Name = "Eduardo Pires", Email = "contato@desenvolvedor.io" },
-            License = new OpenApiLicense() { Name = "MIT", Url = new Uri("https://opensource.org/licenses/MIT") }
+            Description = "Esta API opera como Backend para os controles realizados no Dinheiro Exato.",
+            Contact = new OpenApiContact() { Name = "Dinheiro Exato", Email = "suporte@dinheiroexato.com.br" },
+            //License = new OpenApiLicense() { Name = "MIT", Url = new Uri("https://opensource.org/licenses/MIT") }
         };
 
         if (description.IsDeprecated)
