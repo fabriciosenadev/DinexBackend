@@ -37,8 +37,8 @@ public class UsersController : MainController
         return SuccessResponse(HttpStatusCode.NoContent);
     }
 
-    [HttpPost("change-password")]
-    public async Task<IActionResult> ChangePassword([FromBody] UserResetPasswordDto request)
+    [HttpPost("reset-password")]
+    public async Task<IActionResult> ResetPassword([FromBody] UserResetPasswordDto request)
     {
         //TODO: need to implement service
         return SuccessResponse(HttpStatusCode.NoContent); ;
