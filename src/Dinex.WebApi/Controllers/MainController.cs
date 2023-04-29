@@ -1,29 +1,24 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using System.Net;
+﻿namespace Dinex.Backend.WebApi.Controllers;
 
-namespace Dinex.Backend.WebApi.Controllers
+[EnableCors("_myAllowSpecificOrigins")]
+[ApiController]
+public class MainController : ControllerBase
 {
-    [EnableCors("_myAllowSpecificOrigins")]
-    [ApiController]
-    public class MainController : ControllerBase
+    protected ActionResult SuccessResponse(object? result = null, HttpStatusCode statusCode = HttpStatusCode.OK)
     {
-        protected ActionResult SuccessResponse(object? result = null, HttpStatusCode statusCode = HttpStatusCode.OK)
-        {
 
-            var resultSuccess = new 
-            { 
-                success = true,
-                data = result
-            };
+        var resultSuccess = new 
+        { 
+            success = true,
+            data = result
+        };
 
-            switch(statusCode)
-            {                    
-                case HttpStatusCode.NoContent:
-                    return NoContent();
-                default:
-                    return Ok(resultSuccess);
-            }
+        switch(statusCode)
+        {                    
+            case HttpStatusCode.NoContent:
+                return NoContent();
+            default:
+                return Ok(resultSuccess);
         }
     }
 }
