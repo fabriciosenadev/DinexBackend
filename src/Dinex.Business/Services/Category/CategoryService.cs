@@ -15,9 +15,10 @@
         public void ValidateCategoryId(int categoryId)
         {
             if (categoryId == InvalidId)
-                Notification.RaiseError(
-                    Category.Error.CategoryNotFound, 
-                    NotificationService.ErrorType.Infra);
+                Notification.RaiseError(Category.Error.CategoryNotFound);
+            //Notification.RaiseError(
+            //        Category.Error.CategoryNotFound, 
+            //        NotificationService.ErrorType.Infra);
         }
 
         private async Task<Category> AddCategoryAsync(string categoryName, bool isCustom)

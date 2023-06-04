@@ -1,29 +1,59 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using System.Net;
+﻿namespace Dinex.Backend.WebApi.Controllers;
 
-namespace Dinex.Backend.WebApi.Controllers
+[EnableCors("_myAllowSpecificOrigins")]
+[ApiController]
+public abstract class MainController : ControllerBase
 {
-    [EnableCors("_myAllowSpecificOrigins")]
-    [ApiController]
-    public class MainController : ControllerBase
+    public readonly INotificationService _notificationService;
+    public MainController(INotificationService notificationService)
     {
-        protected ActionResult SuccessResponse(object? result = null, HttpStatusCode statusCode = HttpStatusCode.OK)
+        _notificationService = notificationService;
+    }
+
+    protected ActionResult SuccessResponse(object? result = null, HttpStatusCode statusCode = HttpStatusCode.OK)
+    {
+
+        var resultSuccess = new
         {
+            success = true,
+            data = result
+        };
 
-            var resultSuccess = new 
-            { 
-                success = true,
-                data = result
-            };
+        return CustomReponse(resultSuccess, statusCode);
+    }
 
-            switch(statusCode)
-            {                    
-                case HttpStatusCode.NoContent:
-                    return NoContent();
-                default:
-                    return Ok(resultSuccess);
-            }
+    protected ActionResult ErrorResponse(object? result = null, HttpStatusCode statusCode = HttpStatusCode.BadRequest)
+    {
+        var resultError = new
+        {
+            success = false,
+            data = result
+        };
+
+        return CustomReponse(resultError, statusCode);
+    }
+
+    protected ActionResult HandleResponse(object? result = null)
+    {
+        if(_notificationService.HasNotification())
+            return ErrorResponse(_notificationService.GetAllNotifications());
+
+        return SuccessResponse(result);
+    }
+
+    #region private methods
+    private ActionResult CustomReponse(object? result = null, HttpStatusCode statusCode = HttpStatusCode.NoContent)
+    {
+        switch (statusCode)
+        {
+            case HttpStatusCode.OK:
+                return Ok(result);
+            case HttpStatusCode.BadRequest:
+                return BadRequest(result);
+            case HttpStatusCode.NoContent:
+            default:
+                return NoContent();
         }
     }
+    #endregion
 }

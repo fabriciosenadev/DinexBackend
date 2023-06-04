@@ -1,4 +1,4 @@
-﻿namespace Dinex.Infra
+﻿namespace Dinex.Extensions
 {
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method)]
     public class AuthorizeAttribute : Attribute, IAuthorizationFilter

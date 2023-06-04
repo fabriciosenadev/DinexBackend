@@ -1,6 +1,6 @@
 ﻿namespace Dinex.Infra
 {
-    public abstract class Repository<T> : IRepository<T> where T : class
+    public class Repository<T> : IRepository<T> where T : class
     {
         protected readonly DbSet<T> _dbSet;
         protected readonly DinexBackendContext _context;

@@ -6,7 +6,10 @@ public class LaunchesController : MainController
     private readonly ILaunchManager _launchManager;
     private readonly IUserService _userService;
 
-    public LaunchesController(ILaunchManager launchManager, IUserService userService)
+    public LaunchesController(ILaunchManager launchManager, 
+        IUserService userService, 
+        INotificationService notificationService) 
+        : base(notificationService)
     {
         _launchManager = launchManager;
         _userService = userService;

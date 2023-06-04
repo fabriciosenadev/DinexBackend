@@ -12,20 +12,15 @@ global using System.Security.Claims;
 global using Microsoft.AspNetCore.Http;
 global using Microsoft.AspNetCore.Mvc;
 global using Microsoft.AspNetCore.Mvc.Filters;
-global using Microsoft.AspNetCore.Mvc.Infrastructure;
-
-global using Microsoft.EntityFrameworkCore;
-global using Microsoft.EntityFrameworkCore.Migrations;
-global using Microsoft.EntityFrameworkCore.Infrastructure;
-global using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 global using Microsoft.IdentityModel.Tokens;
 
 global using Microsoft.Extensions.DependencyInjection;
 global using Microsoft.Extensions.Options;
 
-global using FluentValidation;
-global using FluentValidation.AspNetCore;
+global using MailKit.Net.Smtp;
+global using MimeKit;
+
+global using Newtonsoft.Json;
 
 global using Dinex.Core;
-global using Dinex.Extensions;

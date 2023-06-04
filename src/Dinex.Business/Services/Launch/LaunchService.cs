@@ -20,9 +20,10 @@
 
             var result = await _launchRepository.AddAsync(launch);
             if (result != Success)
-                Notification.RaiseError(
-                    Launch.Error.LaunchErrorToCreate, 
-                    NotificationService.ErrorType.Infra);
+                Notification.RaiseError(Launch.Error.LaunchErrorToCreate);
+                //Notification.RaiseError(
+                //    Launch.Error.LaunchErrorToCreate, 
+                //    NotificationService.ErrorType.Infra);
 
             return launch;
         }
@@ -33,7 +34,8 @@
 
             var launchResult = await _launchRepository.UpdateAsync(launch);
             if (launchResult != Success)
-                Notification.RaiseError(Launch.Error.LaunchErrorToUpdate, NotificationService.ErrorType.Infra);
+                Notification.RaiseError(Launch.Error.LaunchErrorToUpdate);
+                //Notification.RaiseError(Launch.Error.LaunchErrorToUpdate, NotificationService.ErrorType.Infra);
 
             return launch;
         }

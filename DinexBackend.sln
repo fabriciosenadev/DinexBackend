@@ -17,6 +17,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{2DE74B98-9
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Dinex.Business.Tests", "test\Dinex.Business.Tests\Dinex.Business.Tests.csproj", "{F69A8AEA-688D-4F22-9E45-C5D9A7D5B89A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dinex.Extensions", "src\Dinex.Exntesions\Dinex.Extensions.csproj", "{9144B3DD-0384-4044-BAC4-5BD7A365BB12}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -43,6 +45,10 @@ Global
 		{F69A8AEA-688D-4F22-9E45-C5D9A7D5B89A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F69A8AEA-688D-4F22-9E45-C5D9A7D5B89A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F69A8AEA-688D-4F22-9E45-C5D9A7D5B89A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9144B3DD-0384-4044-BAC4-5BD7A365BB12}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9144B3DD-0384-4044-BAC4-5BD7A365BB12}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9144B3DD-0384-4044-BAC4-5BD7A365BB12}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9144B3DD-0384-4044-BAC4-5BD7A365BB12}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -53,6 +59,7 @@ Global
 		{BE187A63-72F4-42B2-B088-2DDACF50CDF6} = {C5664301-8F6D-477C-9EC3-AA3E81A54FEA}
 		{8735E28D-26AE-4687-B493-FADFAD90B92A} = {C5664301-8F6D-477C-9EC3-AA3E81A54FEA}
 		{F69A8AEA-688D-4F22-9E45-C5D9A7D5B89A} = {2DE74B98-9C05-419B-ADD4-64FA0B2235A1}
+		{9144B3DD-0384-4044-BAC4-5BD7A365BB12} = {C5664301-8F6D-477C-9EC3-AA3E81A54FEA}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {52931BE3-06E6-4B31-A122-9F5AE2B306F3}

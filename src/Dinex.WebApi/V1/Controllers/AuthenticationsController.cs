@@ -5,7 +5,9 @@ public class AuthenticationsController : MainController
 {
     private readonly IAuthenticationService _authenticationService;
 
-    public AuthenticationsController(IAuthenticationService authenticationService)
+    public AuthenticationsController(IAuthenticationService authenticationService, 
+        INotificationService notificationService) 
+        : base(notificationService)
     {
         _authenticationService = authenticationService;
     }

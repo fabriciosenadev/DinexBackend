@@ -3,6 +3,7 @@ using Bogus;
 using Dinex.Business;
 using Dinex.Core;
 using Dinex.Infra;
+using Dinex.Extensions;
 using NSubstitute;
 using System;
 using System.Collections.Generic;
@@ -14,7 +15,7 @@ using System.Threading.Tasks;
 namespace Dinex.Business.UserTests
 {
     [ExcludeFromCodeCoverage]
-    public class UsereServiceTests
+    public class UserServiceTests
     {
         private readonly IUserService _userService;
         private readonly IUserRepository _userRepository;
@@ -24,7 +25,7 @@ namespace Dinex.Business.UserTests
         private readonly ICodeManagerService _codeManagerService;
         private readonly Faker _faker;
 
-        public UsereServiceTests()
+        public UserServiceTests()
         {
             _faker = new Faker("pt_BR");
 
@@ -54,7 +55,7 @@ namespace Dinex.Business.UserTests
             {
                 Email = _faker.Internet.Email(),
                 FullName = _faker.Person.FullName.ToString(),
-                IsActive = UserActivatioStatus.Inactive,
+                //IsActive = UserActivatioStatus.Inactive,
                 Password = password,
                 ConfirmPassword = password
             };
@@ -80,7 +81,7 @@ namespace Dinex.Business.UserTests
             
             var userMock = GetUserMock(request);
 
-            _userRepository.AddAsync(userMock)
+            _userRepository.AddUserAsync(userMock)
                 .ReturnsForAnyArgs(1);            
 
             var result = await _userService
@@ -98,7 +99,7 @@ namespace Dinex.Business.UserTests
 
             var userMock = GetUserMock(request);
 
-            _userRepository.AddAsync(userMock)
+            _userRepository.AddUserAsync(userMock)
                 .ReturnsForAnyArgs(0);
 
             var result = await _userService

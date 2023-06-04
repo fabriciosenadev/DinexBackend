@@ -21,9 +21,10 @@
 
             var result = await _payMethodFromLaunchRepository.AddAsync(payMethodFromLaunch);
             if (result != Success)
-                Notification.RaiseError(
-                    PayMethodFromLaunch.Error.PayMethodFromLaunchErrorToCreate, 
-                    NotificationService.ErrorType.Infra);
+                Notification.RaiseError(PayMethodFromLaunch.Error.PayMethodFromLaunchErrorToCreate);
+                //Notification.RaiseError(
+                //    PayMethodFromLaunch.Error.PayMethodFromLaunchErrorToCreate, 
+                //    NotificationService.ErrorType.Infra);
 
             return payMethodFromLaunch;
         }
@@ -33,9 +34,10 @@
             payMethodFromLaunch.DeletedAt = DateTime.Now;
             var result = await _payMethodFromLaunchRepository.UpdateAsync(payMethodFromLaunch);
             if (result != Success)
-                Notification.RaiseError(
-                    PayMethodFromLaunch.Error.PayMethodFromLaunchErrorToDelete, 
-                    NotificationService.ErrorType.Infra);
+                Notification.RaiseError(PayMethodFromLaunch.Error.PayMethodFromLaunchErrorToDelete);
+                //Notification.RaiseError(
+                //    PayMethodFromLaunch.Error.PayMethodFromLaunchErrorToDelete, 
+                //    NotificationService.ErrorType.Infra);
         }
 
         public async Task<PayMethodFromLaunchResponseDto> UpdateAsync(PayMethodFromLaunchRequestDto payMethodRequest, int launchId)
@@ -46,9 +48,10 @@
 
             var result = await _payMethodFromLaunchRepository.UpdateAsync(payMethodFromLaunch);
             if (result != Success)
-                Notification.RaiseError(
-                    PayMethodFromLaunch.Error.PayMethodFromLaunchErrorToUpdate, 
-                    NotificationService.ErrorType.Infra);
+                Notification.RaiseError(PayMethodFromLaunch.Error.PayMethodFromLaunchErrorToUpdate);
+            //Notification.RaiseError(
+            //        PayMethodFromLaunch.Error.PayMethodFromLaunchErrorToUpdate, 
+            //        NotificationService.ErrorType.Infra);
 
             var payMethodFromLaunchResponse = _mapper.Map<PayMethodFromLaunchResponseDto>(payMethodFromLaunch);
             return payMethodFromLaunchResponse;

@@ -7,7 +7,10 @@ public class CategoriesController : MainController
     private readonly IUserService _userService;
 
 
-    public CategoriesController(ICategoryManager categoryManager, IUserService userService)
+    public CategoriesController(ICategoryManager categoryManager, 
+        IUserService userService,
+        INotificationService notificationService)
+        : base(notificationService)
     {
         _categoryManager = categoryManager;
         _userService = userService;

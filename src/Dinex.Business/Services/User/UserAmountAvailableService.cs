@@ -21,9 +21,11 @@
         {
             var result = await _userAmountAvailableRepository.AddAsync(userAmountAvailable);
             if (result != Success)
-                Notification.RaiseError(
-                    UserAmountAvailable.Error.UserAmountErrorToCreate,
-                    NotificationService.ErrorType.Infra);
+                Notification.RaiseError(UserAmountAvailable.Error.UserAmountErrorToCreate);
+                //Notification.RaiseError(
+                //    UserAmountAvailable.Error.UserAmountErrorToCreate,
+                //    NotificationService.ErrorType.Infra);
+
 
 
             return userAmountAvailable;

@@ -21,7 +21,7 @@
             #endregion
 
             #region business validations
-            services.AddScoped<IValidator<UserRequestDto>, UserRequestModelValidation>();
+            //services.AddScoped<IValidator<UserRequestDto>, UserRequestModelValidation>();
             services.AddScoped<IValidator<ActivationRequestDto>, ActivationRequestModelValidation>();
             services.AddScoped<IValidator<CategoryRequestDto>, CategoryRequestModelValidation>();
             services.AddScoped<IValidator<LaunchAndPayMethodRequestDto>, LaunchAndPayMethodRequestModelValidation>();

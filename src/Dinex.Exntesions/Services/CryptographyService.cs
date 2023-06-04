@@ -1,4 +1,6 @@
-﻿namespace Dinex.Infra
+﻿using BCrypt.Net;
+
+namespace Dinex.Extensions
 {
     public class CryptographyService : ICryptographyService
     {

@@ -4,7 +4,9 @@
 public class ActivationsController : MainController
 {
     private readonly IActivationAccountManager _activationManager;
-    public ActivationsController(IActivationAccountManager activationManager)
+    public ActivationsController(IActivationAccountManager activationManager, 
+        INotificationService notificationService)
+        : base(notificationService)
     {
         _activationManager = activationManager;
     }

@@ -20,48 +20,20 @@ namespace Dinex.Business
             _generationCodeService = generationCodeService;
         }
 
-        #region Private methods
-        private async Task<User> GetFromContextAsync(HttpContext httpContext)
-        {
-            var user = await (Task<User>)httpContext.Items["User"];
-            if (user is null)
-                Notification.RaiseError(User.Error.UserNotFound);
-
-            httpContext.Items["User"] = null;
-
-            return user;
-        }
-        #endregion
-
-        #region exclusive for middleware
-        public async Task<User> GetByIdAsNoTracking(Guid userId)
-        {
-            var user = _userRepository.GetByIdAsNoTracking(userId).Result;
-            if (user is null)
-                Notification.RaiseError(User.Error.UserNotFound);
-
-            return user;
-        }
-        #endregion
-
         public async Task<UserResponseDto> CreateAsync(UserRequestDto request)
         {
-            var user = _mapper.Map<User>(request);
+            User newUser = request;
 
-            user.IsActive = UserActivatioStatus.Inactive;
-            user.CreatedAt = DateTime.Now;
-            user.Password = _cryptographyService.Encrypt(user.Password);
+            newUser.Password = _cryptographyService.Encrypt(newUser.Password);
 
-            var result = await _userRepository.AddAsync(user);
+            var result = await _userRepository.AddUserAsync(newUser);
             if (result != Success)
             {
-                Notification.RaiseError(
-                    User.Error.UserErrorToCreate, 
-                    NotificationService.ErrorType.Infra);
+                Notification.RaiseError(User.Error.UserErrorToCreate);
                 return default;
             }
 
-            var userResult = _mapper.Map<UserResponseDto>(user);
+            var userResult = (UserResponseDto)newUser;
             return userResult;
         }
 
@@ -77,31 +49,27 @@ namespace Dinex.Business
             return user;
         }
 
-        public async Task<UserResponseDto> UpdateAsync(
-            UserRequestDto request,
-            bool needUpdatePassword)
+        public async Task<UserResponseDto> UpdateAsync(User request)
         {
-            Guid userId = Guid.NewGuid();
-            if(request.Id.HasValue)
-                userId = request.Id.Value;
+            var user = await GetByIdAsync(request.Id);
 
-            var user = await GetByIdAsync(userId);
+            if(user is null)
+            {
+                Notification.RaiseError(User.Error.UserNotFound);
+                return default;
+            }
 
             user.UpdatedAt = DateTime.Now;
+            user.Password = _cryptographyService.Encrypt(request.Password);
 
-            if (request.IsActive != null)
-                user.IsActive = request.IsActive.Value;
-
-            if (needUpdatePassword)
-                user.Password = _cryptographyService.Encrypt(request.Password);
-
-            var result = await _userRepository.UpdateAsync(user);
+            var result = await _userRepository.UpdateUserAsync(user);
             if (result != Success)
-                Notification.RaiseError(
-                    User.Error.UserErrorToCreate, 
-                    NotificationService.ErrorType.Infra);
+            {
+                Notification.RaiseError(User.Error.UserErrorToCreate);
+                return default;
+            }
 
-            var userResult = _mapper.Map<UserResponseDto>(user);
+            var userResult = (UserResponseDto)user;
             return userResult;
         }
 
@@ -119,11 +87,31 @@ namespace Dinex.Business
             user.IsActive = UserActivatioStatus.Active;
             user.UpdatedAt = DateTime.Now;
 
-            var userDto = _mapper.Map<UserRequestDto>(user);
-
-            await UpdateAsync(userDto, false);
+            await UpdateAsync(user);
         }
 
+        #region exclusive for middleware
+        public async Task<User> GetByIdAsNoTracking(Guid userId)
+        {
+            var user = _userRepository.GetByIdAsNoTracking(userId).Result;
+            if (user is null)
+                Notification.RaiseError(User.Error.UserNotFound);
 
+            return user;
+        }
+        #endregion
+
+        #region Private methods
+        private async Task<User?> GetFromContextAsync(HttpContext httpContext)
+        {
+            var user = await (Task<User>)httpContext.Items["User"];
+            if (user is null)
+                Notification.RaiseError(User.Error.UserNotFound);
+
+            httpContext.Items["User"] = null;
+
+            return user;
+        }
+        #endregion
     }
 }

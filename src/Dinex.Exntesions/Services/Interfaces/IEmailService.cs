@@ -1,4 +1,6 @@
-﻿namespace Dinex.Infra
+﻿
+
+namespace Dinex.Extensions
 {
     public interface IEmailService
     {

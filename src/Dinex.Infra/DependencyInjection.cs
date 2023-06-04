@@ -7,18 +7,22 @@
             // database context registration
             services.AddEntityFrameworkSqlite().AddDbContext<DinexBackendContext>();
 
-            services.AddMvc(
-                options =>
-                    {
-                        options.Filters.Add(new ValidationMiddleware());
-                    }
-                ).AddFluentValidation();
+            //services.AddMvc(
+            //    options =>
+            //        {
+            //            options.Filters.Add(new ValidationMiddleware());
+            //        }
+            //    ).AddFluentValidation();
 
             #region infra services
             services.AddScoped<IJwtService, JwtService>();
             services.AddScoped<IEmailService, EmailService>();
             services.AddScoped<ICryptographyService, CryptographyService>();
             services.AddScoped<INotificationService, NotificationService>();
+            #endregion
+
+            #region generic repositories
+            services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
             #endregion
 
             #region repositories
