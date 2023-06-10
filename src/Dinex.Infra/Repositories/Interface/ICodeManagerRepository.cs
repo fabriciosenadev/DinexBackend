@@ -4,5 +4,6 @@
     {
         Task<List<CodeManager>> ListByUserIdAsync(Guid userId);
         Task DeleteByUserIdAsync(Guid userId, CodeReason codeReason);
+        Task<int> CreateAsync(CodeManager codeManager);
     }
 }

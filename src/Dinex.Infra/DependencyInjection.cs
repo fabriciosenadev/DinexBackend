@@ -34,6 +34,9 @@
             services.AddScoped<IPayMethodFromLaunchRepository, PayMethodFromLaunchRepository>();
             services.AddScoped<IUserAmountAvailableRepository, UserAmountAvailableRepository>();
             services.AddScoped<ICodeManagerRepository, CodeManagerRepository>();
+
+            services.AddScoped<IQueueInRepository, QueueInRepository>();
+            services.AddScoped<IHistoryFileRepository, HistoryFileRepository>();
             #endregion
 
             return services;
