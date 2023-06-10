@@ -4,15 +4,30 @@
     [Route("v{version:apiVersion}/[controller]")]
     public class UploadHistoryFileController : MainController
     {
-        public UploadHistoryFileController(INotificationService notificationService) 
+        private readonly IUserService _userService;
+        private readonly IHistoryFileManager _historyFileManager;
+
+        public UploadHistoryFileController(INotificationService notificationService,
+            IUserService userService,
+            IHistoryFileManager historyFileManager)
             : base(notificationService)
         {
+            _userService = userService;
+            _historyFileManager = historyFileManager;
+        }
+
+        private async Task<Guid> GetUserId()
+        {
+            var user = await _userService.GetUser(HttpContext);
+            return user.Id;
         }
 
         [HttpPost]
-        public async Task<ActionResult> ReceiveHistoryFile(IFormFile file)
+        public async Task<ActionResult> ReceiveHistoryFile([FromForm] HistoryFileRequestDto request)
         {
-            return Ok(file);
+            var userId = await GetUserId();
+            var result = await _historyFileManager.ReceiveHistoryFile(request, userId);
+            return HandleResponse(result);
         }
     }
 }

@@ -3,16 +3,19 @@ using System;
 using Dinex.Infra;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace Dinex.Infra
+namespace Dinex.Infra.DB.Migrations
 {
     [DbContext(typeof(DinexBackendContext))]
-    partial class DinexBackendContextModelSnapshot : ModelSnapshot
+    [Migration("20230607105256_QueueInAndHistoryFile")]
+    partial class QueueInAndHistoryFile
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "7.0.5");
@@ -141,7 +144,7 @@ namespace Dinex.Infra
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("Quantity")
+                    b.Property<int>("Qauantity")
                         .HasColumnType("INTEGER");
 
                     b.Property<Guid>("QueueId")

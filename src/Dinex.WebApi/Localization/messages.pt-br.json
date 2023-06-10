@@ -27,5 +27,8 @@
   "UserErrorToCreate": "Erro ao criar usuário",
   "UserErrorToUpdate": "Erro ao atualizar usuario",
 
-  "UserAmountErrorToCreate": "Erro ao cadastrar saldo"
+  "UserAmountErrorToCreate": "Erro ao cadastrar saldo",
+
+  "FileNotReceived": "Nenhum arquivo foi enviado",
+  "FileFormatInvalid": "O arquivo não é um XLSX válido"
 }

@@ -16,6 +16,9 @@
         //public DbSet<ScheduledLaunches> ScheduledLaunches { get; set; }
         public DbSet<User> Users { get; set; }
         public DbSet<UserAmountAvailable> UserAmountAvailable { get; set; }
+        public DbSet<QueueIn> QueueIn { get; set; }
+
+        public DbSet<HistoryFile> HistoryFiles { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

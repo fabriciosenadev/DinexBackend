@@ -33,6 +33,8 @@
             services.AddScoped<ILaunchManager, LaunchManager>();
             services.AddScoped<IUserAmountManager, UserAmountManager>();
             services.AddScoped<ICodeManagerService, CodeManagerService>();
+
+            services.AddScoped<IHistoryFileManager, HistoryFileManager>();
             #endregion
 
             #region business services
@@ -44,6 +46,9 @@
             services.AddScoped<ILaunchService, LaunchService>();
             services.AddScoped<IPayMethodFromLaunchService, PayMethodFromLaunchService>();
             services.AddScoped<IUserAmountAvailableService, UserAmountAvailableService>();
+
+            services.AddScoped<IQueueInService, QueueInService>();
+            services.AddScoped<IHistoryFileService, HistoryFileService>();
             #endregion
 
             return services;

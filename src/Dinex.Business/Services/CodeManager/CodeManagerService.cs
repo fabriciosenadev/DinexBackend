@@ -62,7 +62,7 @@
                 Reason = codeReason
             };
 
-            var result = await _codeManagerRepository.AddAsync(codeManager);
+            var result = await _codeManagerRepository.CreateAsync(codeManager);
             return result;
         }
 

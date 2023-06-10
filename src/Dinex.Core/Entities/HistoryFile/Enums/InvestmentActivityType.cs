@@ -2,7 +2,7 @@
 
 public enum InvestmentActivityType
 {
-    [Description("Bonificação de Ativos")]
+    [Description("Bonificação em Ativos")]
     AssetBonus,
 
     [Description("Cessão de Direitos")]
@@ -20,22 +20,22 @@ public enum InvestmentActivityType
     [Description("Leilão de Fração")]
     FractionAuction,
 
-    [Description("Fração de Ativos")]
+    [Description("Fração em Ativos")]
     FractionOfAssets,
 
-    [Description("Juros Sobre Capital Proprio")]
+    [Description("Juros Sobre Capital Próprio")]
     InterestOnEquity,
 
     [Description("Direito de Subscrição")]
     SubscriptionRight,
 
-    [Description("Direito de Subscrição - Não Exercido")]
-    SubscriptionRightNotExercised,
+    [Description("Direitos de Subscrição - Não Exercido")]
+    SubscriptionRightsNotExercised,
 
-    [Description("Transferencia - Liquidação")]
+    [Description("Transferência - Liquidação")]
     SettlementTransfer,
 
-    [Description("Transferencia")]
+    [Description("Transferência")]
     Transfer,
 
     [Description("Rendimento")]
