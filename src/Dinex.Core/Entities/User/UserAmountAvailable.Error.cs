@@ -1,16 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿namespace Dinex.Core;
 
-namespace Dinex.Core
+public partial class UserAmountAvailable
 {
-    public partial class UserAmountAvailable
+    public enum Error
     {
-        public enum Error
-        {
-            UserAmountErrorToCreate
-        }
+        UserAmountErrorToCreate
     }
 }

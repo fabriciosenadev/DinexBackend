@@ -1,11 +1,4 @@
-﻿using ExcelDataReader;
-using Microsoft.Extensions.Primitives;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Globalization;
-
-namespace Dinex.Business;
+﻿namespace Dinex.Business;
 
 public class HistoryFileService : BaseService, IHistoryFileService
 {

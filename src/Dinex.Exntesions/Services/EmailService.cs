@@ -1,6 +1,4 @@
-﻿using File = System.IO.File;
-
-namespace Dinex.Extensions;
+﻿namespace Dinex.Extensions;
 public class EmailService : IEmailService
 {
     private readonly AppSettings _appSettings;
