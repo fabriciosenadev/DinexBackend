@@ -7,10 +7,10 @@
 
         }
 
-        public async Task<UserAmountAvailable> GetAmountAvailableAsync(Guid userId)
-        {
-            return await _context.UserAmountAvailable
-                .FirstOrDefaultAsync(x => x.UserId.Equals(userId));
-        }
+        //public async Task<UserAmountAvailable> GetAmountAvailableAsync(Guid userId)
+        //{
+        //    return await _context.UserAmountAvailable
+        //        .FirstOrDefaultAsync(x => x.UserId.Equals(userId));
+        //}
     }
 }

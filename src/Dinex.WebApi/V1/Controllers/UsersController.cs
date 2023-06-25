@@ -10,7 +10,8 @@ public class UsersController : MainController
 
     public UsersController(
         IUserService userService,
-        IUserAmountManager userAmountManager)
+        IUserAmountManager userAmountManager, 
+        INotificationService notificationService) : base(notificationService)
     {
         _userService = userService;
         _userAmountManager = userAmountManager;
@@ -22,28 +23,12 @@ public class UsersController : MainController
         return user.Id;
     }
 
-    #region Unauthenticated routes
     [HttpPost]
     public async Task<ActionResult<UserResponseDto>> Create([FromBody] UserRequestDto request)
     {
         var result = await _userService.CreateAsync(request);
-        return SuccessResponse(result);
+        return HandleResponse(null);
     }
-
-    [HttpPost("send-reset-code")]
-    public async Task<IActionResult> SendResetPasswordCode([FromBody] UserResetPasswordDto request)
-    {
-        //TODO: need to implement service
-        return SuccessResponse(HttpStatusCode.NoContent);
-    }
-
-    [HttpPost("reset-password")]
-    public async Task<IActionResult> ResetPassword([FromBody] UserResetPasswordDto request)
-    {
-        //TODO: need to implement service
-        return SuccessResponse(HttpStatusCode.NoContent); ;
-    }
-    #endregion
 
     #region Authenticated routes
     [Authorize]
@@ -51,29 +36,30 @@ public class UsersController : MainController
     public async Task<ActionResult<UserResponseDto>> Get()
     {
         var user = await _userService.GetUser(HttpContext);
-        return SuccessResponse(user);
+        return HandleResponse(user);
     }
 
-    [Authorize]
-    [HttpPut]
-    public async Task<ActionResult<UserResponseDto>> Update([FromBody] UserRequestDto request)
-    {
-        request.Id = await GetUserId();
+    //[Authorize]
+    //[HttpPut("{userId}")]
+    //public async Task<ActionResult<UserResponseDto>> Update([FromRoute] string userId, [FromBody] UserRequestDto request)
+    //{
+    //    //request.Id = await GetUserId();
+    //    request.Id = new Guid(userId.ToUpper());
 
-        var userResult = await _userService
-            .UpdateAsync(request, true);
+    //    var userResult = await _userService
+    //        .UpdateAsync(request);
 
-        return SuccessResponse(userResult);
-    }
+    //    return SuccessResponse(null, HttpStatusCode.NoContent);
+    //}
 
-    [Authorize]
-    [HttpGet("amount-available")]
-    public async Task<ActionResult<UserAmountAvailableResponseDto>> GetAmountAvailableAsync()
-    {
-        var userId = await GetUserId();
-        var result = await _userAmountManager.GetAmountAvailableByUserId(userId);
+    //[Authorize]
+    //[HttpGet("amount-available")]
+    //public async Task<ActionResult<UserAmountAvailableResponseDto>> GetAmountAvailableAsync()
+    //{
+    //    var userId = await GetUserId();
+    //    var result = await _userAmountManager.GetAmountAvailableByUserId(userId);
 
-        return SuccessResponse(result);
-    }
+    //    return HandleResponse(result);
+    //}
     #endregion
 }

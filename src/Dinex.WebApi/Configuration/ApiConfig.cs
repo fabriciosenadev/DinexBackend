@@ -54,6 +54,9 @@
                     });
             });
 
+            // configuration to work with ExcelDataReader --- see readme https://github.com/ExcelDataReader/ExcelDataReader
+            System.Text.Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
+
             return services;
         }
 

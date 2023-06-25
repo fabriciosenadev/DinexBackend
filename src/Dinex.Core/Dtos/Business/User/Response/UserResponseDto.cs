@@ -1,10 +1,18 @@
-﻿namespace Dinex.Core
+﻿namespace Dinex.Core;
+
+public class UserResponseDto
 {
-    public class UserResponseDto
+    public Guid Id { get; set; }
+    public string FullName { get; set; }
+    public string Email { get; set; }
+
+    public static explicit operator UserResponseDto(User user)
     {
-        public Guid Id { get; set; }
-        public string FullName { get; set; }
-        public string Email { get; set; }
-        //public string Password { get; set; }
+        return new UserResponseDto
+        {
+            Id = user.Id,
+            FullName = user.FullName,
+            Email = user.UserAccount.Email,
+        };
     }
 }

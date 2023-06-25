@@ -11,7 +11,7 @@
         {
             Id = user.Id;
             FullName = user.FullName;
-            Email = user.Email;
+            Email = user.UserAccount.Email;
             Token = token;
         }
     }

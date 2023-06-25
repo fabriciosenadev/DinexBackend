@@ -2,6 +2,6 @@
 {
     public interface IUserAmountAvailableRepository : IRepository<UserAmountAvailable>
     {
-        Task<UserAmountAvailable> GetAmountAvailableAsync(Guid userId);
+        //Task<UserAmountAvailable> GetAmountAvailableAsync(Guid userId);
     }
 }

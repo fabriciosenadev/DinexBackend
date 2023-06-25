@@ -27,7 +27,5 @@ global using Microsoft.Extensions.Options;
 global using FluentValidation;
 global using FluentValidation.AspNetCore;
 
-global using MailKit.Net.Smtp;
-global using MimeKit;
-
 global using Dinex.Core;
+global using Dinex.Extensions;
