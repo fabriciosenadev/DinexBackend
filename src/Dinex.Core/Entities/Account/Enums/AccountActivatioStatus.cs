@@ -1,6 +1,6 @@
 ﻿namespace Dinex.Core
 {
-    public enum UserActivatioStatus
+    public enum AccountActivatioStatus
     {
         Inactive = 0,
         Active = 1,

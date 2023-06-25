@@ -36,6 +36,7 @@ public partial class NotificationService : INotificationService
         return message;
     }
 
+    // TODO: need to remove this method
     private void RaiseError<T>(T enumError, Notification.Type errorType = Notification.Type.App) where T : Enum
     {
         switch (errorType)

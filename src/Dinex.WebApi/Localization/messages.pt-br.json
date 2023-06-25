@@ -26,6 +26,7 @@
   "UserNotFound": "Usuário não encontrado",
   "UserErrorToCreate": "Erro ao criar usuário",
   "UserErrorToUpdate": "Erro ao atualizar usuario",
+  "UserAlreadyExists": "Endereço de e-mail já cadastrado",
 
   "UserAmountErrorToCreate": "Erro ao cadastrar saldo",
 

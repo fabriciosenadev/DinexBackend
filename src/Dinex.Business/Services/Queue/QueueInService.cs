@@ -12,7 +12,7 @@ public class QueueInService : BaseService, IQueueInService
 
     public async Task<QueueIn> CreateAsync(QueueIn queueIn)
     {
-        var filePrefix = new Guid().ToString();
+        var filePrefix = Guid.NewGuid();
         queueIn.FileName = $"{filePrefix}_{queueIn.FileName}";
 
         queueIn.CreatedAt = DateTime.Now;

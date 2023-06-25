@@ -1,11 +1,11 @@
 ﻿namespace Dinex.Business;
 
-public class HistoryFileManager : BaseService, IHistoryFileManager
+public class HistoryFileManagerService : BaseService, IHistoryFileManager
 {
     private readonly IHistoryFileService _historyFileService;
     private readonly IQueueInService _queueInService;
 
-    public HistoryFileManager(IMapper mapper,
+    public HistoryFileManagerService(IMapper mapper,
         INotificationService notification,
         IHistoryFileService historyFileService,
         IQueueInService queueInService)
@@ -31,7 +31,7 @@ public class HistoryFileManager : BaseService, IHistoryFileManager
         {
             UserId = userId,
             FileName = request.FileHistory.FileName,
-            Type = request.QueueType
+            Type = request.QueueType,
         };
         await _queueInService.CreateAsync(queueIn);
         #endregion
@@ -45,6 +45,7 @@ public class HistoryFileManager : BaseService, IHistoryFileManager
         response.QueueInId = queueIn.Id;
         response.FileName = queueIn.FileName;
         response.Type = queueIn.Type;
+        response.CreatedAt = queueIn.CreatedAt;
         return response;
     }
 }

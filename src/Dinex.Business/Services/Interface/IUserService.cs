@@ -35,7 +35,7 @@
         /// </summary>
         /// <param name="user">dados do usuario</param>
         /// <returns>dados do usuario atualizados</returns>
-        Task<UserResponseDto> UpdateAsync(User request);
+        //Task<UserResponseDto> UpdateAsync(User request);
 
         /// <summary>
         /// obtem o usuario do contexto http passado

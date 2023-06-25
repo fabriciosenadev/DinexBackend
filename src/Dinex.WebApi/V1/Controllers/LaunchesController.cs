@@ -21,75 +21,75 @@ public class LaunchesController : MainController
         return user.Id;
     }
 
-    [HttpPost]
-    [Authorize]
-    public async Task<ActionResult<LaunchAndPayMethodRequestDto>> Create([FromBody] LaunchAndPayMethodRequestDto request)
-    {
-        var userId = await GetUserId();
+    //[HttpPost]
+    //[Authorize]
+    //public async Task<ActionResult<LaunchAndPayMethodRequestDto>> Create([FromBody] LaunchAndPayMethodRequestDto request)
+    //{
+    //    var userId = await GetUserId();
 
-        var response = await _launchManager.CreateAsync(request, userId);
-        return SuccessResponse(response);
-    }
+    //    var response = await _launchManager.CreateAsync(request, userId);
+    //    return SuccessResponse(response);
+    //}
 
-    [HttpPut("{Id}")]
-    [Authorize]
-    public async Task<ActionResult<LaunchAndPayMethodResponseDto>> Update(
-        [FromRoute] int id,
-        [FromQuery] bool isJustStatus,
-        [FromBody] LaunchAndPayMethodRequestDto request)
-    {
-        var userId = await GetUserId();
+    //[HttpPut("{Id}")]
+    //[Authorize]
+    //public async Task<ActionResult<LaunchAndPayMethodResponseDto>> Update(
+    //    [FromRoute] int id,
+    //    [FromQuery] bool isJustStatus,
+    //    [FromBody] LaunchAndPayMethodRequestDto request)
+    //{
+    //    var userId = await GetUserId();
 
-        var response = await _launchManager.UpdateAsync(request, id, userId, isJustStatus);
-        return SuccessResponse(response);
-    }
+    //    var response = await _launchManager.UpdateAsync(request, id, userId, isJustStatus);
+    //    return SuccessResponse(response);
+    //}
 
-    [HttpDelete("{Id}")]
-    [Authorize]
-    public async Task<IActionResult> Delete(int id)
-    {
-        await _launchManager.SoftDeleteAsync(id);
+    //[HttpDelete("{Id}")]
+    //[Authorize]
+    //public async Task<IActionResult> Delete(int id)
+    //{
+    //    await _launchManager.SoftDeleteAsync(id);
 
-        return SuccessResponse(HttpStatusCode.NoContent);
-    }
+    //    return SuccessResponse(HttpStatusCode.NoContent);
+    //}
 
-    [HttpGet("{Id}")]
-    [Authorize]
-    public async Task<ActionResult<LaunchAndPayMethodResponseDto>> Get([FromRoute] int id)
-    {
-        var response = await _launchManager.GetAsync(id);
-        return SuccessResponse(response);
+    //[HttpGet("{Id}")]
+    //[Authorize]
+    //public async Task<ActionResult<LaunchAndPayMethodResponseDto>> Get([FromRoute] int id)
+    //{
+    //    var response = await _launchManager.GetAsync(id);
+    //    return SuccessResponse(response);
 
-    }
+    //}
 
-    [HttpGet("last")]
-    [Authorize]
-    public async Task<ActionResult<List<LaunchResponseDto>>> ListLastLaunches()
-    {
-        var userId = await GetUserId();
+    //[HttpGet("last")]
+    //[Authorize]
+    //public async Task<ActionResult<List<LaunchResponseDto>>> ListLastLaunches()
+    //{
+    //    var userId = await GetUserId();
 
-        var response = await _launchManager.ListLast(userId);
-        return SuccessResponse(response);
-    }
+    //    var response = await _launchManager.ListLast(userId);
+    //    return SuccessResponse(response);
+    //}
 
-    [HttpGet("{year}/{month}/resume")]
-    [Authorize]
-    public async Task<IActionResult> GetResumeByYearAndMonth([FromRoute] int year, [FromRoute] int month)
-    {
-        var userId = await GetUserId();
+    //[HttpGet("{year}/{month}/resume")]
+    //[Authorize]
+    //public async Task<IActionResult> GetResumeByYearAndMonth([FromRoute] int year, [FromRoute] int month)
+    //{
+    //    var userId = await GetUserId();
 
-        var result = await _launchManager.GetResumeByYearAndMonthAsync(year, month, userId);
-        return SuccessResponse(result);
-    }
+    //    var result = await _launchManager.GetResumeByYearAndMonthAsync(year, month, userId);
+    //    return SuccessResponse(result);
+    //}
 
-    [HttpGet("{year}/{month}/details")]
-    [Authorize]
-    public async Task<IActionResult> GetDetailsByYearAndMonth([FromRoute] int year, [FromRoute] int month)
-    {
-        var userId = await GetUserId();
+    //[HttpGet("{year}/{month}/details")]
+    //[Authorize]
+    //public async Task<IActionResult> GetDetailsByYearAndMonth([FromRoute] int year, [FromRoute] int month)
+    //{
+    //    var userId = await GetUserId();
 
-        var result = await _launchManager.GetDetailsByYearAndMonthAsync(year, month, userId);
-        return SuccessResponse(result);
-    }
+    //    var result = await _launchManager.GetDetailsByYearAndMonthAsync(year, month, userId);
+    //    return SuccessResponse(result);
+    //}
 
 }

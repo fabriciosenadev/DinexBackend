@@ -1,6 +1,6 @@
 ﻿namespace Dinex.Core
 {
-    public partial class Activation
+    public partial class CodeManager
     {
         public enum Error
         {

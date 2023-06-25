@@ -27,7 +27,6 @@
 
             #region repositories
             services.AddScoped<IUserRepository, UserRepository>();
-            services.AddScoped<IActivationRepository, ActivationRepository>();
             services.AddScoped<ICategoryRepository, CategoryRepository>();
             services.AddScoped<ICategoryToUserRepository, CategoryToUserRepository>();
             services.AddScoped<ILaunchRepository, LaunchRepository>();

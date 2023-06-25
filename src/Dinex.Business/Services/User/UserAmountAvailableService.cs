@@ -11,29 +11,29 @@
             _userAmountAvailableRepository = userAmountAvailableRepository;
         }
 
-        public async Task<UserAmountAvailable> GetAmountAvailableAsync(Guid userId)
-        {
-            var result = await _userAmountAvailableRepository.GetAmountAvailableAsync(userId);
-            return result;
-        }
+        //public async Task<UserAmountAvailable> GetAmountAvailableAsync(Guid userId)
+        //{
+        //    var result = await _userAmountAvailableRepository.GetAmountAvailableAsync(userId);
+        //    return result;
+        //}
 
-        public async Task<UserAmountAvailable> CreateAsync(UserAmountAvailable userAmountAvailable)
-        {
-            var result = await _userAmountAvailableRepository.AddAsync(userAmountAvailable);
-            if (result != Success)
-                Notification.RaiseError(UserAmountAvailable.Error.UserAmountErrorToCreate);
-                //Notification.RaiseError(
-                //    UserAmountAvailable.Error.UserAmountErrorToCreate,
-                //    NotificationService.ErrorType.Infra);
+        //public async Task<UserAmountAvailable> CreateAsync(UserAmountAvailable userAmountAvailable)
+        //{
+        //    var result = await _userAmountAvailableRepository.AddAsync(userAmountAvailable);
+        //    if (result != Success)
+        //        Notification.RaiseError(UserAmountAvailable.Error.UserAmountErrorToCreate);
+        //        //Notification.RaiseError(
+        //        //    UserAmountAvailable.Error.UserAmountErrorToCreate,
+        //        //    NotificationService.ErrorType.Infra);
 
 
 
-            return userAmountAvailable;
-        }
+        //    return userAmountAvailable;
+        //}
 
-        public async Task UpdateAsync(UserAmountAvailable userAmountAvailable)
-        {
-            await _userAmountAvailableRepository.UpdateAsync(userAmountAvailable);
-        }
+        //public async Task UpdateAsync(UserAmountAvailable userAmountAvailable)
+        //{
+        //    await _userAmountAvailableRepository.UpdateAsync(userAmountAvailable);
+        //}
     }
 }

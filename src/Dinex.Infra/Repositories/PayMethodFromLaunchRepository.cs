@@ -6,22 +6,22 @@
         {
         }
 
-        public async Task<PayMethodFromLaunch> FindRelationAsync(int launchId)
-        {
-            var result = await _context.PayMethodFromLaunches
-                .Where(x => x.LaunchId.Equals(launchId))
-                .FirstOrDefaultAsync();
+        //public async Task<PayMethodFromLaunch> FindRelationAsync(int launchId)
+        //{
+        //    var result = await _context.PayMethodFromLaunches
+        //        .Where(x => x.LaunchId.Equals(launchId))
+        //        .FirstOrDefaultAsync();
 
-            return result;
-        }
+        //    return result;
+        //}
 
-        public async Task<List<PayMethodFromLaunch>> ListRelationsAsync(List<int> launchIds)
-        {
-            var result = await _context.PayMethodFromLaunches
-                .Where(c => launchIds.Contains(c.Id))
-                .ToListAsync();
+        //public async Task<List<PayMethodFromLaunch>> ListRelationsAsync(List<int> launchIds)
+        //{
+        //    var result = await _context.PayMethodFromLaunches
+        //        .Where(c => launchIds.Contains(c.Id))
+        //        .ToListAsync();
 
-            return result;
-        }
+        //    return result;
+        //}
     }
 }

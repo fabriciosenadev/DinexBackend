@@ -10,7 +10,7 @@ public abstract class MainController : ControllerBase
         _notificationService = notificationService;
     }
 
-    protected ActionResult SuccessResponse(object? result = null, HttpStatusCode statusCode = HttpStatusCode.OK)
+    protected ActionResult SuccessResponse(object? result = null, HttpStatusCode? statusCode = null)
     {
 
         var resultSuccess = new
@@ -18,11 +18,12 @@ public abstract class MainController : ControllerBase
             success = true,
             data = result
         };
+        statusCode ??= HttpStatusCode.OK;
 
         return CustomReponse(resultSuccess, statusCode);
     }
 
-    protected ActionResult ErrorResponse(object? result = null, HttpStatusCode statusCode = HttpStatusCode.BadRequest)
+    protected ActionResult ErrorResponse(object? result = null, HttpStatusCode? statusCode = null)
     {
         var resultError = new
         {
@@ -30,30 +31,29 @@ public abstract class MainController : ControllerBase
             data = result
         };
 
+        statusCode ??= HttpStatusCode.BadRequest;
+
         return CustomReponse(resultError, statusCode);
     }
 
-    protected ActionResult HandleResponse(object? result = null)
+    protected ActionResult HandleResponse(object? result = null, HttpStatusCode? statusCode = null)
     {
         if(_notificationService.HasNotification())
-            return ErrorResponse(_notificationService.GetAllNotifications());
+            return ErrorResponse(_notificationService.GetAllNotifications(), statusCode);
 
         return SuccessResponse(result);
     }
 
     #region private methods
-    private ActionResult CustomReponse(object? result = null, HttpStatusCode statusCode = HttpStatusCode.NoContent)
+    private ActionResult CustomReponse(object? result = null, HttpStatusCode? statusCode = null)
     {
-        switch (statusCode)
+        return statusCode switch
         {
-            case HttpStatusCode.OK:
-                return Ok(result);
-            case HttpStatusCode.BadRequest:
-                return BadRequest(result);
-            case HttpStatusCode.NoContent:
-            default:
-                return NoContent();
-        }
+            HttpStatusCode.OK => Ok(result),
+            HttpStatusCode.BadRequest => BadRequest(result),
+            HttpStatusCode.NoContent => NoContent(),
+            _ => NoContent(),
+        };
     }
     #endregion
 }

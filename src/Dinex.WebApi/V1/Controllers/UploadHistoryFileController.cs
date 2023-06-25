@@ -23,6 +23,7 @@
         }
 
         [HttpPost]
+        [Authorize]
         public async Task<ActionResult> ReceiveHistoryFile([FromForm] HistoryFileRequestDto request)
         {
             var userId = await GetUserId();

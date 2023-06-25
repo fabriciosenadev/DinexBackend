@@ -2,10 +2,9 @@
 
 public partial class User : Entity
 {
-    public string FullName { get; set; }
-    public string Email { get; set; }
-    public string Password { get; set; }
-    public UserActivatioStatus IsActive { get; set; }
+    public required string FullName { get; set; }
+
+    public required Account UserAccount { get; set; }
 
     // directly convertion without automapper
     //public UserResponseDto ToUserReponseDto()
@@ -33,10 +32,7 @@ public partial class User : Entity
         return new User
         {
             FullName = request.FullName,
-            Email = request.Email,
-            Password = request.Password,
-            IsActive = UserActivatioStatus.Inactive,
-            CreatedAt = DateTime.UtcNow,
+            UserAccount = request.UserAccount
         };
     }
 }

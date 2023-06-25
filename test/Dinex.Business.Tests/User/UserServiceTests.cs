@@ -53,11 +53,15 @@ namespace Dinex.Business.UserTests
             var password = _faker.Random.String2(10);
             var request = new UserRequestDto
             {
-                Email = _faker.Internet.Email(),
+                
                 FullName = _faker.Person.FullName.ToString(),
+                UserAccount = new AccountRequestDto
+                {
+                    Email = _faker.Internet.Email(),
+                    Password = password,
+                    ConfirmPassword = password
+                }
                 //IsActive = UserActivatioStatus.Inactive,
-                Password = password,
-                ConfirmPassword = password
             };
 
             return request;
@@ -67,9 +71,14 @@ namespace Dinex.Business.UserTests
             var user = new User
             {
                 CreatedAt = DateTime.UtcNow,
-                Email = request.Email,
+                
                 FullName = request.FullName,
-                Password = request.Password,
+                UserAccount = new Account
+                {
+                    Email = request.UserAccount.Email,
+                    Password = request.UserAccount.Password,
+                }
+                
             };
             return user;
         }

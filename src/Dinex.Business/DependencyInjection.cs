@@ -9,7 +9,7 @@
 
             #region register ContextAccessor
             services.AddHttpContextAccessor();
-            services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
+            //services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
             #endregion
 
             #region AutoMapper
@@ -22,25 +22,25 @@
 
             #region business validations
             //services.AddScoped<IValidator<UserRequestDto>, UserRequestModelValidation>();
-            services.AddScoped<IValidator<ActivationRequestDto>, ActivationRequestModelValidation>();
-            services.AddScoped<IValidator<CategoryRequestDto>, CategoryRequestModelValidation>();
-            services.AddScoped<IValidator<LaunchAndPayMethodRequestDto>, LaunchAndPayMethodRequestModelValidation>();
+            //services.AddScoped<IValidator<AccountActivationRequestDto>, ActivationRequestModelValidation>();
+            //services.AddScoped<IValidator<CategoryRequestDto>, CategoryRequestModelValidation>();
+            //services.AddScoped<IValidator<LaunchAndPayMethodRequestDto>, LaunchAndPayMethodRequestModelValidation>();
             #endregion
 
             #region business managers
-            services.AddScoped<IActivationAccountManager, ActivationAccountManager>();
+            services.AddScoped<IActivationAccountManager, AccountManagerService>();
             services.AddScoped<ICategoryManager, CategoryManager>();
             services.AddScoped<ILaunchManager, LaunchManager>();
-            services.AddScoped<IUserAmountManager, UserAmountManager>();
-            services.AddScoped<ICodeManagerService, CodeManagerService>();
+            services.AddScoped<IUserAmountManager, UserAmountManager>();           
 
-            services.AddScoped<IHistoryFileManager, HistoryFileManager>();
+            services.AddScoped<IHistoryFileManager, HistoryFileManagerService>();
             #endregion
 
             #region business services
             services.AddScoped<IUserService, UserService>();
+
             services.AddScoped<IAuthenticationService, AuthenticationService>();
-            services.AddScoped<IActivationService, ActivationService>();
+            services.AddScoped<ICodeManagerService, CodeManagerService>();
             services.AddScoped<ICategoryService, CategoryService>();
             services.AddScoped<ICategoryToUserService, CategoryToUserService>();
             services.AddScoped<ILaunchService, LaunchService>();

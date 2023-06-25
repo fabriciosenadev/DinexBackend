@@ -2,6 +2,7 @@
 {
     public class CodeManagerService : BaseService, ICodeManagerService
     {
+        const int MaxActivationCodesAllowed = 1;
         private readonly ICodeManagerRepository _codeManagerRepository;
 
         public CodeManagerService(
@@ -74,6 +75,21 @@
         public Task ClearAllCodesByUserAsync(Guid userId)
         {
             throw new NotImplementedException();
+        }
+
+        public async Task ValidateActivationCode(string activationCode, Guid userId)
+        {
+            var listOfActivations = await _codeManagerRepository.ListByUserIdAsync(userId);
+
+            listOfActivations.RemoveAll(a => !a.Code.Equals(activationCode));
+            if (listOfActivations.Count != MaxActivationCodesAllowed)
+                Notification.RaiseError(CodeManager.Error.ActivationInvalidCode);
+
+            const int activationExpiresInMinutes = 120;
+            var createdAt = listOfActivations[0].CreatedAt;
+            var currentTimeToExpire = DateTime.Now.AddMinutes(-activationExpiresInMinutes);
+            if (currentTimeToExpire >= createdAt)
+                Notification.RaiseError(CodeManager.Error.ActivationExpiredCode);
         }
     }
 }
