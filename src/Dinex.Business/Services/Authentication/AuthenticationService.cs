@@ -27,11 +27,11 @@
             if(user is null)
                 Notification.RaiseError(Login.Error.LoginNotFound);
 
-            var passwordsMatch = _cryptographyService.CompareValues(user.Password, login.Password);
+            var passwordsMatch = _cryptographyService.CompareValues(user.UserAccount.Password, login.Password);
             if (!passwordsMatch)
                 Notification.RaiseError(Login.Error.LoginOrPassIncorrect);
 
-            if (user.IsActive == UserActivatioStatus.Inactive)
+            if (user.UserAccount.IsActive == AccountActivatioStatus.Inactive)
                 Notification.RaiseError(Login.Error.LoginInactive);
 
             var token = _jwtService.GenerateToken(user);

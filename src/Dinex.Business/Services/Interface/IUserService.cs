@@ -34,9 +34,8 @@
         /// atualiza usuario existente
         /// </summary>
         /// <param name="user">dados do usuario</param>
-        /// <param name="needUpdatePassword">avalia necessidade de atualizar a senha</param>
         /// <returns>dados do usuario atualizados</returns>
-        Task<UserResponseDto> UpdateAsync(UserRequestDto request, bool needUpdatePassword);
+        //Task<UserResponseDto> UpdateAsync(User request);
 
         /// <summary>
         /// obtem o usuario do contexto http passado

@@ -1,13 +1,13 @@
-﻿namespace Dinex.Core
-{
-    public partial class User
-    {
-        public enum Error
-        {
-            UserErrorToCreate,
-            UserErrorToUpdate,
+﻿namespace Dinex.Core;
 
-            UserNotFound,
-        }
+public partial class User
+{
+    public enum Error
+    {
+        UserErrorToCreate,
+        UserErrorToUpdate,
+
+        UserNotFound,
+        UserAlreadyExists,
     }
 }

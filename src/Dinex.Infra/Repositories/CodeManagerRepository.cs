@@ -2,9 +2,10 @@
 {
     public class CodeManagerRepository : Repository<CodeManager>, ICodeManagerRepository
     {
-        public CodeManagerRepository(DinexBackendContext context) : base(context)
+        private readonly IRepository<CodeManager> _repository;
+        public CodeManagerRepository(DinexBackendContext context, IRepository<CodeManager> repository) : base(context)
         {
-
+            _repository = repository;
         }
 
         private async Task<IQueryable<CodeManager>> GetByUserIdAndReason(Guid userId, CodeReason codeReason)
@@ -27,6 +28,11 @@
         public async Task<List<CodeManager>> ListByUserIdAsync(Guid userId)
         {
             return await _context.CodeManager.Where(a => a.UserId.Equals(userId)).ToListAsync();
+        }
+
+        public async Task<int> CreateAsync(CodeManager codeManager)
+        {
+            return await _repository.AddAsync(codeManager);
         }
     }
 }

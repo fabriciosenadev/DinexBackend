@@ -22,43 +22,43 @@
             _launchService = launchService;
         }
 
-        private async Task<UserAmountAvailable> CreateAvailableAmountByUserId(Guid userId)
-        {
-            var userCategories = await _categoryToUserRepository.ListCategoryRelationIdsAsync(userId);
+        //private async Task<UserAmountAvailable> CreateAvailableAmountByUserId(Guid userId)
+        //{
+        //    var userCategories = await _categoryToUserRepository.ListCategoryRelationIdsAsync(userId);
 
-            var inCategories = userCategories
-                .Where(x => x.Applicable.Equals(Applicable.In))
-                .Select(x => x.CategoryId).ToList();
+        //    var inCategories = userCategories
+        //        .Where(x => x.Applicable.Equals(Applicable.In))
+        //        .Select(x => x.CategoryId).ToList();
 
-            var outCategories = userCategories
-                .Where(x => x.Applicable.Equals(Applicable.Out))
-                .Select(x => x.CategoryId).ToList();
+        //    var outCategories = userCategories
+        //        .Where(x => x.Applicable.Equals(Applicable.Out))
+        //        .Select(x => x.CategoryId).ToList();
 
-            var inLaunchesValue = await _launchService.GetLaunchesSumByCategoriesIdAndStatus(userId, inCategories, LaunchStatus.Received);
-            var outLaunchesValue = await _launchService.GetLaunchesSumByCategoriesIdAndStatus(userId, outCategories, LaunchStatus.Paid);
+        //    var inLaunchesValue = await _launchService.GetLaunchesSumByCategoriesIdAndStatus(userId, inCategories, LaunchStatus.Received);
+        //    var outLaunchesValue = await _launchService.GetLaunchesSumByCategoriesIdAndStatus(userId, outCategories, LaunchStatus.Paid);
 
-            var availableValue = inLaunchesValue - outLaunchesValue;
+        //    var availableValue = inLaunchesValue - outLaunchesValue;
 
-            var amountAvailable = new UserAmountAvailable
-            {
-                AmountAvailable = availableValue,
-                UserId = userId,
-            };
+        //    var amountAvailable = new UserAmountAvailable
+        //    {
+        //        AmountAvailable = availableValue,
+        //        UserId = userId,
+        //    };
 
-            await _userAmountAvailableService.CreateAsync(amountAvailable);
+        //    await _userAmountAvailableService.CreateAsync(amountAvailable);
 
-            return amountAvailable;
-        }
+        //    return amountAvailable;
+        //}
 
-        public async Task<UserAmountAvailableResponseDto> GetAmountAvailableByUserId(Guid userId)
-        {
-            var amountAvailable = await _userAmountAvailableService.GetAmountAvailableAsync(userId);
+        //public async Task<UserAmountAvailableResponseDto> GetAmountAvailableByUserId(Guid userId)
+        //{
+        //    var amountAvailable = await _userAmountAvailableService.GetAmountAvailableAsync(userId);
 
-            if (amountAvailable is null)
-               amountAvailable = await CreateAvailableAmountByUserId(userId);
+        //    if (amountAvailable is null)
+        //       amountAvailable = await CreateAvailableAmountByUserId(userId);
 
-            var result = _mapper.Map<UserAmountAvailableResponseDto>(amountAvailable);
-            return result;
-        }
+        //    var result = _mapper.Map<UserAmountAvailableResponseDto>(amountAvailable);
+        //    return result;
+        //}
     }
 }
