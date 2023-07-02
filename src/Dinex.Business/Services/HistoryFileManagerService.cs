@@ -39,10 +39,8 @@ public class HistoryFileManagerService : BaseService, IHistoryFileManager
         await _queueInService.CreateAsync(queueIn);
         #endregion
 
-        // save file at the database
         await _historyFileService.CreateAsync(request.FileHistory, queueIn.Id);
 
-        // TODO: process file in an async method without awaiter
         _processingService.ProcessQueueIn(userId);
 
         var response = new HistoryFileResponseDto();

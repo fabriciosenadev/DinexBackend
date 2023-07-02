@@ -1,4 +1,6 @@
-﻿namespace Dinex.Business;
+﻿using Dinex.Core;
+
+namespace Dinex.Business;
 
 public class ProcessingService : IProcessingService
 {
@@ -26,10 +28,8 @@ public class ProcessingService : IProcessingService
 
     public async Task ProcessQueueIn(Guid userId)
     {
-        // pegar a fila de entrada -> saída será uma lista
         var queueIn = await _queueInRepository.ListQueueInAsync();
 
-        // executa uma iteração para cada posição da fila de entrada
         foreach (var item in queueIn)
         {
             switch (item.Type)
@@ -120,7 +120,7 @@ public class ProcessingService : IProcessingService
         var launch = new Launch
         {
             Activity = TransactionActivity.Investing,
-            Date = investingHistoryFile.Date,
+            Date = GetOperationDate(investingHistoryFile.Date),
             UserId = userId,
             CreatedAt = DateTime.UtcNow,
         };
@@ -139,6 +139,23 @@ public class ProcessingService : IProcessingService
             CreatedAt = DateTime.UtcNow,
         };
         await _launchInvestingRepository.AddAsync(investingLaunch);
+    }
+
+    private static DateTime GetOperationDate(DateTime dateFromFile)
+    {
+        DateTime operationDate = dateFromFile.AddDays(-2);
+
+        switch (operationDate.DayOfWeek)
+        {
+            case DayOfWeek.Sunday:
+                operationDate = dateFromFile.AddDays(-4);
+                break;
+            case DayOfWeek.Saturday:
+                operationDate = dateFromFile.AddDays(-3);
+                break;
+        }
+
+        return operationDate;
     }
     #endregion
 
