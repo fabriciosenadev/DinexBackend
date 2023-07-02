@@ -14,4 +14,8 @@
     <Folder Include="Dtos\Business\Activation\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Dinex.Exntesions\Dinex.Extensions.csproj" />
+  </ItemGroup>
+
 </Project>

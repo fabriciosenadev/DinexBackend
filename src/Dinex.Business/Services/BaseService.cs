@@ -48,6 +48,6 @@ public class BaseService
 
     private void Notify(string mensagem)
     {
-        Notification.RaiseError(new Extensions.Notification(mensagem));
+        Notification.RaiseError(new NotificationDto(mensagem));
     }
 }

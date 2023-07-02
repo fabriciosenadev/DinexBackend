@@ -21,3 +21,4 @@ global using ExcelDataReader;
 global using Dinex.Core;
 global using Dinex.Infra;
 global using Dinex.Extensions;
+global using Dinex.Shared;

@@ -1,6 +1,6 @@
 ﻿namespace Dinex.Core;
 
-public partial class HistoryFile
+public partial class InvestingHistoryFile
 {
     public enum Error
     {

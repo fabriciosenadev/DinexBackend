@@ -10,4 +10,5 @@ global using Dinex.Business;
 global using Dinex.Core;
 global using Dinex.Infra;
 global using Dinex.Extensions;
+global using Dinex.Shared;
 global using Dinex.Backend.WebApi.Controllers;
