@@ -1,4 +1,4 @@
-﻿namespace Dinex.Extensions;
+﻿namespace Dinex.Shared;
 public class EmailService : IEmailService
 {
     private readonly AppSettings _appSettings;

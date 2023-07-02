@@ -24,3 +24,6 @@ global using MailKit.Net.Smtp;
 global using MimeKit;
 
 global using Newtonsoft.Json;
+
+global using Dinex.Core;
+global using Dinex.Extensions;

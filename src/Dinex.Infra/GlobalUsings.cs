@@ -29,3 +29,4 @@ global using FluentValidation.AspNetCore;
 
 global using Dinex.Core;
 global using Dinex.Extensions;
+global using Dinex.Shared;

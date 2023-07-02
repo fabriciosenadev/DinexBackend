@@ -9,6 +9,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Dinex.Core\Dinex.Core.csproj" />
     <ProjectReference Include="..\Dinex.Exntesions\Dinex.Extensions.csproj" />
+    <ProjectReference Include="..\Dinex.Shared\Dinex.Shared\Dinex.Shared.csproj" />
   </ItemGroup>
 
   <ItemGroup>

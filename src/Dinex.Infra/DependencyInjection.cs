@@ -27,15 +27,20 @@
 
             #region repositories
             services.AddScoped<IUserRepository, UserRepository>();
-            services.AddScoped<ICategoryRepository, CategoryRepository>();
-            services.AddScoped<ICategoryToUserRepository, CategoryToUserRepository>();
             services.AddScoped<ILaunchRepository, LaunchRepository>();
-            services.AddScoped<IPayMethodFromLaunchRepository, PayMethodFromLaunchRepository>();
-            services.AddScoped<IUserAmountAvailableRepository, UserAmountAvailableRepository>();
             services.AddScoped<ICodeManagerRepository, CodeManagerRepository>();
 
             services.AddScoped<IQueueInRepository, QueueInRepository>();
             services.AddScoped<IHistoryFileRepository, HistoryFileRepository>();
+
+            services.AddScoped<IProductRepository, ProductRepository>();
+            services.AddScoped<ILaunchInvestingRepository, LaunchInvestingRepository>();
+            services.AddScoped<IBrokerageRepository, BrokerageRepository>();
+
+            services.AddScoped<ICategoryRepository, CategoryRepository>();
+            services.AddScoped<ICategoryToUserRepository, CategoryToUserRepository>();
+            services.AddScoped<IPayMethodFromLaunchRepository, PayMethodFromLaunchRepository>();
+            services.AddScoped<IUserAmountAvailableRepository, UserAmountAvailableRepository>();
             #endregion
 
             return services;

@@ -2,5 +2,5 @@
 
 public interface IHistoryFileService
 {
-    Task<List<HistoryFile>> CreateAsync(IFormFile fileHistory, Guid queueInId);
+    Task<List<InvestingHistoryFile>> CreateAsync(IFormFile fileHistory, Guid queueInId);
 }

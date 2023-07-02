@@ -2,10 +2,18 @@
 {
     public class LaunchRepository : Repository<Launch>, ILaunchRepository
     {
-        public LaunchRepository(DinexBackendContext context) : base(context)
-        {
+        private readonly IRepository<Launch> _repository;
 
+        public LaunchRepository(DinexBackendContext context, IRepository<Launch> repository) : base(context)
+        {
+            _repository = repository;
         }
+
+        public async Task AddAsync(Launch launch)
+        {
+            await _repository.AddAsync(launch);
+        }
+
 
         //public async Task<int> CountByCategoryIdAsync(int categoryId, Guid userId)
         //{

@@ -49,6 +49,8 @@
 
             services.AddScoped<IQueueInService, QueueInService>();
             services.AddScoped<IHistoryFileService, HistoryFileService>();
+
+            services.AddScoped<IProcessingService, ProcessingService>();
             #endregion
 
             return services;

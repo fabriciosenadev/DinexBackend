@@ -4,7 +4,7 @@ public class HistoryFileResponseDto
 {
 
     public Guid QueueInId { get; set; }
-    public QueueType Type { get; set; }
+    public TransactionActivity Type { get; set; }
     public string FileName { get; set; }
     public DateTime CreatedAt { get; set; }
 

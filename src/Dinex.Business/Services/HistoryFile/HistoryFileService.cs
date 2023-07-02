@@ -13,10 +13,10 @@ public class HistoryFileService : BaseService, IHistoryFileService
         _historyFileRepository = historyFileRepository;
     }
 
-    public async Task<List<HistoryFile>> CreateAsync(IFormFile fileHistory, Guid queueInId)
+    public async Task<List<InvestingHistoryFile>> CreateAsync(IFormFile fileHistory, Guid queueInId)
     {
         var dictionary = new Dictionary<int, List<dynamic>>();
-        var historyFileList = new List<HistoryFile>();
+        var historyFileList = new List<InvestingHistoryFile>();
 
         using (var stream = fileHistory?.OpenReadStream())
         {
@@ -73,11 +73,11 @@ public class HistoryFileService : BaseService, IHistoryFileService
 
         for (int selectedKey = 0; selectedKey < dictionary.Count; selectedKey++)
         {
-            var historyFile = new HistoryFile();
+            var historyFile = new InvestingHistoryFile();
             historyFile.QueueId = queueInId;
             historyFile.Applicable = GetApplicable(dictionary.FirstOrDefault(x => x.Key == selectedKey).Value[0]);
             historyFile.Date = DateTime.Parse(dictionary.FirstOrDefault(x => x.Key == selectedKey).Value[1], culture);
-            historyFile.InvestmentActivityType = GetInvestmentActivityTypeByDescription(dictionary.FirstOrDefault(x => x.Key == selectedKey).Value[2]);
+            historyFile.ActivityType = GetInvestmentActivityTypeByDescription(dictionary.FirstOrDefault(x => x.Key == selectedKey).Value[2]);
             historyFile.Product = dictionary.FirstOrDefault(x => x.Key == selectedKey).Value[3];
             historyFile.Institution = dictionary.FirstOrDefault(x => x.Key == selectedKey).Value[4];
             historyFile.Quantity = ConvertToInt(dictionary.FirstOrDefault(x => x.Key == selectedKey).Value[5]);
@@ -90,13 +90,13 @@ public class HistoryFileService : BaseService, IHistoryFileService
         return historyFileList;
     }
 
-    private static InvestmentActivityType GetInvestmentActivityTypeByDescription(string? description)
+    private static InvestingActivity GetInvestmentActivityTypeByDescription(string? description)
     {
-        var enumValues = Enum.GetValues(typeof(InvestmentActivityType));
+        var enumValues = Enum.GetValues(typeof(InvestingActivity));
 
         foreach (var enumValue in enumValues)
         {
-            if (enumValue is InvestmentActivityType activityType)
+            if (enumValue is InvestingActivity activityType)
             {
                 var enumDescription = GetEnumDescription(activityType); // Método para obter a descrição do enum
 
