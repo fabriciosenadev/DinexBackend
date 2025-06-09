@@ -62,7 +62,7 @@ namespace Dinex.Business.UserTests
                     Password = password,
                     ConfirmPassword = password
                 }
-                //IsActive = UserActivatioStatus.Inactive,
+                //IsActive = AccountActivatioStatus.Inactive,
             };
 
             return request;
