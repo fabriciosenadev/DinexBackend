@@ -97,6 +97,9 @@ namespace Dinex.Business.UserTests
             var result = await _userService
                 .CreateAsync(request);
 
+            _cryptographyService.Received(1)
+                .Encrypt(request.UserAccount.Password);
+
             Assert.NotNull(result.Email);
             Assert.NotNull(result.FullName);
             Assert.True(result.Id == userMock.Id);
