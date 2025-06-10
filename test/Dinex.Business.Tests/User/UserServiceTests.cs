@@ -122,5 +122,41 @@ namespace Dinex.Business.UserTests
             Assert.Null(result.FullName);
             Assert.True(result.Id == Guid.Empty);
         }
+
+        [Fact]
+        public async Task Should_Not_Create_User_When_Email_Already_Exists()
+        {
+            var request = GetUserRequestDtoMock();
+
+            var existingUser = GetUserMock(request);
+
+            _userRepository.GetByEmailAsync(request.UserAccount.Email)
+                .Returns(existingUser);
+
+            var result = await _userService.CreateAsync(request);
+
+            _notificationService.Received(1)
+                .RaiseError(User.Error.UserAlreadyExists);
+
+            Assert.Null(result.Email);
+            Assert.Equal(Guid.Empty, result.Id);
+        }
+
+        [Fact]
+        public async Task Should_Not_Create_User_When_Data_Invalid()
+        {
+            var request = GetUserRequestDtoMock();
+            request.UserAccount.ConfirmPassword = _faker.Random.String2(8);
+
+            var result = await _userService.CreateAsync(request);
+
+            await _userRepository.DidNotReceive()
+                .AddUserAsync(Arg.Any<User>());
+
+            _notificationService.Received()
+                .RaiseError(Arg.Any<NotificationDto>());
+
+            Assert.Equal(Guid.Empty, result.Id);
+        }
     }
 }
